@@ -137,7 +137,7 @@ public class AuctionServiceImpl implements AuctionService {
             try {
                 transitionService.endAuction(auction.getAuctionId());
             } catch (Exception e) {
-                log.error("Error ending auction ID {}: {}", auction.getAuctionId(), e.getMessage());
+                log.error("Error ending auction ID {}: ", auction.getAuctionId(), e);
             }
         }
     }

@@ -15,6 +15,8 @@ import com.eAuction.backend.repository.AuctionRepository;
 import com.eAuction.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,32 @@ public class OrderServiceImpl implements OrderService {
     private final AuctionRepository auctionRepository;
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
+    private final OrderStatusHistoryService historyService;
+
+
+//    /**
+//     * RETROACTIVE RUNNER:
+//     * Executes on Application Startup. Scans all existing ENDED auctions
+//     * in the DB and generates missing orders automatically.
+//     */
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void generateMissingOrdersForEndedAuctions() {
+//        log.info("Checking for past ENDED auctions missing orders...");
+//        List<Auction> endedAuctions = auctionRepository.findByAuctionStatus(AuctionStatus.ENDED);
+//
+//        for (Auction auction : endedAuctions) {
+//            try {
+//                if (auction.getHighestBidder() != null && !orderRepository.existsByAuction_AuctionId(auction.getAuctionId())) {
+//                    createAutomaticOrderForWinner(auction.getAuctionId());
+//                }
+//            } catch (ResourceNotFoundException e) {
+//                log.warn("Retroactive Order skipped for Auction ID {}: {}", auction.getAuctionId(), e.getMessage());
+//            } catch (Exception e) {
+//                log.error("Failed retroactive order generation for Auction ID {}: {}", auction.getAuctionId(), e.getMessage());
+//            }
+//        }
+//    }
+
 
     @Override
     public OrderDTOs.OrderResponse createOrder(OrderDTOs.CreateOrderRequest request) {
@@ -63,6 +91,44 @@ public class OrderServiceImpl implements OrderService {
 
         AuctionOrder savedOrder = orderRepository.save(order);
         log.info("Order ID {} successfully created for auction ID {}", savedOrder.getOrderId(), request.getAuctionId());
+
+        historyService.logStatusChange(savedOrder, OrderStatus.CREATED.name());
+
+        return mapToOrderResponse(savedOrder);
+    }
+
+
+    @Override
+    public OrderDTOs.OrderResponse createAutomaticOrderForWinner(Long auctionId) {
+        log.info("Attempting automatic order creation for auction ID: {}", auctionId);
+
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Auction not found with id: " + auctionId));
+
+        if (auction.getHighestBidder() == null) {
+            log.info("No winner for auction ID: {}. Skipping order creation.", auctionId);
+            return null;
+        }
+
+        if (orderRepository.existsByAuction_AuctionId(auctionId)) {
+            log.info("Order already exists for auction ID: {}", auctionId);
+            return mapToOrderResponse(orderRepository.findByAuction_AuctionId(auctionId).get());
+        }
+
+        Long winnerUserId = auction.getHighestBidder().getUserId();
+
+        // Find winner's default address or first fallback address
+        Address address = addressRepository.findByUserUserIdAndIsDefaultTrue(winnerUserId)
+                .orElseGet(() -> addressRepository.findFirstByUserUserIdOrderByAddressIdAsc(winnerUserId)
+                        .orElseThrow(() -> new ResourceNotFoundException("NO_ADDRESS_FOUND")));
+
+        AuctionOrder order = new AuctionOrder();
+        order.setAuction(auction);
+        order.setAddress(address);
+        order.setOrderStatus(OrderStatus.CREATED);
+
+        AuctionOrder savedOrder = orderRepository.save(order);
+        log.info("Automatic Order ID {} created successfully for auction ID {}", savedOrder.getOrderId(), auctionId);
 
         return mapToOrderResponse(savedOrder);
     }
@@ -128,6 +194,9 @@ public class OrderServiceImpl implements OrderService {
         AuctionOrder updatedOrder = orderRepository.save(order);
 
         log.info("Order ID {} status updated to {}", orderId, orderStatus);
+
+        historyService.logStatusChange(updatedOrder, orderStatus.name());
+
         return mapToOrderResponse(updatedOrder);
     }
 
@@ -145,6 +214,7 @@ public class OrderServiceImpl implements OrderService {
                 order.setOrderStatus(OrderStatus.CANCELLED);
                 orderRepository.save(order);
                 log.info("Order ID: {} automatically CANCELLED due to non-payment within 1 week.", order.getOrderId());
+                historyService.logStatusChange(order, OrderStatus.CANCELLED.name());
             }
         } catch (Exception e) {
             log.error("Error processing expired unpaid orders", e);

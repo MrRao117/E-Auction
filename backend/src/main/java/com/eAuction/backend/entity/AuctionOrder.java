@@ -28,7 +28,8 @@ public class AuctionOrder {
     private Address address;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus = OrderStatus.CREATED;
+    @Column(name = "order_status", nullable = false, length = 30)
+    private OrderStatus orderStatus;
 
     @CreationTimestamp
     @Column(name = "orderDate", updatable = false)

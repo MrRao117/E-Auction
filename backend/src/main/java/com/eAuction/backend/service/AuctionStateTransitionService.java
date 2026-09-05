@@ -5,6 +5,7 @@ import com.eAuction.backend.entity.Auction;
 import com.eAuction.backend.entity.AuctionOrder;
 import com.eAuction.backend.entity.enums.AuctionStatus;
 import com.eAuction.backend.entity.enums.OrderStatus;
+import com.eAuction.backend.exception.ResourceNotFoundException;
 import com.eAuction.backend.repository.AddressRepository;
 import com.eAuction.backend.repository.AuctionOrderRepository;
 import com.eAuction.backend.repository.AuctionRepository;
@@ -22,6 +23,7 @@ public class AuctionStateTransitionService {
     private final AuctionRepository auctionRepository;
     private final AuctionOrderRepository orderRepository;
     private final AddressRepository addressRepository;
+    private final AuctionOrderCreationService auctionOrderCreationService;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void activateAuction(Long auctionId) {
@@ -40,32 +42,25 @@ public class AuctionStateTransitionService {
         Auction auction = auctionRepository.findById(auctionId).orElse(null);
         if (auction == null || auction.getAuctionStatus() != AuctionStatus.ACTIVE) return;
 
+        // 1. Transaction 1: Mark as ENDED and commit to DB
         auction.setAuctionStatus(AuctionStatus.ENDED);
         auctionRepository.saveAndFlush(auction);
-        log.info("Auction ID: {} status automatically updated to ENDED", auctionId);
+        log.info("Auction ID: {} status automatically updated to ENDED in DB", auctionId);
 
-        // Auto-create order if a winner exists and no order was generated yet
-        if (auction.getHighestBidder() != null && !orderRepository.existsByAuction_AuctionId(auctionId)) {
-            Long winnerUserId = auction.getHighestBidder().getUserId();
-
-            // 1. Fetch default address, or fallback to first available address
-            Address shippingAddress = addressRepository.findByUserUserIdAndIsDefaultTrue(winnerUserId)
-                    .orElseGet(() -> addressRepository.findFirstByUserUserIdOrderByAddressIdAsc(winnerUserId).orElse(null));
-
-            if (shippingAddress == null) {
-                log.warn("Auction ID: {} ended with winner ID: {}, but no address was found. Order creation postponed.",
-                        auctionId, winnerUserId);
-                return;
+        // 2. Transaction 2: Execute order creation in an isolated sub-transaction
+        try {
+            // Pass auction.getAuctionId() instead of auction object
+            auctionOrderCreationService.createOrderForWinner(auction.getAuctionId());
+        } catch (ResourceNotFoundException e) {
+            if ("NO_ADDRESS_FOUND".equals(e.getMessage())) {
+                log.warn("Auction ID {} set to ENDED, but winner has no registered shipping address. Order creation postponed.", auctionId);
+            } else {
+                log.error("Resource error during auto order creation for Auction ID {}: {}", auctionId, e.getMessage());
             }
-
-            // 2. Create AuctionOrder with assigned default address
-            AuctionOrder order = new AuctionOrder();
-            order.setAuction(auction);
-            order.setAddress(shippingAddress);
-            order.setOrderStatus(OrderStatus.CREATED);
-
-            orderRepository.saveAndFlush(order);
-            log.info("AuctionOrder automatically created for Auction ID: {} with Address ID: {}", auctionId, shippingAddress.getAddressId());
+        } catch (Exception e) {
+            log.error("Failed to auto-create order for ended Auction ID {}: {}", auctionId, e.getMessage());
         }
     }
+
+
 }

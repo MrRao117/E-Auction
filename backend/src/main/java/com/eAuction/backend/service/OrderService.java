@@ -9,6 +9,8 @@ public interface OrderService {
 
     OrderDTOs.OrderResponse createOrder(OrderDTOs.CreateOrderRequest request);
 
+    OrderDTOs.OrderResponse createAutomaticOrderForWinner(Long auctionId);
+
     OrderDTOs.OrderResponse getOrderById(Long orderId);
 
     OrderDTOs.OrderResponse getOrderByAuctionId(Long auctionId);

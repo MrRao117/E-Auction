@@ -23,7 +23,7 @@ public class ProductController {
     // CATEGORY ENDPOINTS
     // ==========================================
 
-    @PostMapping("/categories")
+    @PostMapping("/categories/create")
     @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
     public ResponseEntity<ProductDTOs.CategoryResponse> createCategory(
             @Valid @RequestBody ProductDTOs.CreateCategoryRequest request,
@@ -33,7 +33,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.createCategory(request, currentUserEmail), HttpStatus.CREATED);
     }
 
-    @GetMapping("/categories")
+    @GetMapping("/categories/all")
     public ResponseEntity<List<ProductDTOs.CategoryResponse>> getAllCategories() {
         return ResponseEntity.ok(productService.getAllCategories());
     }
@@ -71,7 +71,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getMyProducts(sellerEmail));
     }
 
-    @GetMapping("/category/{categoryId}")
+    @GetMapping("/category/{categoryId}/products")
     public ResponseEntity<List<ProductDTOs.ProductResponse>> getProductsByCategory(@PathVariable Long categoryId) {
         return ResponseEntity.ok(productService.getProductsByCategory(categoryId));
     }
@@ -108,7 +108,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.verifyProduct(productId, adminEmail, request));
     }
 
-    @PutMapping("/{productId}")
+    @PutMapping("/{productId}/update")
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> updateProduct(
             @PathVariable Long productId,
@@ -119,7 +119,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProduct(productId, request, sellerEmail));
     }
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("/{productId}/delete")
     @PreAuthorize("hasAnyRole('SELLER', 'ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId, Authentication authentication) {
         String userEmail = authentication.getName();

@@ -58,7 +58,7 @@ public class AddressController {
     }
 
     // 5. Update an existing address
-    @PutMapping("/{addressId}")
+    @PutMapping("/{addressId}/update")
     public ResponseEntity<AddressDTOs.AddressResponse> updateAddress(
             @PathVariable Long addressId,
             @Valid @RequestBody AddressDTOs.CreateAddressRequest request,
@@ -69,7 +69,7 @@ public class AddressController {
     }
 
     // 6. Delete an address
-    @DeleteMapping("/{addressId}")
+    @DeleteMapping("/{addressId}/delete")
     public ResponseEntity<Void> deleteAddress(
             @PathVariable Long addressId,
             Authentication authentication) {
