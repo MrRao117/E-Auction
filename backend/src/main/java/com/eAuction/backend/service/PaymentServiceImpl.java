@@ -3,21 +3,24 @@ package com.eAuction.backend.service;
 import com.eAuction.backend.dto.OrderDTOs;
 import com.eAuction.backend.entity.AuctionOrder;
 import com.eAuction.backend.entity.Payment;
+import com.eAuction.backend.entity.User;
 import com.eAuction.backend.entity.enums.OrderStatus;
 import com.eAuction.backend.entity.enums.PaymentStatus;
-import com.eAuction.backend.exception.DuplicateResourceException;
 import com.eAuction.backend.exception.InvalidOperationException;
 import com.eAuction.backend.exception.ResourceNotFoundException;
 import com.eAuction.backend.repository.AuctionOrderRepository;
 import com.eAuction.backend.repository.PaymentRepository;
+import com.razorpay.PaymentLink;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,59 +31,85 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final AuctionOrderRepository orderRepository;
+    private final OrderStatusHistoryService historyService;
+    private final RazorpayClient razorpayClient;
 
     @Override
     public OrderDTOs.PaymentResponse processPayment(OrderDTOs.CreatePaymentRequest request) {
-        log.info("Processing payment for order ID: {} with total amount: {}", request.getOrderId(), request.getTotalAmount());
+        log.info("Processing payment for order ID: {}", request.getOrderId());
 
-        // 1. Fetch and validate Order
+        // 1. Fetch & Validate Order
         AuctionOrder order = orderRepository.findById(request.getOrderId())
-                .orElseThrow(() -> {
-                    log.warn("Payment failed. Order not found with ID: {}", request.getOrderId());
-                    return new ResourceNotFoundException("Order not found with id: " + request.getOrderId());
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + request.getOrderId()));
 
-        // 2. Prevent payment if Order is cancelled
         if (order.getOrderStatus() == OrderStatus.CANCELLED) {
-            log.warn("Payment failed. Order ID {} is already cancelled.", request.getOrderId());
             throw new InvalidOperationException("Cannot process payment for a cancelled order.");
         }
 
-        // 3. Ensure a successful payment doesn't already exist for this order
+        // 2. Check existing successful payment
         paymentRepository.findByOrder_OrderId(request.getOrderId()).ifPresent(existingPayment -> {
             if (existingPayment.getStatus() == PaymentStatus.SUCCESS) {
-                log.warn("Payment failed. Order ID {} already has a completed payment.", request.getOrderId());
                 throw new InvalidOperationException("Payment has already been completed for this order.");
             }
         });
 
-        // 4. Handle Transaction ID (generate one if null/blank, or check uniqueness if provided)
-        String transactionId = request.getTransactionId();
-        if (transactionId == null || transactionId.isBlank()) {
-            transactionId = "TXN-" + UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase();
-        } else if (paymentRepository.existsByTransactionId(transactionId)) {
-            log.warn("Payment failed. Transaction ID {} already exists.", transactionId);
-            throw new DuplicateResourceException("Transaction ID already exists: " + transactionId);
+        // 3. Create Payment Link with Razorpay
+        PaymentLink paymentLink;
+        try {
+            JSONObject paymentLinkRequest = new JSONObject();
+
+            // Amount in paise (1 INR = 100 Paise)
+            long amountInPaise = request.getTotalAmount().multiply(new BigDecimal("100")).longValue();
+            paymentLinkRequest.put("amount", amountInPaise);
+            paymentLinkRequest.put("currency", "INR");
+            paymentLinkRequest.put("accept_partial", false);
+            paymentLinkRequest.put("description", "Payment for Order #" + order.getOrderId());
+
+            // Extract winner details from order -> auction -> highestBidder (User entity)
+            User winner = (order.getAuction() != null) ? order.getAuction().getHighestBidder() : null;
+            String customerName = (winner != null && winner.getName() != null) ? winner.getName() : "Customer";
+            String customerEmail = (winner != null && winner.getEmail() != null) ? winner.getEmail() : "customer@example.com";
+
+            // Customer Details
+            JSONObject customer = new JSONObject();
+            customer.put("name", customerName);
+            customer.put("email", customerEmail);
+            paymentLinkRequest.put("customer", customer);
+
+            // Redirection after payment completes
+            JSONObject notify = new JSONObject();
+            notify.put("email", true);
+            notify.put("sms", false);
+            paymentLinkRequest.put("notify", notify);
+            paymentLinkRequest.put("callback_url", "http://localhost:8080/api/v1/payments/callback");
+            paymentLinkRequest.put("callback_method", "get");
+
+            paymentLink = razorpayClient.paymentLink.create(paymentLinkRequest);
+
+        } catch (RazorpayException e) {
+            log.error("Error creating Razorpay Payment Link", e);
+            throw new RuntimeException("Failed to initiate payment with Razorpay: " + e.getMessage());
         }
 
-        // 5. Build and populate Payment entity
+        String razorpayPaymentLinkId = paymentLink.get("id");
+        String razorpayShortUrl = paymentLink.get("short_url"); // hosted payment page
+
+        // 4. Save Payment Record with PENDING status
         Payment payment = new Payment();
         payment.setOrder(order);
         payment.setTotalAmount(request.getTotalAmount());
         payment.setTaxAmount(request.getTaxAmount() != null ? request.getTaxAmount() : BigDecimal.ZERO);
-        payment.setMethod(request.getMethod() != null ? request.getMethod() : "CARD");
-        payment.setTransactionId(transactionId);
-        payment.setStatus(PaymentStatus.SUCCESS); // Default to SUCCESS upon successful processing
+        payment.setMethod(request.getMethod() != null ? request.getMethod() : "RAZORPAY");
+        payment.setTransactionId(razorpayPaymentLinkId);
+        payment.setStatus(PaymentStatus.PENDING); // Mark as PENDING until verified via Webhook/Callback
 
         Payment savedPayment = paymentRepository.save(payment);
 
-        // 6. Update Order Status following successful payment
-        order.setOrderStatus(OrderStatus.CONFIRMED);
-        orderRepository.save(order);
+        // 5. Build Response including the Razorpay link
+        OrderDTOs.PaymentResponse response = mapToPaymentResponse(savedPayment);
+        response.setPaymentLink(razorpayShortUrl);
 
-        log.info("Payment ID {} processed successfully with Transaction ID {}", savedPayment.getPaymentId(), transactionId);
-
-        return mapToPaymentResponse(savedPayment);
+        return response;
     }
 
     @Override
@@ -139,12 +168,16 @@ public class PaymentServiceImpl implements PaymentService {
 
         payment.setStatus(status);
 
-        // Update corresponding order status if payment failed/refunded
-        if (status == PaymentStatus.FAILED || status == PaymentStatus.REFUNDED) {
-            AuctionOrder order = payment.getOrder();
-            if (order != null) {
+        AuctionOrder order = payment.getOrder();
+        if (order != null) {
+            if (status == PaymentStatus.SUCCESS) {
+                order.setOrderStatus(OrderStatus.CONFIRMED);
+                orderRepository.save(order);
+                historyService.logStatusChange(order, OrderStatus.CONFIRMED.name());
+            } else if (status == PaymentStatus.FAILED || status == PaymentStatus.REFUNDED) {
                 order.setOrderStatus(OrderStatus.CANCELLED);
                 orderRepository.save(order);
+                historyService.logStatusChange(order, OrderStatus.CANCELLED.name());
             }
         }
 
@@ -154,7 +187,6 @@ public class PaymentServiceImpl implements PaymentService {
         return mapToPaymentResponse(updatedPayment);
     }
 
-    // Helper mapper from Entity to Response
     private OrderDTOs.PaymentResponse mapToPaymentResponse(Payment payment) {
         OrderDTOs.PaymentResponse response = new OrderDTOs.PaymentResponse();
         response.setPaymentId(payment.getPaymentId());

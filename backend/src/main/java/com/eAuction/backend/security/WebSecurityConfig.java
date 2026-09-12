@@ -30,21 +30,22 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // 1. PUBLIC AUTH & SWAGGER DOCS
+                        // 1. PUBLIC AUTH, SWAGGER DOCS & PAYMENT CALLBACK
                         .requestMatchers(
                                 "/api/v1/auth/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/api/v1/admin/register",
-                                "/api/v1/admin/login"
+                                "/api/v1/admin/login",
+                                "/api/v1/payments/callback"
                         ).permitAll()
 
                         // 2. PRODUCT & CATEGORY PUBLIC READS
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
 
-                        // 3. AUCTION SPECIFIC RULES (Placed before general role matchers)
+                        // 3. AUCTION SPECIFIC RULES
                         .requestMatchers(HttpMethod.GET, "/api/v1/auctions/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auctions/**").hasRole("SELLER")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/auctions/*/cancel").hasRole("SELLER")
@@ -78,6 +79,11 @@ public class WebSecurityConfig {
                         // 7.3 ORDER ENDPOINTS
                         .requestMatchers("/api/v1/orders/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/orders/**").hasAnyRole("BUYER", "SELLER", "ADMIN")
+
+                        // 7.4 DELIVERY AGENTS & DELIVERIES (ADDED HERE)
+                        .requestMatchers("/api/v1/delivery-agents/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/deliveries/assign").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/deliveries/**").hasAnyRole("ADMIN", "BUYER", "SELLER")
 
                         // General
                         .requestMatchers("/api/v1/users/**").authenticated()

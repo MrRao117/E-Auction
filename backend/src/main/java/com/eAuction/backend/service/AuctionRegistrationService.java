@@ -8,6 +8,8 @@ public interface AuctionRegistrationService {
 
     void registerForAuction(Long auctionId, String userEmail);
 
+    void cancelRegistration(Long auctionId, String userEmail);
+
     boolean isUserRegisteredForAuction(String userEmail, Long auctionId);
 
     List<AuctionDTOs.AuctionResponse> getRegisteredAuctionsForUser(String userEmail);
@@ -15,4 +17,6 @@ public interface AuctionRegistrationService {
     List<AuctionDTOs.AuctionRegistrationDetailsResponse> getRegistrationsByAuctionId(Long auctionId);
 
     long getRegistrationCountForAuction(Long auctionId);
+
+
 }

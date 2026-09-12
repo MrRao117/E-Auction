@@ -31,6 +31,9 @@ public class KycVerification {
     @Column(length = 50)
     private String documentType;
 
+    @Column(name = "document_number", length = 100)
+    private String documentNumber;
+
     @Enumerated(EnumType.STRING)
     private VerificationStatus verificationStatus = VerificationStatus.PENDING;
 

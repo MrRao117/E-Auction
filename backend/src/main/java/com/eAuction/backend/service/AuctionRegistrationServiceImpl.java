@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,31 @@ public class AuctionRegistrationServiceImpl implements AuctionRegistrationServic
 
         registrationRepository.save(registration);
         log.info("User email: {} successfully registered for auction ID: {}", userEmail, auctionId);
+    }
+
+
+    @Override
+    public void cancelRegistration(Long auctionId, String userEmail) {
+        log.info("Cancelling registration for user email: {} and auction ID: {}", userEmail, auctionId);
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userEmail));
+
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Auction not found with id: " + auctionId));
+
+        AuctionRegistrationId registrationId = new AuctionRegistrationId(user.getUserId(), auctionId);
+
+        AuctionRegistration registration = registrationRepository.findById(registrationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Registration record not found for this auction."));
+
+        // Enforce 2-hour cutoff rule: Current time + 2 hours must be BEFORE start time
+        if (LocalDateTime.now().plusHours(2).isAfter(auction.getStartTime())) {
+            throw new InvalidOperationException("Registration cannot be cancelled within 2 hours of auction start time.");
+        }
+
+        registrationRepository.delete(registration);
+        log.info("Successfully cancelled registration for user email: {} on auction ID: {}", userEmail, auctionId);
     }
 
     @Override

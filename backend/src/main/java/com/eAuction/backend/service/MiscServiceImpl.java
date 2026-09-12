@@ -44,6 +44,7 @@ public class MiscServiceImpl implements MiscService {
         KycVerification kyc = new KycVerification();
         kyc.setUser(user);
         kyc.setDocumentType(request.getDocumentType());
+        kyc.setDocumentNumber(request.getDocumentNumber());
         kyc.setRemarks(request.getRemarks());
         kyc.setVerificationStatus(VerificationStatus.PENDING);
         kyc.setSubmittedAt(LocalDateTime.now());
@@ -173,6 +174,7 @@ public class MiscServiceImpl implements MiscService {
                 .kycId(kyc.getKycId())
                 .userEmail(kyc.getUser() != null ? kyc.getUser().getEmail() : null)
                 .documentType(kyc.getDocumentType())
+                .documentNumber(kyc.getDocumentNumber())
                 .verificationStatus(kyc.getVerificationStatus())
                 .remarks(kyc.getRemarks())
                 .submittedAt(kyc.getSubmittedAt())

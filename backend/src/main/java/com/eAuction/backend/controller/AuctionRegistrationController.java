@@ -28,6 +28,16 @@ public class AuctionRegistrationController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @DeleteMapping("/cancel/{auctionId}")
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
+    public ResponseEntity<Void> cancelRegistration(
+            @PathVariable Long auctionId,
+            Authentication authentication
+    ) {
+        auctionRegistrationService.cancelRegistration(auctionId, authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/check/{auctionId}")
     @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     public ResponseEntity<Boolean> isUserRegistered(

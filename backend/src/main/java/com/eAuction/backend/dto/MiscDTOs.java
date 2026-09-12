@@ -21,6 +21,9 @@ public class MiscDTOs {
         @NotBlank(message = "Document type is required")
         private String documentType;
 
+        @NotBlank(message = "Document number is required")
+        private String documentNumber;
+
         private String remarks;
     }
 
@@ -41,6 +44,7 @@ public class MiscDTOs {
         private Long kycId;
         private String userEmail;
         private String documentType;
+        private String documentNumber;
         private VerificationStatus verificationStatus;
         private String remarks;
         private LocalDateTime submittedAt;

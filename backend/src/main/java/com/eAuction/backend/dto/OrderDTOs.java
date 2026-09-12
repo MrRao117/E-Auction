@@ -72,6 +72,7 @@ public class OrderDTOs {
         private String method;
         private String transactionId;
         private LocalDateTime paymentDate;
+        private String paymentLink;
     }
 
     @Data

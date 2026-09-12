@@ -30,6 +30,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final DeliveryRepository deliveryRepository;
     private final AuctionOrderRepository orderRepository;
     private final DeliveryAgentRepository deliveryAgentRepository;
+    private final OrderStatusHistoryService historyService;
 
     @Override
     public OrderDTOs.DeliveryResponse assignDelivery(OrderDTOs.AssignDeliveryRequest request) {
@@ -83,6 +84,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
         log.info("Delivery ID {} successfully assigned to Agent ID {} for Order ID {}",
                 savedDelivery.getDeliveryId(), agent.getAgentId(), order.getOrderId());
+        historyService.logStatusChange(order, OrderStatus.SHIPPED.name());
 
         return mapToDeliveryResponse(savedDelivery);
     }
@@ -155,6 +157,8 @@ public class DeliveryServiceImpl implements DeliveryService {
             if (order != null) {
                 order.setOrderStatus(OrderStatus.DELIVERED);
                 orderRepository.save(order);
+
+                historyService.logStatusChange(order, OrderStatus.DELIVERED.name());
             }
         }
 
