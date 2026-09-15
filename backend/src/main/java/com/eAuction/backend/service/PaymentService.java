@@ -9,6 +9,8 @@ public interface PaymentService {
 
     OrderDTOs.PaymentResponse processPayment(OrderDTOs.CreatePaymentRequest request);
 
+    void processWebhookEvent(String payload);
+
     OrderDTOs.PaymentResponse getPaymentById(Long paymentId);
 
     OrderDTOs.PaymentResponse getPaymentByOrderId(Long orderId);

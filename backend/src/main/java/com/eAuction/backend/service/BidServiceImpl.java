@@ -33,10 +33,12 @@ public class BidServiceImpl implements BidService {
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
     private final AuctionRegistrationRepository auctionRegistrationRepository;
+    private final RedisBidService redisBidService;
 
     @Override
     public BidDTOs.PublicBidResponse placeBid(Long auctionId, String buyerEmail, BidDTOs.PlaceBidRequest request) {
         try {
+            // 1. Fetch Auction & Validate Status
             Auction auction = auctionRepository.findById(auctionId)
                     .orElseThrow(() -> new ResourceNotFoundException("Auction not found with id: " + auctionId));
 
@@ -50,6 +52,7 @@ public class BidServiceImpl implements BidService {
                 throw new InvalidOperationException("This auction has not started yet.");
             }
 
+            // 2. Fetch Buyer
             User buyer = userRepository.findByEmail(buyerEmail)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + buyerEmail));
 
@@ -59,7 +62,7 @@ public class BidServiceImpl implements BidService {
                 throw new InvalidOperationException("Sellers are not permitted to bid on their own listings.");
             }
 
-            // Check registration
+            // 3. Check Registration
             boolean isRegistered = auctionRegistrationRepository.existsById(
                     new AuctionRegistrationId(buyer.getUserId(), auctionId)
             );
@@ -67,10 +70,10 @@ public class BidServiceImpl implements BidService {
                 throw new InvalidOperationException("You must register for this auction prior to placing a bid.");
             }
 
+            // 4. Calculate Minimum Required Bid Logic
             BigDecimal incrementStep = auction.getBidIncrementedBy() != null ? auction.getBidIncrementedBy() : BigDecimal.ZERO;
             BigDecimal currentBid = auction.getCurrHighestBid() != null ? auction.getCurrHighestBid() : BigDecimal.ZERO;
 
-            // --- ADD THE FIRST-BID MINIMUM REQUIREMENT LOGIC HERE ---
             BigDecimal minRequiredBid;
             if (bidRepository.countByAuctionAuctionId(auctionId) == 0) {
                 minRequiredBid = auction.getBasePrice() != null ? auction.getBasePrice() : BigDecimal.ZERO;
@@ -82,6 +85,16 @@ public class BidServiceImpl implements BidService {
                 throw new InvalidOperationException("Bid amount must be at least " + minRequiredBid);
             }
 
+            // --- 5. ATOMIC REDIS CACHE UPDATE ---
+            // Validates bid against Redis state and updates cache in sub-milliseconds
+            redisBidService.placeBidInCache(
+                    auctionId,
+                    buyer.getUserId(),
+                    buyer.getName(),
+                    request.getBidAmount()
+            );
+
+            // 6. Save Entity to Database (Persistence & Audit Trail)
             Bid bid = new Bid();
             bid.setAuction(auction);
             bid.setBuyer(buyer);
@@ -89,12 +102,14 @@ public class BidServiceImpl implements BidService {
 
             Bid savedBid = bidRepository.save(bid);
 
+            // Update Auction State in MySQL
             auction.setCurrHighestBid(request.getBidAmount());
             auction.setHighestBidder(buyer);
             auctionRepository.save(auction);
 
             return mapToPublicBidResponse(savedBid);
-        }catch (ObjectOptimisticLockingFailureException e) {
+
+        } catch (ObjectOptimisticLockingFailureException e) {
             log.warn("Concurrent bid conflict for auction ID: {}", auctionId);
             throw new InvalidOperationException("Another bid was placed simultaneously. Please refresh and try again.");
         }

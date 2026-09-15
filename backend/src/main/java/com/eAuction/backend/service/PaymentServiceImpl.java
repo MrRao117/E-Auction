@@ -112,6 +112,73 @@ public class PaymentServiceImpl implements PaymentService {
         return response;
     }
 
+
+    @Override
+    public void processWebhookEvent(String payload) {
+        try {
+            org.json.JSONObject json = new org.json.JSONObject(payload);
+            String event = json.getString("event");
+
+            log.info("Processing Webhook Event: {}", event);
+
+            // Razorpay triggers payment.captured or payment_link.paid on success
+            if ("payment.captured".equals(event) || "payment_link.paid".equals(event) || "order.paid".equals(event)) {
+
+                org.json.JSONObject payloadObj = json.getJSONObject("payload");
+                String paymentLinkId = null;
+
+                // Extract Payment Link ID from payload if present
+                if (payloadObj.has("payment_link")) {
+                    paymentLinkId = payloadObj.getJSONObject("payment_link")
+                            .getJSONObject("entity")
+                            .getString("id");
+                } else if (payloadObj.has("payment")) {
+                    org.json.JSONObject paymentEntity = payloadObj.getJSONObject("payment").getJSONObject("entity");
+                    // Payment Links send the link ID inside payment entity as 'description' or 'payment_link_id'
+                    if (paymentEntity.has("payment_link_id") && !paymentEntity.isNull("payment_link_id")) {
+                        paymentLinkId = paymentEntity.getString("payment_link_id");
+                    }
+                }
+
+                if (paymentLinkId != null) {
+                    this.handlePaymentSuccess(paymentLinkId);
+                } else {
+                    log.warn("Could not extract payment_link_id from webhook payload");
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error parsing webhook payload", e);
+        }
+    }
+
+    private void handlePaymentSuccess(String transactionId) {
+        log.info("Handling payment success for transaction ID (Payment Link ID): {}", transactionId);
+
+        Payment payment = paymentRepository.findByTransactionId(transactionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment record not found with transaction id: " + transactionId));
+
+        // Prevent re-processing if already marked SUCCESS
+        if (payment.getStatus() == PaymentStatus.SUCCESS) {
+            log.info("Payment transaction {} is already processed.", transactionId);
+            return;
+        }
+
+        // 1. Mark Payment as SUCCESS
+        payment.setStatus(PaymentStatus.SUCCESS);
+        paymentRepository.save(payment);
+
+        // 2. Flip Order status to CONFIRMED
+        AuctionOrder order = payment.getOrder();
+        if (order != null) {
+            order.setOrderStatus(OrderStatus.CONFIRMED);
+            orderRepository.save(order);
+
+            // 3. Log History
+            historyService.logStatusChange(order, OrderStatus.CONFIRMED.name());
+            log.info("Order ID {} status successfully updated to CONFIRMED via Webhook", order.getOrderId());
+        }
+    }
+
     @Override
     @Transactional(readOnly = true)
     public OrderDTOs.PaymentResponse getPaymentById(Long paymentId) {

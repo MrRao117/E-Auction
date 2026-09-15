@@ -38,7 +38,8 @@ public class WebSecurityConfig {
                                 "/swagger-ui.html",
                                 "/api/v1/admin/register",
                                 "/api/v1/admin/login",
-                                "/api/v1/payments/callback"
+                                "/api/v1/payments/callback",
+                                "/api/v1/payments/webhook"
                         ).permitAll()
 
                         // 2. PRODUCT & CATEGORY PUBLIC READS
