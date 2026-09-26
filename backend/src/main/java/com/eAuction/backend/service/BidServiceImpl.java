@@ -19,13 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class BidServiceImpl implements BidService {
 
@@ -34,9 +33,16 @@ public class BidServiceImpl implements BidService {
     private final UserRepository userRepository;
     private final AuctionRegistrationRepository auctionRegistrationRepository;
     private final RedisBidService redisBidService;
+    private final BidAsyncEventExecutor bidAsyncEventExecutor;
+
+    // Injected business-aware rate limiter
+    private final AuctionBidRateLimiter auctionBidRateLimiter;
 
     @Override
     public BidDTOs.PublicBidResponse placeBid(Long auctionId, String buyerEmail, BidDTOs.PlaceBidRequest request) {
+        BidDTOs.PublicBidResponse publicResponse;
+        Long buyerId;
+
         try {
             // 1. Fetch Auction & Validate Status
             Auction auction = auctionRepository.findById(auctionId)
@@ -44,25 +50,36 @@ public class BidServiceImpl implements BidService {
 
             AuctionStatus currentStatus = auction.getRealTimeStatus();
 
+            if (currentStatus == AuctionStatus.CANCELLED) {
+                throw new InvalidOperationException("This auction has been cancelled.");
+            }
             if (currentStatus == AuctionStatus.ENDED) {
                 throw new InvalidOperationException("This auction has already ended.");
             }
-
             if (currentStatus == AuctionStatus.SCHEDULED) {
                 throw new InvalidOperationException("This auction has not started yet.");
+            }
+            if (currentStatus != AuctionStatus.ACTIVE) {
+                throw new InvalidOperationException("Bidding is not allowed for an auction in status: " + currentStatus);
             }
 
             // 2. Fetch Buyer
             User buyer = userRepository.findByEmail(buyerEmail)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + buyerEmail));
+            buyerId = buyer.getUserId();
 
-            // Prevent seller from bidding on their own item
+            // --- 3. IN-APP BUSINESS-AWARE RATE LIMIT CHECK ---
+            if (!auctionBidRateLimiter.tryConsumeBid(buyerId, auctionId)) {
+                throw new InvalidOperationException("You are bidding too fast on this auction. Please wait a few seconds before trying again.");
+            }
+
+            // Prevent seller from bidding on their own listing
             if (auction.getProduct() != null && auction.getProduct().getSeller() != null
                     && auction.getProduct().getSeller().getEmail().equalsIgnoreCase(buyerEmail)) {
                 throw new InvalidOperationException("Sellers are not permitted to bid on their own listings.");
             }
 
-            // 3. Check Registration
+            // 4. Check Registration
             boolean isRegistered = auctionRegistrationRepository.existsById(
                     new AuctionRegistrationId(buyer.getUserId(), auctionId)
             );
@@ -70,7 +87,7 @@ public class BidServiceImpl implements BidService {
                 throw new InvalidOperationException("You must register for this auction prior to placing a bid.");
             }
 
-            // 4. Calculate Minimum Required Bid Logic
+            // 5. Calculate Minimum Required Bid Logic
             BigDecimal incrementStep = auction.getBidIncrementedBy() != null ? auction.getBidIncrementedBy() : BigDecimal.ZERO;
             BigDecimal currentBid = auction.getCurrHighestBid() != null ? auction.getCurrHighestBid() : BigDecimal.ZERO;
 
@@ -85,16 +102,19 @@ public class BidServiceImpl implements BidService {
                 throw new InvalidOperationException("Bid amount must be at least " + minRequiredBid);
             }
 
-            // --- 5. ATOMIC REDIS CACHE UPDATE ---
-            // Validates bid against Redis state and updates cache in sub-milliseconds
+            // Convert End Time to Epoch Milliseconds for strict Lua check
+            long endTimeMillis = auction.getEndTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+            // --- 6. ATOMIC REDIS LUA CACHE EXECUTION ---
             redisBidService.placeBidInCache(
                     auctionId,
                     buyer.getUserId(),
                     buyer.getName(),
-                    request.getBidAmount()
+                    request.getBidAmount(),
+                    endTimeMillis
             );
 
-            // 6. Save Entity to Database (Persistence & Audit Trail)
+            // 7. Save Entity to Database
             Bid bid = new Bid();
             bid.setAuction(auction);
             bid.setBuyer(buyer);
@@ -102,17 +122,21 @@ public class BidServiceImpl implements BidService {
 
             Bid savedBid = bidRepository.save(bid);
 
-            // Update Auction State in MySQL
             auction.setCurrHighestBid(request.getBidAmount());
             auction.setHighestBidder(buyer);
             auctionRepository.save(auction);
 
-            return mapToPublicBidResponse(savedBid);
+            publicResponse = mapToPublicBidResponse(savedBid);
 
         } catch (ObjectOptimisticLockingFailureException e) {
             log.warn("Concurrent bid conflict for auction ID: {}", auctionId);
             throw new InvalidOperationException("Another bid was placed simultaneously. Please refresh and try again.");
         }
+
+        // 8. Async Side Effects
+        bidAsyncEventExecutor.publishBidSideEffects(auctionId, buyerId, request.getBidAmount(), publicResponse);
+
+        return publicResponse;
     }
 
     @Override
@@ -155,7 +179,7 @@ public class BidServiceImpl implements BidService {
     @Transactional(readOnly = true)
     public List<BidDTOs.AdminBidResponse> getFullBidsForAdmin(Long auctionId) {
         if (!auctionRepository.existsById(auctionId)) {
-            throw new ResourceNotFoundException("Auction not found with id: " + auctionId);
+            throw new ResourceNotFoundException("Resource not found with auction id: " + auctionId);
         }
         return bidRepository.findByAuctionAuctionIdOrderByBidTimeDesc(auctionId).stream()
                 .map(bid -> BidDTOs.AdminBidResponse.builder()
@@ -185,7 +209,6 @@ public class BidServiceImpl implements BidService {
                 && auction.getHighestBidder().getEmail().equalsIgnoreCase(userEmail);
     }
 
-    // Helper: Public response with masked name and clean output
     private BidDTOs.PublicBidResponse mapToPublicBidResponse(Bid bid) {
         String rawName = (bid.getBuyer() != null && bid.getBuyer().getName() != null)
                 ? bid.getBuyer().getName()
@@ -198,7 +221,6 @@ public class BidServiceImpl implements BidService {
                 .build();
     }
 
-    // Helper: Private history response for the logged-in user
     private BidDTOs.MyBidResponse mapToMyBidResponse(Bid bid) {
         return BidDTOs.MyBidResponse.builder()
                 .bidAmount(bid.getBidAmount())
@@ -206,7 +228,6 @@ public class BidServiceImpl implements BidService {
                 .build();
     }
 
-    // Utility to anonymize name (e.g. "Tushar2" -> "T***2")
     private String maskName(String name) {
         if (name == null || name.length() <= 2) {
             return "***";

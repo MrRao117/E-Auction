@@ -1,6 +1,7 @@
 package com.eAuction.backend.controller;
 
 import com.eAuction.backend.dto.AdminDTOs;
+import com.eAuction.backend.security.Auditable;
 import com.eAuction.backend.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class AdminController {
     // Secure Admin Registration: Only an existing logged-in ADMIN can create another admin account
     @PostMapping("/register")
     @PreAuthorize("hasRole('ADMIN')")
+    @Auditable(action = "REGISTER_ADMIN", target = "ADMIN_USER")
     public ResponseEntity<AdminDTOs.AdminResponse> registerAdmin(
             @Valid @RequestBody AdminDTOs.AdminRegisterRequest request
     ) {

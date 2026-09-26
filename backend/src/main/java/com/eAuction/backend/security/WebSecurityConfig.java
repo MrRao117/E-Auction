@@ -1,6 +1,7 @@
 package com.eAuction.backend.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +13,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -22,24 +29,32 @@ public class WebSecurityConfig {
     private final JWTAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
+    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:5173}")
+    private String[] allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // 1. PUBLIC AUTH, SWAGGER DOCS & PAYMENT CALLBACK
+                        // 1. PUBLIC AUTH, SWAGGER DOCS, TEST ROUTE & PAYMENT CALLBACK/WEBHOOK
                         .requestMatchers(
+                                "/api/v1",                   // <--- Keeps your test/root endpoint accessible
+                                "/api/v1/",                  // <--- Keeps trailing slash test path accessible
                                 "/api/v1/auth/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
+                                "/v3/api-docs/**",           // <--- OpenAPI json docs
+                                "/swagger-ui/**",            // <--- Swagger UI static assets
+                                "/swagger-ui.html",          // <--- Swagger UI main endpoint
                                 "/api/v1/admin/register",
                                 "/api/v1/admin/login",
                                 "/api/v1/payments/callback",
-                                "/api/v1/payments/webhook"
+                                "/api/v1/payments/webhook",
+                                "/actuator/health",
+                                "/actuator/prometheus"
                         ).permitAll()
 
                         // 2. PRODUCT & CATEGORY PUBLIC READS
@@ -66,37 +81,49 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/v1/addresses/user").hasRole("ADMIN")
                         .requestMatchers("/api/v1/addresses/**").hasAnyRole("BUYER", "SELLER", "ADMIN")
 
-                        // 7. GENERAL ROLE-BASED MATCHERS
-                        // 7.1 Auction registration endpoints
-                        .requestMatchers(HttpMethod.GET, "/api/v1/auction-registration/public/count/**").permitAll()
-                        .requestMatchers("/api/v1/auction-registration/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/auction-registrations/**").hasAnyRole("BUYER", "SELLER")
+                        // 7. GENERAL ROLE-BASED MATCHERS (Both singular & plural support kept intact)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auction-registrations/public/count/**", "/api/v1/auction-registration/public/count/**").permitAll()
+                        .requestMatchers("/api/v1/auction-registrations/admin/**", "/api/v1/auction-registration/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/auction-registrations/**", "/api/v1/auction-registration/**").hasAnyRole("BUYER", "SELLER")
 
-                        // 7.2 FOR BIDS
                         .requestMatchers(HttpMethod.GET, "/api/v1/bids/auction/**").permitAll()
                         .requestMatchers("/api/v1/bids/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/bids/**").hasAnyRole("BUYER", "SELLER")
 
-                        // 7.3 ORDER ENDPOINTS
                         .requestMatchers("/api/v1/orders/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/orders/**").hasAnyRole("BUYER", "SELLER", "ADMIN")
 
-                        // 7.4 DELIVERY AGENTS & DELIVERIES (ADDED HERE)
                         .requestMatchers("/api/v1/delivery-agents/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/deliveries/assign").hasRole("ADMIN")
                         .requestMatchers("/api/v1/deliveries/**").hasAnyRole("ADMIN", "BUYER", "SELLER")
 
-                        // General
                         .requestMatchers("/api/v1/users/**").authenticated()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/seller/**").hasRole("SELLER")
 
-                        // 8. CATCH-ALL FOR ANY UNMAPPED ENDPOINT
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")
+
+                        // 8. CATCH-ALL
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "X-Razorpay-Signature"));
+        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

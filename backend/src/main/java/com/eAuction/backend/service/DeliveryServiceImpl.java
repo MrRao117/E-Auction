@@ -9,11 +9,15 @@ import com.eAuction.backend.entity.enums.DeliveryStatus;
 import com.eAuction.backend.entity.enums.OrderStatus;
 import com.eAuction.backend.exception.InvalidOperationException;
 import com.eAuction.backend.exception.ResourceNotFoundException;
+import com.eAuction.backend.exception.UnauthorizedAccessException;
+import com.eAuction.backend.repository.AdminRepository;
+import com.eAuction.backend.repository.AuctionOrderRepository;
 import com.eAuction.backend.repository.DeliveryAgentRepository;
 import com.eAuction.backend.repository.DeliveryRepository;
-import com.eAuction.backend.repository.AuctionOrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +35,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final AuctionOrderRepository orderRepository;
     private final DeliveryAgentRepository deliveryAgentRepository;
     private final OrderStatusHistoryService historyService;
+    private final AdminRepository adminRepository;
 
     @Override
     public OrderDTOs.DeliveryResponse assignDelivery(OrderDTOs.AssignDeliveryRequest request) {
@@ -38,33 +43,24 @@ public class DeliveryServiceImpl implements DeliveryService {
 
         // 1. Fetch and validate Order
         AuctionOrder order = orderRepository.findById(request.getOrderId())
-                .orElseThrow(() -> {
-                    log.warn("Delivery assignment failed. Order not found with ID: {}", request.getOrderId());
-                    return new ResourceNotFoundException("Order not found with id: " + request.getOrderId());
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + request.getOrderId()));
 
         // 2. Ensure Order is not cancelled
         if (order.getOrderStatus() == OrderStatus.CANCELLED) {
-            log.warn("Delivery assignment failed. Order ID {} is cancelled.", request.getOrderId());
             throw new InvalidOperationException("Cannot assign delivery for a cancelled order.");
         }
 
-        // 3. Ensure a delivery assignment does not already exist for this order
+        // 3. Ensure a delivery assignment does not already exist
         if (deliveryRepository.existsByOrder_OrderId(request.getOrderId())) {
-            log.warn("Delivery assignment failed. Order ID {} already has an assigned delivery.", request.getOrderId());
             throw new InvalidOperationException("A delivery agent is already assigned to this order.");
         }
 
         // 4. Fetch and validate Delivery Agent
         DeliveryAgent agent = deliveryAgentRepository.findById(request.getAgentId())
-                .orElseThrow(() -> {
-                    log.warn("Delivery assignment failed. Agent not found with ID: {}", request.getAgentId());
-                    return new ResourceNotFoundException("Delivery agent not found with id: " + request.getAgentId());
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("Delivery agent not found with id: " + request.getAgentId()));
 
         // 5. Ensure Agent is ACTIVE
         if (agent.getDeliveryStatus() != DeliveryAgentStatus.ACTIVE) {
-            log.warn("Delivery assignment failed. Agent ID {} is in status {}", request.getAgentId(), agent.getDeliveryStatus());
             throw new InvalidOperationException("Cannot assign order to an INACTIVE or BUSY delivery agent.");
         }
 
@@ -78,12 +74,10 @@ public class DeliveryServiceImpl implements DeliveryService {
 
         Delivery savedDelivery = deliveryRepository.save(delivery);
 
-        // 7. Update Order status to SHIPPED or PROCESSING
+        // 7. Update Order status to SHIPPED
         order.setOrderStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
 
-        log.info("Delivery ID {} successfully assigned to Agent ID {} for Order ID {}",
-                savedDelivery.getDeliveryId(), agent.getAgentId(), order.getOrderId());
         historyService.logStatusChange(order, OrderStatus.SHIPPED.name());
 
         return mapToDeliveryResponse(savedDelivery);
@@ -97,6 +91,8 @@ public class DeliveryServiceImpl implements DeliveryService {
         Delivery delivery = deliveryRepository.findById(deliveryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Delivery record not found with id: " + deliveryId));
 
+        validateUserDeliveryAccess(delivery);
+
         return mapToDeliveryResponse(delivery);
     }
 
@@ -109,8 +105,10 @@ public class DeliveryServiceImpl implements DeliveryService {
             throw new ResourceNotFoundException("Order not found with id: " + orderId);
         }
 
-        Delivery delivery = deliveryRepository.findByOrderOrderId(orderId)
+        Delivery delivery = deliveryRepository.findByOrder_OrderId(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("No delivery record found for order id: " + orderId));
+
+        validateUserDeliveryAccess(delivery);
 
         return mapToDeliveryResponse(delivery);
     }
@@ -124,7 +122,7 @@ public class DeliveryServiceImpl implements DeliveryService {
             throw new ResourceNotFoundException("Delivery agent not found with id: " + agentId);
         }
 
-        return deliveryRepository.findByAgentAgentId(agentId).stream()
+        return deliveryRepository.findByAgent_AgentId(agentId).stream()
                 .map(this::mapToDeliveryResponse)
                 .collect(Collectors.toList());
     }
@@ -157,18 +155,46 @@ public class DeliveryServiceImpl implements DeliveryService {
             if (order != null) {
                 order.setOrderStatus(OrderStatus.DELIVERED);
                 orderRepository.save(order);
-
                 historyService.logStatusChange(order, OrderStatus.DELIVERED.name());
             }
         }
 
         Delivery updatedDelivery = deliveryRepository.save(delivery);
-        log.info("Delivery ID {} status successfully updated to {}", deliveryId, status);
-
         return mapToDeliveryResponse(updatedDelivery);
     }
 
-    // Helper mapper from Entity to DTO
+    // Helper method to extract current authenticated user email
+    private String getCurrentUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UnauthorizedAccessException("User is not authenticated.");
+        }
+        return authentication.getName();
+    }
+
+    // IDOR Check: Ensure user is Admin, Winning Buyer, or Item Seller
+    private void validateUserDeliveryAccess(Delivery delivery) {
+        String currentUserEmail = getCurrentUserEmail();
+        AuctionOrder order = delivery.getOrder();
+
+        boolean isAdmin = adminRepository.findByEmail(currentUserEmail).isPresent();
+
+        boolean isBuyer = order != null
+                && order.getAuction() != null
+                && order.getAuction().getHighestBidder() != null
+                && currentUserEmail.equalsIgnoreCase(order.getAuction().getHighestBidder().getEmail());
+
+        boolean isSeller = order != null
+                && order.getAuction() != null
+                && order.getAuction().getProduct() != null
+                && order.getAuction().getProduct().getSeller() != null
+                && currentUserEmail.equalsIgnoreCase(order.getAuction().getProduct().getSeller().getEmail());
+
+        if (!isAdmin && !isBuyer && !isSeller) {
+            throw new UnauthorizedAccessException("You are not authorized to access this delivery record.");
+        }
+    }
+
     private OrderDTOs.DeliveryResponse mapToDeliveryResponse(Delivery delivery) {
         OrderDTOs.DeliveryResponse response = new OrderDTOs.DeliveryResponse();
         response.setDeliveryId(delivery.getDeliveryId());

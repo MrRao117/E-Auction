@@ -11,8 +11,12 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "bid")
-public class Bid {
+@Table(
+        name = "bid",
+        indexes = {
+                @Index(name = "idx_bid_auction_amount", columnList = "auction_id, bid_amount DESC")
+        }
+)public class Bid {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

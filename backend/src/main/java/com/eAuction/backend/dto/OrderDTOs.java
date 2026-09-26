@@ -51,11 +51,6 @@ public class OrderDTOs {
         @NotNull(message = "Order Id is required")
         private Long orderId;
 
-        @NotNull(message = "Total amount is required")
-        @Positive
-        private BigDecimal totalAmount;
-
-        private BigDecimal taxAmount;
         private String method;
         private String transactionId;
     }

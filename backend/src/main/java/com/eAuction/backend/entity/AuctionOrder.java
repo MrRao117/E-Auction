@@ -12,15 +12,22 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "auctionorder")
-public class AuctionOrder {
+@Table(
+        name = "auctionorder",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_auction_order_auction_id",
+                        columnNames = {"auction_id"}
+                )
+        }
+)public class AuctionOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auctionId", nullable = false)
+    @JoinColumn(name = "auctionId", nullable = false, unique = true)
     private Auction auction;
 
     @ManyToOne(fetch = FetchType.LAZY)

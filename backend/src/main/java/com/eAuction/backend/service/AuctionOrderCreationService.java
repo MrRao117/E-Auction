@@ -12,6 +12,7 @@ import com.eAuction.backend.repository.AuctionRepository;
 import com.eAuction.backend.repository.OrderStatusHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,6 @@ public class AuctionOrderCreationService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void createOrderForWinner(Long auctionId) {
-        // Fetch fresh managed auction entity inside this new transaction
         Auction auction = auctionRepository.findById(auctionId).orElse(null);
 
         if (auction == null) {
@@ -48,7 +48,6 @@ public class AuctionOrderCreationService {
 
         Long winnerUserId = auction.getHighestBidder().getUserId();
 
-        // Fallback search strategy for winner's shipping address
         Address shippingAddress = addressRepository.findByUserUserIdAndIsDefaultTrue(winnerUserId)
                 .orElseGet(() -> addressRepository.findFirstByUserUserIdOrderByAddressIdAsc(winnerUserId)
                         .orElseThrow(() -> new ResourceNotFoundException("NO_ADDRESS_FOUND")));
@@ -58,13 +57,17 @@ public class AuctionOrderCreationService {
         order.setAddress(shippingAddress);
         order.setOrderStatus(OrderStatus.CREATED);
 
-        orderRepository.saveAndFlush(order);
+        try {
+            orderRepository.saveAndFlush(order);
 
-        OrderStatusHistory history = new OrderStatusHistory();
-        history.setOrder(order);
-        history.setStatus(OrderStatus.CREATED.name());
-        historyRepository.save(history);
+            OrderStatusHistory history = new OrderStatusHistory();
+            history.setOrder(order);
+            history.setStatus(OrderStatus.CREATED.name());
+            historyRepository.save(history);
 
-        log.info("SUCCESS: AuctionOrder automatically created with ID: {} for Auction ID: {}", order.getOrderId(), auctionId);
+            log.info("SUCCESS: AuctionOrder automatically created with ID: {} for Auction ID: {}", order.getOrderId(), auctionId);
+        } catch (DataIntegrityViolationException e) {
+            log.warn("Concurrent creation detected: Order already exists for Auction ID: {}", auctionId);
+        }
     }
 }

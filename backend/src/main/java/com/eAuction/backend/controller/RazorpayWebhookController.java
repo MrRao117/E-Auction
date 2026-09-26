@@ -23,17 +23,17 @@ public class RazorpayWebhookController {
     @PostMapping
     public ResponseEntity<String> handleRazorpayWebhook(
             @RequestBody String payload,
-            @RequestHeader("X-Razorpay-Signature") String signature) {
+            @RequestHeader(value="X-Razorpay-Signature", required = false) String signature) {
 
         log.info("Received Razorpay Webhook Event");
 
         try {
-            // 1. Verify Razorpay Signature
-//            boolean isValid = Utils.verifyWebhookSignature(payload, signature, webhookSecret);
-//            if (!isValid) {
-//                log.warn("Invalid Razorpay Webhook Signature!");
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Signature");
-//            }
+//             1. Verify Razorpay Signature
+            boolean isValid = Utils.verifyWebhookSignature(payload, signature, webhookSecret);
+            if (!isValid) {
+                log.warn("Invalid Razorpay Webhook Signature!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Signature");
+            }
 
             // 2. Process Webhook Asynchronously
             paymentService.processWebhookEvent(payload);

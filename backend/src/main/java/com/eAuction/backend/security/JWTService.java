@@ -5,6 +5,7 @@ import com.eAuction.backend.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,20 @@ import java.util.Date;
 @Service
 public class JWTService {
 
-    @Value("${jwt.secretKey:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}")
+    @Value("${jwt.secretKey}")
     private String jwtSecretKey;
 
     private SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
+    }
+
+    @PostConstruct
+    public void init() {
+        if (jwtSecretKey == null || jwtSecretKey.trim().length() < 32) {
+            throw new IllegalArgumentException(
+                    "FATAL SECURITY RISK: 'jwt.secretKey' must be provided as an environment variable and be at least 32 characters (256 bits) long!"
+            );
+        }
     }
 
     public String generateAccessToken(User user) {

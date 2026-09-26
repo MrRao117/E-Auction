@@ -11,9 +11,9 @@ import java.util.Optional;
 @Repository
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
 
-    Optional<Delivery> findByOrderOrderId(Long orderId);
+    Optional<Delivery> findByOrder_OrderId(Long orderId);
 
-    List<Delivery> findByAgentAgentId(Long agentId);
+    List<Delivery> findByAgent_AgentId(Long agentId);
 
     List<Delivery> findByDeliveryStatus(DeliveryStatus deliveryStatus);
 

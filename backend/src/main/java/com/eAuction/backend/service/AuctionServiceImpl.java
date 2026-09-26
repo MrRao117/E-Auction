@@ -12,6 +12,7 @@ import com.eAuction.backend.repository.ProductRepository;
 import com.eAuction.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,6 +113,11 @@ public class AuctionServiceImpl implements AuctionService {
      * Scheduled Task: Transitions SCHEDULED -> ACTIVE when start time arrives
      */
     @Scheduled(fixedRate = 5000)
+    @SchedulerLock(
+            name = "AuctionService_processScheduledToActiveAuctions",
+            lockAtMostFor = "4s",
+            lockAtLeastFor = "1s"
+    )
     public void processScheduledToActiveAuctions() {
         List<Auction> scheduledAuctions = auctionRepository
                 .findByAuctionStatusAndStartTimeBefore(AuctionStatus.SCHEDULED, LocalDateTime.now());
@@ -129,6 +135,11 @@ public class AuctionServiceImpl implements AuctionService {
      * Scheduled Task: Transitions ACTIVE -> ENDED when end time passes
      */
     @Scheduled(fixedRate = 5000)
+    @SchedulerLock(
+            name = "AuctionService_processActiveToEndedAuctions",
+            lockAtMostFor = "4s",
+            lockAtLeastFor = "1s"
+    )
     public void processActiveToEndedAuctions() {
         List<Auction> activeAuctions = auctionRepository
                 .findByAuctionStatusAndEndTimeBefore(AuctionStatus.ACTIVE, LocalDateTime.now());
@@ -209,6 +220,14 @@ public class AuctionServiceImpl implements AuctionService {
 
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Auction not found with id: " + auctionId));
+
+        if (auction.getAuctionStatus() == AuctionStatus.CANCELLED) {
+            throw new InvalidOperationException("Auction is already cancelled.");
+        }
+
+        if (auction.getAuctionStatus() == AuctionStatus.ENDED) {
+            throw new InvalidOperationException("Cannot cancel an auction that has already ended.");
+        }
 
         if (auction.getHighestBidder() != null) {
             log.warn("Cannot cancel auction ID: {} as bids have already been placed.", auctionId);

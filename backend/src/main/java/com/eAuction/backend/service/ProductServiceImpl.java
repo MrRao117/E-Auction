@@ -14,6 +14,8 @@ import com.eAuction.backend.repository.ProductRepository;
 import com.eAuction.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
+    @CacheEvict(value = "categories", allEntries = true)
     public ProductDTOs.CategoryResponse createCategory(ProductDTOs.CreateCategoryRequest request, String createdByEmail) {
         log.info("Creating product category '{}' by user: {}", request.getCategoryName(), createdByEmail);
 
@@ -52,6 +55,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "categories")
     public List<ProductDTOs.CategoryResponse> getAllCategories() {
         log.info("Fetching all product categories");
 
@@ -62,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional(readOnly = true)
     @Override
+    @Cacheable(value = "categoryDetails", key = "#categoryId")
     public ProductDTOs.CategoryResponse getCategoryById(Long categoryId) {
         log.info("Fetching category with ID: {}", categoryId);
 
@@ -162,6 +167,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "verifiedProducts")
     public List<ProductDTOs.ProductResponse> getVerifiedProducts() {
         log.info("Fetching all verified products for public catalog");
         return productRepository.findByIsVerifiedTrue().stream()
@@ -224,6 +230,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "verifiedProducts", allEntries = true)
     public ProductDTOs.ProductResponse verifyProduct(Long productId,String adminEmail, ProductDTOs.VerifyProductRequest request) {
         log.info("Verifying product ID: {} by admin email: {}", productId, adminEmail);
 
@@ -253,8 +260,11 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
 
-        // Allow deletion if requested by the seller who owns it
-        if (!product.getSeller().getEmail().equalsIgnoreCase(userEmail)) {
+        boolean isSeller = product.getSeller() != null && product.getSeller().getEmail().equalsIgnoreCase(userEmail);
+        boolean isAdmin = adminRepository.findByEmail(userEmail).isPresent();
+
+        // IDOR Check: Must be either the owner seller OR an admin
+        if (!isSeller && !isAdmin) {
             throw new UnauthorizedAccessException("You are not authorized to delete this product");
         }
 

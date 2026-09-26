@@ -15,8 +15,8 @@ import com.eAuction.backend.repository.AuctionRepository;
 import com.eAuction.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,6 +98,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+
     @Override
     public OrderDTOs.OrderResponse createAutomaticOrderForWinner(Long auctionId) {
         log.info("Attempting automatic order creation for auction ID: {}", auctionId);
@@ -117,7 +118,6 @@ public class OrderServiceImpl implements OrderService {
 
         Long winnerUserId = auction.getHighestBidder().getUserId();
 
-        // Find winner's default address or first fallback address
         Address address = addressRepository.findByUserUserIdAndIsDefaultTrue(winnerUserId)
                 .orElseGet(() -> addressRepository.findFirstByUserUserIdOrderByAddressIdAsc(winnerUserId)
                         .orElseThrow(() -> new ResourceNotFoundException("NO_ADDRESS_FOUND")));
@@ -127,10 +127,16 @@ public class OrderServiceImpl implements OrderService {
         order.setAddress(address);
         order.setOrderStatus(OrderStatus.CREATED);
 
-        AuctionOrder savedOrder = orderRepository.save(order);
-        log.info("Automatic Order ID {} created successfully for auction ID {}", savedOrder.getOrderId(), auctionId);
-
-        return mapToOrderResponse(savedOrder);
+        try {
+            AuctionOrder savedOrder = orderRepository.save(order);
+            log.info("Automatic Order ID {} created successfully for auction ID {}", savedOrder.getOrderId(), auctionId);
+            return mapToOrderResponse(savedOrder);
+        } catch (DataIntegrityViolationException e) {
+            log.warn("Concurrent creation race detected for auction ID: {}. Returning existing order.", auctionId);
+            AuctionOrder existingOrder = orderRepository.findByAuction_AuctionId(auctionId)
+                    .orElseThrow(() -> e);
+            return mapToOrderResponse(existingOrder);
+        }
     }
 
     @Override
@@ -205,6 +211,11 @@ public class OrderServiceImpl implements OrderService {
      * Runs every hour: Automatically cancels CREATED orders if payment is not completed within 7 days.
      */
     @Scheduled(fixedRate = 3600000)
+    @SchedulerLock(
+            name = "OrderService_processExpiredUnpaidOrders",
+            lockAtMostFor = "10m",
+            lockAtLeastFor = "30s"
+    )
     public void processExpiredUnpaidOrders() {
         try {
             LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
