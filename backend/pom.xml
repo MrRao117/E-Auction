@@ -136,13 +136,24 @@
 
 
 <!--		11. Bucket4j Rate Limiting-->
-		<dependency>
-			<groupId>com.bucket4j</groupId>
-			<artifactId>bucket4j-core</artifactId>
-			<version>8.10.1</version>
-		</dependency>
+			<!-- Use the JDK 17+ core module -->
+			<dependency>
+				<groupId>com.bucket4j</groupId>
+				<artifactId>bucket4j_jdk17-core</artifactId>
+				<version>8.19.0</version>
+			</dependency>
 
-<!--		12. Spring Boot Actuator-->
+			<!-- Use the JDK 17+ lettuce/redis module if applicable -->
+			<dependency>
+				<groupId>com.bucket4j</groupId>
+				<artifactId>bucket4j_jdk17-lettuce</artifactId>
+				<version>8.19.0</version>
+			</dependency>
+
+
+
+
+		<!--		12. Spring Boot Actuator-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -194,6 +205,15 @@
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
+
+
+
+<!--		19. Reactor Netty under the hood to handle TCP socket connections-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-reactor-netty</artifactId>
+		</dependency>
+
 
 	</dependencies>
 

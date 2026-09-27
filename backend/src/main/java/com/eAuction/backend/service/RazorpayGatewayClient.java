@@ -1,5 +1,6 @@
 package com.eAuction.backend.service;
 
+import com.eAuction.backend.exception.RazorpayServiceException;
 import com.razorpay.PaymentLink;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
@@ -10,6 +11,7 @@ import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -21,6 +23,9 @@ import java.util.concurrent.CompletableFuture;
 public class RazorpayGatewayClient {
 
     private final RazorpayClient razorpayClient;
+
+    @Value("${app.base-url:http://localhost:8080}")
+    private String baseUrl;
 
     @CircuitBreaker(name = "razorpayService", fallbackMethod = "createPaymentLinkFallback")
     @Retry(name = "razorpayService")
@@ -48,14 +53,18 @@ public class RazorpayGatewayClient {
                 notify.put("email", true);
                 notify.put("sms", false);
                 paymentLinkRequest.put("notify", notify);
-                paymentLinkRequest.put("callback_url", "http://localhost:8080/api/v1/payments/callback");
+
+                // Externalized base-url fallback integration
+                paymentLinkRequest.put("callback_url", baseUrl + "/api/v1/payments/callback");
                 paymentLinkRequest.put("callback_method", "get");
 
                 return razorpayClient.paymentLink.create(paymentLinkRequest);
 
             } catch (RazorpayException e) {
-                log.error("Razorpay exception during payment link creation for order ID: {}", orderId, e);
-                throw new RuntimeException("Failed to initiate payment with Razorpay: " + e.getMessage(), e);
+                // Wrap it in your dedicated retryable unchecked exception
+                throw new RazorpayServiceException("Failed to create Razorpay payment link: " + e.getMessage(), e);
+            } catch (Exception e) {
+                throw new RuntimeException("Unexpected error during payment link creation", e);
             }
         });
     }

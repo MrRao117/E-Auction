@@ -12,9 +12,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        // Enables a simple memory-based message broker for destinations prefixed with "/topic"
-        config.enableSimpleBroker("/topic");
-
+        // This hooks your STOMP broker relay to ActiveMQ running on localhost:61613
+        config.enableStompBrokerRelay("/topic", "/queue")
+                .setRelayHost("localhost")
+                .setRelayPort(61613)
+                .setClientLogin("admin")
+                .setClientPasscode("admin")
+                .setSystemLogin("admin")
+                .setSystemPasscode("admin");
         // Designates the prefix for messages bound for methods annotated with @MessageMapping
         config.setApplicationDestinationPrefixes("/app");
     }

@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
@@ -18,10 +19,11 @@ public class AdminInitializer implements CommandLineRunner {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${app.admin.default-email:admin@eauction.com}")
+    // No hardcoded fallbacks here anymore!
+    @Value("${app.admin.default-email:}")
     private String defaultAdminEmail;
 
-    @Value("${app.admin.default-password:Admin@123456}")
+    @Value("${app.admin.default-password:}")
     private String defaultAdminPassword;
 
     @Value("${app.admin.default-name:Super Admin}")
@@ -30,6 +32,14 @@ public class AdminInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
+        // Fail fast if the environment variables are missing
+        if (!StringUtils.hasText(defaultAdminEmail) || !StringUtils.hasText(defaultAdminPassword)) {
+            throw new IllegalStateException(
+                    "CRITICAL SECURITY ERROR: Default admin credentials are not configured! " +
+                            "Please set APP_ADMIN_DEFAULT_EMAIL and APP_ADMIN_DEFAULT_PASSWORD environment variables."
+            );
+        }
+
         String normalizedEmail = defaultAdminEmail.toLowerCase().trim();
 
         // Check if any Admin record exists in the database
@@ -45,7 +55,6 @@ public class AdminInitializer implements CommandLineRunner {
             adminRepository.save(admin);
 
             log.info("Default Admin account successfully created with email: {}", normalizedEmail);
-            log.warn("IMPORTANT: Please change the default admin password upon initial login!");
         } else {
             log.info("Admin user check completed: Administrative account already exists.");
         }

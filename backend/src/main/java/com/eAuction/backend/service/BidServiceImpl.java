@@ -39,6 +39,7 @@ public class BidServiceImpl implements BidService {
     private final AuctionBidRateLimiter auctionBidRateLimiter;
 
     @Override
+    @Transactional
     public BidDTOs.PublicBidResponse placeBid(Long auctionId, String buyerEmail, BidDTOs.PlaceBidRequest request) {
         BidDTOs.PublicBidResponse publicResponse;
         Long buyerId;

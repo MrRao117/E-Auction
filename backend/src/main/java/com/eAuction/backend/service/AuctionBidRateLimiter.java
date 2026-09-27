@@ -2,31 +2,32 @@ package com.eAuction.backend.service;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
+import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.Refill;
+import io.github.bucket4j.distributed.proxy.ProxyManager;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AuctionBidRateLimiter {
 
-    // Key format: "userId:auctionId"
-    private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+    private final ProxyManager<byte[]> proxyManager;
 
-    public boolean tryConsumeBid(Long userId, Long auctionId) {
-        String key = userId + ":" + auctionId;
-        Bucket bucket = buckets.computeIfAbsent(key, k -> createNewBucket());
-        return bucket.tryConsume(1);
+    public AuctionBidRateLimiter(ProxyManager<byte[]> proxyManager) {
+        this.proxyManager = proxyManager;
     }
 
-    private Bucket createNewBucket() {
-        // Business rule: Allow 1 bid every 3 seconds per auction, with a burst capacity of 2 tokens
-        Refill refill = Refill.greedy(1, Duration.ofSeconds(3));
-        Bandwidth limit = Bandwidth.classic(2, refill);
-        return Bucket.builder()
-                .addLimit(limit)
+    public boolean tryConsumeBid(Long userId, Long auctionId) {
+        String key = "bid_limit_" + userId + ":" + auctionId;
+        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
+
+        BucketConfiguration configuration = BucketConfiguration.builder()
+                .addLimit(Bandwidth.classic(2, Refill.greedy(1, Duration.ofSeconds(3))))
                 .build();
+
+        Bucket bucket = proxyManager.builder().build(keyBytes, configuration);
+        return bucket.tryConsume(1);
     }
 }

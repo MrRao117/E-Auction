@@ -15,8 +15,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(rateLimitInterceptor)
-                // Protect bidding endpoints against bot spam
-                .addPathPatterns("/api/v1/auctions/*/bids/**")
+                // Fixed: Updated to match your real bid endpoint path pattern
+                .addPathPatterns("/api/v1/bids/**")
                 // Protect login endpoints against brute-force attacks
                 .addPathPatterns("/api/v1/auth/login");
     }

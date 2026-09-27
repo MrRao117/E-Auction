@@ -1,13 +1,11 @@
-version: '3.8'
-
 services:
-
   # Redis Container
   redis:
     image: redis:latest
     container_name: redis-E_auction
     ports:
       - "6379:6379"
+    restart: unless-stopped
 
   # Apache Kafka Container (KRaft mode)
   kafka:
@@ -28,8 +26,47 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+    restart: unless-stopped
 
-  # Nginx Container
+  # Backend App Instance 1 (Load Balanced)
+  app1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eauction-app-1
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATA_REDIS_HOST=redis
+      - MANAGEMENT_SERVER_PORT=9091  # Isolated internal management port for Actuator
+      - APP_ADMIN_DEFAULT_EMAIL=admin@eauction.com
+      - APP_ADMIN_DEFAULT_PASSWORD=admin@123456
+      - APP_ADMIN_DEFAULT_NAME=Super Admin
+    depends_on:
+      - redis
+      - kafka
+      - elasticsearch
+    restart: unless-stopped
+
+  # Backend App Instance 2 (Load Balanced)
+  app2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eauction-app-2
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATA_REDIS_HOST=redis
+      - MANAGEMENT_SERVER_PORT=9091  # Isolated internal management port for Actuator
+      - APP_ADMIN_DEFAULT_EMAIL=admin@eauction.com
+      - APP_ADMIN_DEFAULT_PASSWORD=admin@123456
+      - APP_ADMIN_DEFAULT_NAME=Super Admin
+    depends_on:
+      - redis
+      - kafka
+      - elasticsearch
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy & Load Balancer
   nginx:
     image: nginx:alpine
     container_name: nginx-E_auction
@@ -37,6 +74,9 @@ services:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app1
+      - app2
     restart: unless-stopped
 
   # Prometheus Container
@@ -60,44 +100,43 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     restart: unless-stopped
 
-
-    # 1. Elasticsearch (Search & Storage Engine)
+  # 1. Elasticsearch (Search & Storage Engine)
   elasticsearch:
-      image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3
-      container_name: Elasticsearch-E_auction
-      environment:
-        - discovery.type=single-node
-        - xpack.security.enabled=false
-        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      ports:
-        - "9200:9200"
-      restart: unless-stopped
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3
+    container_name: Elasticsearch-E_auction
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    restart: unless-stopped
 
-    # 2. Logstash (Log Processing Pipeline)
+  # 2. Logstash (Log Processing Pipeline)
   logstash:
-      image: docker.elastic.co/logstash/logstash:8.11.3
-      container_name: Logstash-E_auction
-      volumes:
-        - ./logstash/pipeline:/usr/share/logstash/pipeline
-      ports:
-        - "5000:5000"
-      depends_on:
-        - elasticsearch
-      restart: unless-stopped
+    image: docker.elastic.co/logstash/logstash:8.11.3
+    container_name: Logstash-E_auction
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5000:5000"
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
 
-    # 3. Kibana (Search & Dashboard UI)
+  # 3. Kibana (Search & Dashboard UI)
   kibana:
-      image: docker.elastic.co/kibana/kibana:8.11.3
-      container_name: Kibana-E_auction
-      ports:
-        - "5601:5601"
-      environment:
-        - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      depends_on:
-        - elasticsearch
-      restart: unless-stopped
+    image: docker.elastic.co/kibana/kibana:8.11.3
+    container_name: Kibana-E_auction
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
 
-    # 4. Filebeat (Log Shipper)
+  # 4. Filebeat (Log Shipper)
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.11.3
     container_name: filebeat-auction
@@ -110,6 +149,14 @@ services:
     depends_on:
       - logstash
     restart: unless-stopped
+
+  activemq:
+    image: apache/activemq-classic:5.18.3
+    container_name: activemq-E_auction
+    ports:
+      - "61616:61616" # OpenWire port
+      - "61613:61613" # STOMP port
+      - "8161:8161"   # Web Console port
 
 volumes:
   filebeat_data:

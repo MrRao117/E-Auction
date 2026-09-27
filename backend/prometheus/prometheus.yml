@@ -2,8 +2,9 @@ global:
   scrape_interval: 5s
 
 scrape_configs:
-  - job_name: 'eauction-backend'
+  - job_name: 'eauction-backend-cluster'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      # Use host.docker.internal so Prometheus inside Docker can talk to your Spring Boot app running on port 8080
-      - targets: ['host.docker.internal:8080']
+      - targets:
+          - 'app1:9091'
+          - 'app2:9091'
