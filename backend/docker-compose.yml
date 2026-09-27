@@ -1,4 +1,19 @@
+version: '3.8'
+
 services:
+  # MySQL Database Container
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-E_auction
+    environment:
+      MYSQL_DATABASE: e_auction_dev
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-Tushar@72003}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
   # Redis Container
   redis:
     image: redis:latest
@@ -17,10 +32,10 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
-      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -28,41 +43,71 @@ services:
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
     restart: unless-stopped
 
+  # ActiveMQ STOMP / Message Broker Container
+  activemq:
+    image: apache/activemq-classic:5.18.3
+    container_name: activemq-E_auction
+    ports:
+      - "61616:61616"
+      - "61613:61613"
+      - "8161:8161"
+    restart: unless-stopped
+
   # Backend App Instance 1 (Load Balanced)
   app1:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: eauction-app-1
+    ports:
+      - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/e_auction_dev?useSSL=false&serverTimezone=Asia/Kolkata&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_ROOT_PASSWORD:-Tushar@72003}
       - SPRING_DATA_REDIS_HOST=redis
-      - MANAGEMENT_SERVER_PORT=9091  # Isolated internal management port for Actuator
-      - APP_ADMIN_DEFAULT_EMAIL=admin@eauction.com
-      - APP_ADMIN_DEFAULT_PASSWORD=admin@123456
-      - APP_ADMIN_DEFAULT_NAME=Super Admin
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - ACTIVEMQ_RELAY_HOST=activemq
+      - MANAGEMENT_SERVER_PORT=9091
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your_default_jwt_secret_key_here}
+      - ADMIN_DEFAULT_EMAIL=${ADMIN_DEFAULT_EMAIL:-admin@eauction.com}
+      - ADMIN_DEFAULT_PASSWORD=${ADMIN_DEFAULT_PASSWORD:-admin@123456}
+      - ADMIN_DEFAULT_NAME=${ADMIN_DEFAULT_NAME:-Super Admin}
     depends_on:
+      - mysql
       - redis
       - kafka
+      - activemq
       - elasticsearch
     restart: unless-stopped
 
   # Backend App Instance 2 (Load Balanced)
   app2:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: eauction-app-2
+    ports:
+      - "8081:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/e_auction_dev?useSSL=false&serverTimezone=Asia/Kolkata&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_ROOT_PASSWORD:-Tushar@72003}
       - SPRING_DATA_REDIS_HOST=redis
-      - MANAGEMENT_SERVER_PORT=9091  # Isolated internal management port for Actuator
-      - APP_ADMIN_DEFAULT_EMAIL=admin@eauction.com
-      - APP_ADMIN_DEFAULT_PASSWORD=admin@123456
-      - APP_ADMIN_DEFAULT_NAME=Super Admin
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - ACTIVEMQ_RELAY_HOST=activemq
+      - MANAGEMENT_SERVER_PORT=9091
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your_default_jwt_secret_key_here}
+      - ADMIN_DEFAULT_EMAIL=${ADMIN_DEFAULT_EMAIL:-admin@eauction.com}
+      - ADMIN_DEFAULT_PASSWORD=${ADMIN_DEFAULT_PASSWORD:-admin@123456}
+      - ADMIN_DEFAULT_NAME=${ADMIN_DEFAULT_NAME:-Super Admin}
     depends_on:
+      - mysql
       - redis
       - kafka
+      - activemq
       - elasticsearch
     restart: unless-stopped
 
@@ -100,7 +145,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     restart: unless-stopped
 
-  # 1. Elasticsearch (Search & Storage Engine)
+  # Elasticsearch
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3
     container_name: Elasticsearch-E_auction
@@ -112,19 +157,19 @@ services:
       - "9200:9200"
     restart: unless-stopped
 
-  # 2. Logstash (Log Processing Pipeline)
+  # Logstash
   logstash:
     image: docker.elastic.co/logstash/logstash:8.11.3
     container_name: Logstash-E_auction
     volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - ./backend/logstash/pipeline:/usr/share/logstash/pipeline
     ports:
       - "5000:5000"
     depends_on:
       - elasticsearch
     restart: unless-stopped
 
-  # 3. Kibana (Search & Dashboard UI)
+  # Kibana
   kibana:
     image: docker.elastic.co/kibana/kibana:8.11.3
     container_name: Kibana-E_auction
@@ -136,7 +181,7 @@ services:
       - elasticsearch
     restart: unless-stopped
 
-  # 4. Filebeat (Log Shipper)
+  # Filebeat
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.11.3
     container_name: filebeat-auction
@@ -150,13 +195,6 @@ services:
       - logstash
     restart: unless-stopped
 
-  activemq:
-    image: apache/activemq-classic:5.18.3
-    container_name: activemq-E_auction
-    ports:
-      - "61616:61616" # OpenWire port
-      - "61613:61613" # STOMP port
-      - "8161:8161"   # Web Console port
-
 volumes:
+  mysql_data:
   filebeat_data:

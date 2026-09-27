@@ -7,11 +7,16 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("razorpayHealthIndicator")
 public class RazorpayHealthIndicator implements HealthIndicator {
 
     private final String keyId;
     private final String keySecret;
+
+    // Caching fields to prevent API rate-limiting and external blip cascading
+    private Health cachedHealth;
+    private long lastCheckedTimestamp = 0;
+    private static final long CACHE_TTL_MS = 45_000; // 45 seconds cache window
 
     public RazorpayHealthIndicator(
             @Value("${razorpay.key.id}") String keyId,
@@ -21,24 +26,34 @@ public class RazorpayHealthIndicator implements HealthIndicator {
     }
 
     @Override
-    public Health health() {
+    public synchronized Health health() {
+        long now = System.currentTimeMillis();
+
+        // Return cached health if within the TTL window
+        if (cachedHealth != null && (now - lastCheckedTimestamp) < CACHE_TTL_MS) {
+            return cachedHealth;
+        }
+
         try {
             // Initialize the client
             RazorpayClient client = new RazorpayClient(keyId, keySecret);
 
-            // Perform a lightweight, authenticated API call to test connectivity and key validity
+            // Perform lightweight authenticated API check
             JSONObject params = new JSONObject();
             params.put("count", 1);
-            client.payments.fetchAll(params); // This contacts Razorpay servers
+            client.payments.fetchAll(params);
 
-            return Health.up()
+            cachedHealth = Health.up()
                     .withDetail("razorpay", "Successfully connected and authenticated with Razorpay API")
                     .build();
 
         } catch (Exception e) {
-            return Health.down()
-                    .withDetail("razorpay", "Health check failed: " + e.getMessage())
+            cachedHealth = Health.down()
+                    .withDetail("razorpay", "Health check failed (cached or temporary): " + e.getMessage())
                     .build();
         }
+
+        lastCheckedTimestamp = now;
+        return cachedHealth;
     }
 }
