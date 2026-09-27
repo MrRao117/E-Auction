@@ -18,20 +18,18 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: tushar205
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
         with:
           context: .
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ env.DOCKER_USER }}/eauction-backend:latest
-            ${{ env.DOCKER_USER }}/eauction-backend:${{ github.sha }}
+            tushar205/eauction-backend:latest
+            tushar205/eauction-backend:${{ github.sha }}
 
       # Uncomment below when you have a production server (PROD_HOST) set up
       # - name: Deploy to Production Server via SSH
@@ -41,7 +39,7 @@ jobs:
       #     username: ${{ secrets.PROD_USER }}
       #     key: ${{ secrets.PROD_SSH_KEY }}
       #     script: |
-      #       docker pull ${{ secrets.DOCKER_USERNAME }}/eauction-backend:latest
+      #       docker pull tushar205/eauction-backend:latest
       #       docker stop eauction-app || true
       #       docker rm eauction-app || true
       #       docker run -d \
@@ -54,4 +52,4 @@ jobs:
       #         -e SPRING_DATASOURCE_PASSWORD="${{ secrets.PROD_DB_PASSWORD }}" \
       #         -e ADMIN_DEFAULT_EMAIL="${{ secrets.ADMIN_EMAIL }}" \
       #         -e ADMIN_DEFAULT_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
-      #         ${{ secrets.DOCKER_USERNAME }}/eauction-backend:latest
+      #         tushar205/eauction-backend:latest
