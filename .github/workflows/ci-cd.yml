@@ -11,6 +11,10 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
 
+    # Map secrets to environment variables to ensure clean evaluation
+    env:
+      DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -28,8 +32,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/eauction-backend:latest
-            ${{ secrets.DOCKER_USERNAME }}/eauction-backend:${{ github.sha }}
+            ${{ env.DOCKER_USER }}/eauction-backend:latest
+            ${{ env.DOCKER_USER }}/eauction-backend:${{ github.sha }}
 
       # Uncomment below when you have a production server (PROD_HOST) set up
       # - name: Deploy to Production Server via SSH
