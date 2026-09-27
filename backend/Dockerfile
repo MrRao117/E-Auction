@@ -21,6 +21,8 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
+# Expose both the main app port and the actuator/prometheus management port
 EXPOSE 8080
+EXPOSE 9091
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
