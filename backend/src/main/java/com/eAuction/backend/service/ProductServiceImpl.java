@@ -18,8 +18,11 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
     private final UserRepository userRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final AdminRepository adminRepository;
+    private final CloudinaryService cloudinaryService;
 
 
     @Override
@@ -78,37 +82,38 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductDTOs.ProductResponse createProduct(ProductDTOs.CreateProductRequest request, String sellerEmail) {
+    public ProductDTOs.ProductResponse createProduct(ProductDTOs.CreateProductRequest request, MultipartFile image, String sellerEmail) {
         log.info("Creating product '{}' for seller email: {}", request.getPname(), sellerEmail);
 
-        // Fetch seller directly from DB using email extracted from JWT token
         User seller = userRepository.findByEmail(sellerEmail)
-                .orElseThrow(() -> {
-                    log.warn("Product creation failed. Seller not found with email: {}", sellerEmail);
-                    return new ResourceNotFoundException("Seller not found with email: " + sellerEmail);
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with email: " + sellerEmail));
 
         ProductCategory category = null;
         if (request.getCategoryId() != null) {
             category = productCategoryRepository.findById(request.getCategoryId())
-                    .orElseThrow(() -> {
-                        log.warn("Product creation failed. Category not found with ID: {}", request.getCategoryId());
-                        return new ResourceNotFoundException("Category not found with id: " + request.getCategoryId());
-                    });
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + request.getCategoryId()));
         }
 
         Product product = new Product();
-        product.setSeller(seller); // Set seller from JWT lookup
+        product.setSeller(seller);
         product.setCategoryId(category);
         product.setPname(request.getPname());
         product.setDescription(request.getDescription());
         product.setBasePrice(request.getBasePrice());
-        product.setImageURL(request.getImageUrl());
         product.setVerified(false);
 
-        Product savedProduct = productRepository.save(product);
-        log.info("Product created successfully with ID: {}", savedProduct.getProductId());
+        // Upload image to Cloudinary if provided
+        if (image != null && !image.isEmpty()) {
+            try {
+                Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
+                product.setImageURL(uploadResult.get("imageUrl"));
+                product.setImagePublicId(uploadResult.get("publicId"));
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to upload image to Cloudinary", e);
+            }
+        }
 
+        Product savedProduct = productRepository.save(product);
         return mapToProductResponse(savedProduct);
     }
 
@@ -199,13 +204,10 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductDTOs.ProductResponse updateProduct(Long productId, ProductDTOs.CreateProductRequest request, String sellerEmail) {
-        log.info("Updating product ID: {} by seller email: {}", productId, sellerEmail);
-
+    public ProductDTOs.ProductResponse updateProduct(Long productId, ProductDTOs.CreateProductRequest request, MultipartFile image, String sellerEmail) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
 
-        // Security Check: Only the owner or an admin can update
         if (!product.getSeller().getEmail().equalsIgnoreCase(sellerEmail)) {
             throw new UnauthorizedAccessException("You do not have permission to update this product");
         }
@@ -221,10 +223,23 @@ public class ProductServiceImpl implements ProductService {
         product.setPname(request.getPname());
         product.setDescription(request.getDescription());
         product.setBasePrice(request.getBasePrice());
-        product.setImageURL(request.getImageUrl());
-        // Re-verify product if seller modifies details
-        product.setVerified(false);
 
+        // Handle new image update if a replacement file is sent
+        if (image != null && !image.isEmpty()) {
+            try {
+                // Delete old image from Cloudinary if it exists
+                if (product.getImagePublicId() != null) {
+                    cloudinaryService.deleteImage(product.getImagePublicId());
+                }
+                Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
+                product.setImageURL(uploadResult.get("imageUrl"));
+                product.setImagePublicId(uploadResult.get("publicId"));
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to update image on Cloudinary", e);
+            }
+        }
+
+        product.setVerified(false); // Re-verify product on update
         Product updatedProduct = productRepository.save(product);
         return mapToProductResponse(updatedProduct);
     }
@@ -255,21 +270,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long productId, String userEmail) {
-        log.info("Deleting product ID: {} requested by user: {}", productId, userEmail);
-
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
 
         boolean isSeller = product.getSeller() != null && product.getSeller().getEmail().equalsIgnoreCase(userEmail);
         boolean isAdmin = adminRepository.findByEmail(userEmail).isPresent();
 
-        // IDOR Check: Must be either the owner seller OR an admin
         if (!isSeller && !isAdmin) {
             throw new UnauthorizedAccessException("You are not authorized to delete this product");
         }
 
+        // Clean up Cloudinary asset
+        if (product.getImagePublicId() != null) {
+            cloudinaryService.deleteImage(product.getImagePublicId());
+        }
+
         productRepository.delete(product);
-        log.info("Product ID: {} deleted successfully", productId);
     }
 
     private ProductDTOs.CategoryResponse mapToCategoryResponse(ProductCategory category) {

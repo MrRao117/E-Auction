@@ -3,7 +3,6 @@ package com.eAuction.backend.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 
 @Entity
@@ -21,7 +20,6 @@ public class Product {
     @JoinColumn(name = "categoryId")
     private ProductCategory categoryId;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sellerId", nullable = false)
     private User seller;
@@ -37,7 +35,10 @@ public class Product {
 
     private String imageURL;
 
-    private boolean isVerified=false;
+    @Column(name = "image_public_id") // Added for Cloudinary management
+    private String imagePublicId;
+
+    private boolean isVerified = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "verified_by", referencedColumnName = "admin_id")

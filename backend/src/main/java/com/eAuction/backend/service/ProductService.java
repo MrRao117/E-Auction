@@ -1,6 +1,7 @@
 package com.eAuction.backend.service;
 
 import com.eAuction.backend.dto.ProductDTOs;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface ProductService {
     ProductDTOs.CategoryResponse getCategoryById(Long categoryId);
 
     // Product Operations
-    ProductDTOs.ProductResponse createProduct(ProductDTOs.CreateProductRequest request, String sellerEmail);
+    ProductDTOs.ProductResponse createProduct(ProductDTOs.CreateProductRequest request, MultipartFile image, String sellerEmail);
 
     ProductDTOs.ProductResponse getProductById(Long productId);
 
@@ -24,9 +25,9 @@ public interface ProductService {
     List<ProductDTOs.ProductResponse> getProductsBySellerId(Long sellerId);
     List<ProductDTOs.ProductResponse> getProductsByCategory(Long categoryId);
 
-    ProductDTOs.ProductResponse updateProduct(Long productId, ProductDTOs.CreateProductRequest request, String sellerEmail);
+    ProductDTOs.ProductResponse updateProduct(Long productId, ProductDTOs.CreateProductRequest request, MultipartFile image, String sellerEmail);
 
-    ProductDTOs.ProductResponse verifyProduct(Long productId,String adminEmail, ProductDTOs.VerifyProductRequest request);
+    ProductDTOs.ProductResponse verifyProduct(Long productId, String adminEmail, ProductDTOs.VerifyProductRequest request);
 
     void deleteProduct(Long productId, String userEmail);
 }

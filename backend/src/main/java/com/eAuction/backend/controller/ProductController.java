@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -87,14 +88,15 @@ public class ProductController {
     // PRODUCT POST/PUT/DELETE ENDPOINTS
     // ==========================================
 
-    @PostMapping("/add")
+    @PostMapping(value = "/add", consumes = {"multipart/form-data"})
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> createProduct(
-            @Valid @RequestBody ProductDTOs.CreateProductRequest request,
+            @RequestPart("product") @Valid ProductDTOs.CreateProductRequest request,
+            @RequestPart("image") MultipartFile image,
             Authentication authentication
     ) {
         String sellerEmail = authentication.getName();
-        return new ResponseEntity<>(productService.createProduct(request, sellerEmail), HttpStatus.CREATED);
+        return new ResponseEntity<>(productService.createProduct(request, image, sellerEmail), HttpStatus.CREATED);
     }
 
     @PutMapping("/{productId}/verify")
@@ -108,15 +110,16 @@ public class ProductController {
         return ResponseEntity.ok(productService.verifyProduct(productId, adminEmail, request));
     }
 
-    @PutMapping("/{productId}/update")
+    @PutMapping(value = "/{productId}/update", consumes = {"multipart/form-data"})
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> updateProduct(
             @PathVariable Long productId,
-            @Valid @RequestBody ProductDTOs.CreateProductRequest request,
+            @RequestPart("product") @Valid ProductDTOs.CreateProductRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image,
             Authentication authentication
     ) {
         String sellerEmail = authentication.getName();
-        return ResponseEntity.ok(productService.updateProduct(productId, request, sellerEmail));
+        return ResponseEntity.ok(productService.updateProduct(productId, request, image, sellerEmail));
     }
 
     @DeleteMapping("/{productId}/delete")
