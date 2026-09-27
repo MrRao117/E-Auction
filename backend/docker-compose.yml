@@ -7,7 +7,7 @@ services:
     container_name: mysql-E_auction
     environment:
       MYSQL_DATABASE: e_auction_dev
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-Tushar@72003}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
