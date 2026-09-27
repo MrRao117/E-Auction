@@ -24,18 +24,17 @@ jobs:
 
       - name: Run Maven Tests
         working-directory: ./backend
-        # Added database environment variables so tests can connect to your official DB
         env:
           SPRING_DATASOURCE_URL: ${{ secrets.PROD_DB_URL }}
           SPRING_DATASOURCE_USERNAME: ${{ secrets.PROD_DB_USER }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         run: mvn clean test
 
   build-and-push:
     name: Build & Push Docker Image
     needs: test
     runs-on: ubuntu-latest
-    # Securely restrict building and pushing to direct pushes on master (never on PRs)
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     steps:
@@ -45,7 +44,7 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: tushar205
+          username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker Image
@@ -57,26 +56,3 @@ jobs:
           tags: |
             tushar205/eauction-backend:latest
             tushar205/eauction-backend:${{ github.sha }}
-
-      # Uncomment below when you have a production server (PROD_HOST) set up
-      # - name: Deploy to Production Server via SSH
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.PROD_HOST }}
-      #     username: ${{ secrets.PROD_USER }}
-      #     key: ${{ secrets.PROD_SSH_KEY }}
-      #     script: |
-      #       docker pull tushar205/eauction-backend:latest
-      #       docker stop eauction-app || true
-      #       docker rm eauction-app || true
-      #       docker run -d \
-      #         --name eauction-app \
-      #         -p 8080:8080 \
-      #         -p 9091:9091 \
-      #         -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
-      #         -e SPRING_DATASOURCE_URL="${{ secrets.PROD_DB_URL }}" \
-      #         -e SPRING_DATASOURCE_USERNAME="${{ secrets.PROD_DB_USER }}" \
-      #         -e SPRING_DATASOURCE_PASSWORD="${{ secrets.PROD_DB_PASSWORD }}" \
-      #         -e ADMIN_DEFAULT_EMAIL="${{ secrets.ADMIN_EMAIL }}" \
-      #         -e ADMIN_DEFAULT_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
-      #         tushar205/eauction-backend:latest
