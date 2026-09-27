@@ -11,10 +11,6 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
 
-    # Map secrets to environment variables to ensure clean evaluation
-    env:
-      DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -27,6 +23,8 @@ jobs:
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
         with:
           context: .
           file: ./Dockerfile
