@@ -84,17 +84,24 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTOs.ProductResponse createProduct(ProductDTOs.CreateProductRequest request, String sellerEmail) {
         log.info("Creating product '{}' for seller email: {}", request.getPname(), sellerEmail);
 
+        // Fetch seller directly from DB using email extracted from JWT token
         User seller = userRepository.findByEmail(sellerEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with email: " + sellerEmail));
+                .orElseThrow(() -> {
+                    log.warn("Product creation failed. Seller not found with email: {}", sellerEmail);
+                    return new ResourceNotFoundException("Seller not found with email: " + sellerEmail);
+                });
 
         ProductCategory category = null;
         if (request.getCategoryId() != null) {
             category = productCategoryRepository.findById(request.getCategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + request.getCategoryId()));
+                    .orElseThrow(() -> {
+                        log.warn("Product creation failed. Category not found with ID: {}", request.getCategoryId());
+                        return new ResourceNotFoundException("Category not found with id: " + request.getCategoryId());
+                    });
         }
 
         Product product = new Product();
-        product.setSeller(seller);
+        product.setSeller(seller); // Set seller from JWT lookup
         product.setCategoryId(category);
         product.setPname(request.getPname());
         product.setDescription(request.getDescription());
@@ -102,19 +109,24 @@ public class ProductServiceImpl implements ProductService {
         product.setImageURL(request.getImageUrl());
         product.setVerified(false);
 
-        // Upload image to Cloudinary if provided
-        // if (image != null && !image.isEmpty()) {
-        //     try {
-        //         Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
-        //         product.setImageURL(uploadResult.get("imageUrl"));
-        //         product.setImagePublicId(uploadResult.get("publicId"));
-        //     } catch (IOException e) {
-        //         throw new RuntimeException("Failed to upload image to Cloudinary", e);
-        //     }
-        // }
-
         Product savedProduct = productRepository.save(product);
+        log.info("Product created successfully with ID: {}", savedProduct.getProductId());
+
         return mapToProductResponse(savedProduct);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductDTOs.ProductResponse getProductById(Long productId) {
+        log.info("Fetching product details for ID: {}", productId);
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> {
+                    log.warn("Product not found with ID: {}", productId);
+                    return new ResourceNotFoundException("Product not found with id: " + productId);
+                });
+
+        return mapToProductResponse(product);
     }
 
     @Override
