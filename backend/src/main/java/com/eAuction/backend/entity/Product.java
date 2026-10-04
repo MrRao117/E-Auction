@@ -36,7 +36,7 @@ public class Product {
     private String imageURL;
 
     @Lob
-    @Column(name = "imageURL", columnDefinition = "LONGTEXT") // Added for Cloudinary management
+    @Column(name = "image_public_id", columnDefinition = "LONGTEXT")
     private String imagePublicId;
 
     private boolean isVerified = false;
