@@ -97,7 +97,7 @@ public class ProductController {
             Authentication authentication
     ) {
         String sellerEmail = authentication.getName();
-        return new ResponseEntity<>(productService.createProduct(request, image, sellerEmail), HttpStatus.CREATED);
+        return new ResponseEntity<>(productService.createProduct(request, images, sellerEmail), HttpStatus.CREATED);
     }
 
     @PutMapping("/{productId}/verify")
