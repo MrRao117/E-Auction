@@ -83,6 +83,8 @@ export const getProductById = async (productId) => {
 // 10. Create a new product (Seller only)
 // POST /api/v1/products/add
 export const createProduct = async (productData) => {
+  // Pass formData directly. Do NOT manually override Content-Type headers,
+  // as Axios will automatically handle the multipart boundary.
   const response = await axiosClient.post("/products/add", productData);
   return response.data;
 };
