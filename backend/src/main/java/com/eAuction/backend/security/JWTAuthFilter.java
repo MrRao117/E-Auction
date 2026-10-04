@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JWTAuthFilter extends OncePerRequestFilter {
@@ -32,11 +34,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
 
-        // ==============================
-        // CHECK AUTHORIZATION HEADER
-        // ==============================
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            logger.info("No valid Authorization header found.");
             filterChain.doFilter(request, response);
             return;
         }
@@ -44,42 +42,22 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         final String jwt = authHeader.substring(7);
 
         try {
-
-            // ==============================
-            // EXTRACT USER EMAIL
-            // ==============================
             final String userEmail = jwtService.extractUsername(jwt);
 
-            logger.info("JWT username/email: {}", userEmail);
+            log.info("JWT username/email: {}", userEmail);
 
-            if (userEmail != null
-                    && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (userEmail != null &&
+                    SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                // ==============================
-                // LOAD USER FROM DATABASE
-                // ==============================
                 UserDetails userDetails =
                         userDetailsService.loadUserByUsername(userEmail);
 
-                logger.info("Loaded user: {}", userDetails.getUsername());
+                log.info("Loaded user: {}", userDetails.getUsername());
+                log.info("User authorities: {}", userDetails.getAuthorities());
 
-                // ==============================
-                // PRINT AUTHORITIES
-                // ==============================
-                logger.info(
-                        "User authorities: {}",
-                        userDetails.getAuthorities()
-                );
+                if (jwtService.isTokenValid(jwt, userDetails.getUsername())) {
 
-                // ==============================
-                // VALIDATE JWT
-                // ==============================
-                if (jwtService.isTokenValid(
-                        jwt,
-                        userDetails.getUsername()
-                )) {
-
-                    logger.info("JWT validation successful.");
+                    log.info("JWT validation successful.");
 
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(
@@ -97,38 +75,25 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                             .getContext()
                             .setAuthentication(authToken);
 
-                    // ==============================
-                    // PRINT FINAL SECURITY CONTEXT
-                    // ==============================
-                    logger.info(
-                            "SecurityContext authentication: {}",
-                            SecurityContextHolder
-                                    .getContext()
-                                    .getAuthentication()
-                    );
-
-                    logger.info(
+                    log.info(
                             "Final authorities: {}",
                             SecurityContextHolder
                                     .getContext()
                                     .getAuthentication()
                                     .getAuthorities()
                     );
-
                 } else {
-                    logger.warn("JWT validation failed.");
+                    log.warn("JWT validation failed.");
                 }
             }
 
         } catch (Exception e) {
-
-            logger.error(
+            log.error(
                     "Could not set user authentication in security context",
                     e
             );
         }
 
-        // Continue request
         filterChain.doFilter(request, response);
     }
 }
