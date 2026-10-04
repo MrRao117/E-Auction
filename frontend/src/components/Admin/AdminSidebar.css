@@ -1,0 +1,427 @@
+/* ============================================
+   ADMIN SIDEBAR
+============================================ */
+
+.admin-sidebar {
+  --sidebar-primary: #059669;
+  --sidebar-primary-dark: #047857;
+  --sidebar-text: #111936;
+  --sidebar-muted: #64748b;
+  --sidebar-border: #e5eeea;
+  --sidebar-bg: #ffffff;
+
+  position: fixed;
+  top: 150px;
+  left: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 285px;
+  height: calc(100vh - 150px);
+
+  padding: 10px 12px;
+  margin: 0;
+
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+
+  z-index: 100;
+
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.admin-sidebar *,
+.admin-sidebar *::before,
+.admin-sidebar *::after {
+  box-sizing: border-box;
+}
+
+/* ============================================
+   SIDEBAR NAVIGATION
+============================================ */
+
+.admin-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+
+  width: 100%;
+
+  flex: 1 1 0;
+  height: 0;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5d1 transparent;
+
+  overscroll-behavior: contain;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar {
+  width: 5px;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-thumb {
+  background: #cbd5d1;
+  border-radius: 10px;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ============================================
+   NAVIGATION ITEM
+============================================ */
+
+.admin-nav-item {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+  min-width: 0;
+
+  min-height: 56px;
+  height: 56px;
+  max-height: 56px;
+
+  flex: 0 0 56px;
+
+  margin: 0;
+  padding: 0 12px;
+
+  color: var(--sidebar-text);
+  background: transparent;
+
+  border: 1px solid transparent;
+  border-radius: 9px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* ============================================
+   NAVIGATION ICON
+============================================ */
+
+.admin-nav-icon {
+  width: 19px;
+  height: 19px;
+
+  flex-shrink: 0;
+
+  color: var(--sidebar-text);
+
+  transition: color 0.2s ease;
+}
+
+/* ============================================
+   NAVIGATION LABEL
+============================================ */
+
+.admin-nav-label {
+  flex: 1;
+  min-width: 0;
+
+  margin: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+/* ============================================
+   HOVER STATE
+============================================ */
+
+.admin-nav-item:hover:not(.active) {
+  color: var(--sidebar-primary-dark);
+  background: #f0faf5;
+}
+
+.admin-nav-item:hover:not(.active) .admin-nav-icon {
+  color: var(--sidebar-primary-dark);
+}
+
+/* ============================================
+   ACTIVE STATE
+============================================ */
+
+.admin-nav-item.active {
+  color: #ffffff;
+  background: #047857;
+
+  border-color: #047857;
+
+  box-shadow: 0 2px 5px rgba(4, 120, 87, 0.12);
+}
+
+.admin-nav-item.active .admin-nav-icon {
+  color: #ffffff;
+}
+
+.admin-nav-item.active .admin-nav-label {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.admin-nav-item.active:hover {
+  background: #036b4d;
+}
+
+/* ============================================
+   NAVIGATION ARROW
+============================================ */
+
+.admin-nav-arrow {
+  width: 17px;
+  height: 17px;
+
+  flex-shrink: 0;
+  margin-left: auto;
+
+  color: var(--sidebar-text);
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.admin-nav-item:hover .admin-nav-arrow {
+  color: var(--sidebar-primary-dark);
+}
+
+.admin-nav-item.active .admin-nav-arrow {
+  color: #ffffff;
+}
+
+/* ============================================
+   BADGE
+============================================ */
+
+.admin-nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 28px;
+  height: 28px;
+
+  padding: 0 7px;
+  margin-left: auto;
+
+  color: #ffffff;
+  background: #ef3038;
+
+  border-radius: 50%;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+
+  flex-shrink: 0;
+}
+
+.admin-nav-item.active .admin-nav-badge {
+  color: #ffffff;
+  background: #ef3038;
+}
+
+/* ============================================
+   TABLET / SMALL DESKTOP
+============================================ */
+
+@media (max-width: 1100px) {
+  .admin-sidebar {
+    width: 250px;
+    padding: 10px;
+  }
+
+  .admin-nav-item {
+    gap: 10px;
+    padding: 0 9px;
+
+    min-height: 52px;
+    height: 52px;
+    max-height: 52px;
+
+    flex: 0 0 52px;
+
+    font-size: 11px;
+  }
+
+  .admin-nav-label {
+    font-size: 11px;
+  }
+
+  .admin-nav-icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  .admin-nav-arrow {
+    width: 15px;
+    height: 15px;
+  }
+
+  .admin-nav-badge {
+    min-width: 24px;
+    height: 24px;
+    font-size: 9px;
+  }
+}
+
+/* ============================================
+   MOBILE / TABLET
+============================================ */
+
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 235px;
+    padding: 10px 8px;
+  }
+
+  .admin-sidebar-nav {
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .admin-nav-item {
+    min-height: 50px;
+    height: 50px;
+    max-height: 50px;
+
+    flex: 0 0 50px;
+
+    gap: 9px;
+    margin: 0;
+    padding: 0 8px;
+
+    font-size: 10px;
+  }
+
+  .admin-nav-label {
+    font-size: 10px;
+  }
+
+  .admin-nav-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-nav-arrow {
+    width: 14px;
+    height: 14px;
+  }
+
+  .admin-nav-badge {
+    min-width: 22px;
+    height: 22px;
+    font-size: 8px;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE
+============================================ */
+
+@media (max-width: 480px) {
+  .admin-sidebar {
+    width: 270px;
+    max-width: 85vw;
+
+    top: 150px;
+    bottom: 0;
+    height: calc(100vh - 150px);
+
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+
+    box-shadow: none;
+  }
+
+  .admin-sidebar.open {
+    transform: translateX(0);
+    box-shadow: 8px 0 24px rgba(15, 23, 42, 0.12);
+  }
+
+  .admin-nav-item {
+    min-height: 50px;
+    height: 50px;
+    max-height: 50px;
+
+    flex: 0 0 50px;
+
+    margin: 0;
+    padding: 0 10px;
+
+    font-size: 11px;
+  }
+
+  .admin-nav-label {
+    font-size: 11px;
+  }
+}
+
+/* ============================================
+   ADMIN MAIN CONTENT POSITIONING
+============================================ */
+
+.admin-panel-main {
+  margin-left: 285px;
+
+  width: calc(100% - 285px);
+  min-width: 0;
+
+  padding-top: 0;
+
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+@media (max-width: 1100px) {
+  .admin-panel-main {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-panel-main {
+    margin-left: 235px;
+    width: calc(100% - 235px);
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-panel-main {
+    margin-left: 0;
+    width: 100%;
+  }
+}

@@ -1,0 +1,1096 @@
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+  position: relative;
+
+  width: auto;
+  min-height: 250px;
+
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 25px;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background: linear-gradient(
+    105deg,
+    #f1fff5 0%,
+    #e5f0e6 42%,
+    #d2dfd3 70%,
+    #b8cbbd 100%
+  );
+
+  isolation: isolate;
+
+  transition: background 0.5s ease;
+}
+
+/* =========================================================
+   SLIDE BACKGROUNDS
+========================================================= */
+
+.hero-slide-green {
+  background: linear-gradient(105deg, #f1fff5 0%, #e7f3e9 45%, #d2e1d5 100%);
+}
+
+.hero-slide-blue {
+  background: linear-gradient(105deg, #f1f6ff 0%, #e4edff 48%, #cad9fa 100%);
+}
+
+.hero-slide-orange {
+  background: linear-gradient(105deg, #fff9ed 0%, #f9edd8 48%, #f1d9b7 100%);
+}
+
+.hero-slide-purple {
+  background: linear-gradient(105deg, #fbf7ff 0%, #eee3f8 50%, #dfcef0 100%);
+}
+
+.hero-slide-red {
+  background: linear-gradient(105deg, #fff7f7 0%, #fbe5e5 48%, #f3d1d1 100%);
+}
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.hero-copy {
+  position: relative;
+
+  z-index: 10;
+
+  width: 65%;
+
+  padding-left: calc(clamp(25px, 4vw, 70px) + 10px);
+  padding-top: 15px;
+
+  animation: heroCopyIn 0.55s ease both;
+}
+
+@keyframes heroCopyIn {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+.hero-category {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 8px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: var(--green);
+}
+
+.category-line {
+  width: 24px;
+  height: 2px;
+
+  border-radius: 10px;
+
+  background: var(--green);
+}
+
+.hero-slide-blue .hero-category {
+  color: #2367d1;
+}
+
+.hero-slide-blue .category-line {
+  background: #2367d1;
+}
+
+.hero-slide-orange .hero-category {
+  color: #a75c17;
+}
+
+.hero-slide-orange .category-line {
+  background: #a75c17;
+}
+
+.hero-slide-purple .hero-category {
+  color: #7435a8;
+}
+
+.hero-slide-purple .category-line {
+  background: #7435a8;
+}
+
+.hero-slide-red .hero-category {
+  color: #bd2634;
+}
+
+.hero-slide-red .category-line {
+  background: #bd2634;
+}
+
+/* =========================================================
+   HERO HEADING
+========================================================= */
+
+.hero h1 {
+  margin: 0;
+
+  max-width: 800px;
+
+  white-space: nowrap;
+
+  font-size: clamp(22px, 2.6vw, 33px);
+
+  line-height: 1.03;
+
+  font-weight: 500;
+
+  letter-spacing: -1px;
+
+  color: #111111;
+}
+
+.hero h1 span {
+  color: var(--green);
+
+  font-weight: 800;
+}
+
+.hero-slide-blue h1 span {
+  color: #2367d1;
+}
+
+.hero-slide-orange h1 span {
+  color: #a75c17;
+}
+
+.hero-slide-purple h1 span {
+  color: #7435a8;
+}
+
+.hero-slide-red h1 span {
+  color: #bd2634;
+}
+
+/* =========================================================
+   HERO DESCRIPTION
+========================================================= */
+
+.hero-copy p {
+  margin: 8px 0 12px;
+
+  max-width: 800px;
+
+  white-space: nowrap;
+
+  font-size: clamp(9px, 0.8vw, 15px);
+
+  line-height: 1.35;
+
+  color: #202020;
+}
+
+/* =========================================================
+   HERO ART
+========================================================= */
+
+.hero-art {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 58%;
+  height: 100%;
+
+  z-index: 4;
+
+  pointer-events: none;
+
+  animation: heroArtIn 0.65s ease both;
+}
+
+@keyframes heroArtIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* =========================================================
+   COMMON IMAGE FRAME
+========================================================= */
+
+.hero-frame {
+  position: absolute;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 2px solid rgba(255, 255, 255, 0.95);
+
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.16),
+    0 2px 5px rgba(0, 0, 0, 0.08);
+
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.hero-frame img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+/* =========================================================
+   SLIDE 1
+   OVERLAPPING RECTANGULAR FRAMES
+========================================================= */
+
+.frame-overlap .frame-1 {
+  width: 105px;
+  height: 120px;
+  top: 57%;
+  left: 4%;
+  transform: translate(-50%, -50%) rotate(-14deg);
+  border-radius: 10px;
+  z-index: 2;
+}
+
+.frame-overlap .frame-2 {
+  width: 100px;
+  height: 95px;
+  top: 28%;
+  left: 20%;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  border-radius: 10px;
+  z-index: 2;
+}
+
+.frame-overlap .frame-3 {
+  width: 175px;
+  height: 170px;
+  top: 47%;
+  left: 39%;
+  transform: translate(-50%, -50%);
+  border-radius: 13px;
+  z-index: 4;
+}
+
+.frame-overlap .frame-4 {
+  width: 105px;
+  height: 100px;
+  top: 27%;
+  left: 58%;
+  transform: translate(-50%, -50%) rotate(8deg);
+  border-radius: 10px;
+  z-index: 2;
+}
+
+.frame-overlap .frame-5 {
+  width: 110px;
+  height: 125px;
+  top: 57%;
+  left: 78%;
+  transform: translate(-50%, -50%) rotate(12deg);
+  border-radius: 10px;
+  z-index: 2;
+}
+
+.frame-overlap .frame-6 {
+  width: 95px;
+  height: 90px;
+  top: 78%;
+  left: 28%;
+  transform: translate(-50%, -50%) rotate(-5deg);
+  border-radius: 10px;
+  z-index: 2;
+}
+
+/* =========================================================
+   SLIDE 2
+   CIRCULAR ELECTRONICS FRAMES
+========================================================= */
+
+.frame-circle .frame-1 {
+  width: 90px;
+  height: 90px;
+  top: 22%;
+  left: 5%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border-width: 3px;
+  z-index: 2;
+}
+
+.frame-circle .frame-2 {
+  width: 105px;
+  height: 105px;
+  top: 74%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border-width: 3px;
+  z-index: 2;
+}
+
+.frame-circle .frame-3 {
+  width: 175px;
+  height: 175px;
+  top: 47%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border-width: 3px;
+  z-index: 4;
+}
+
+.frame-circle .frame-4 {
+  width: 92px;
+  height: 92px;
+  top: 20%;
+  left: 58%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border-width: 3px;
+  z-index: 2;
+}
+
+.frame-circle .frame-5 {
+  width: 105px;
+  height: 105px;
+  top: 74%;
+  left: 78%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border-width: 3px;
+  z-index: 2;
+}
+
+.frame-circle .frame-6 {
+  width: 78px;
+  height: 78px;
+  top: 82%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border-width: 3px;
+  z-index: 2;
+}
+
+.frame-circle .frame-1 img,
+.frame-circle .frame-2 img,
+.frame-circle .frame-3 img,
+.frame-circle .frame-4 img,
+.frame-circle .frame-5 img,
+.frame-circle .frame-6 img {
+  border-radius: 50%;
+}
+
+/* =========================================================
+   SLIDE 3
+   ANGULAR VEHICLE FRAMES
+========================================================= */
+
+.frame-angled .frame-1 {
+  width: 105px;
+  height: 130px;
+  top: 55%;
+  left: 4%;
+  transform: translate(-50%, -50%) rotate(-16deg);
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.frame-angled .frame-2 {
+  width: 105px;
+  height: 100px;
+  top: 25%;
+  left: 20%;
+  transform: translate(-50%, -50%) rotate(-9deg);
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.frame-angled .frame-3 {
+  width: 185px;
+  height: 175px;
+  top: 48%;
+  left: 40%;
+  transform: translate(-50%, -50%) rotate(-2deg);
+  border-radius: 7px;
+  z-index: 4;
+}
+
+.frame-angled .frame-4 {
+  width: 105px;
+  height: 105px;
+  top: 25%;
+  left: 59%;
+  transform: translate(-50%, -50%) rotate(9deg);
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.frame-angled .frame-5 {
+  width: 110px;
+  height: 130px;
+  top: 55%;
+  left: 79%;
+  transform: translate(-50%, -50%) rotate(15deg);
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.frame-angled .frame-6 {
+  width: 95px;
+  height: 90px;
+  top: 80%;
+  left: 29%;
+  transform: translate(-50%, -50%) rotate(-6deg);
+  border-radius: 6px;
+  z-index: 2;
+}
+
+/* =========================================================
+   SLIDE 4
+   ARCH ART FRAMES
+========================================================= */
+
+.frame-arch .frame-1 {
+  width: 95px;
+  height: 135px;
+  top: 54%;
+  left: 5%;
+  transform: translate(-50%, -50%);
+  border-radius: 50px 50px 10px 10px;
+  border-width: 3px;
+  z-index: 2;
+}
+
+.frame-arch .frame-2 {
+  width: 100px;
+  height: 125px;
+  top: 24%;
+  left: 21%;
+  transform: translate(-50%, -50%);
+  border-radius: 50px 50px 10px 10px;
+  border-width: 3px;
+  z-index: 2;
+}
+
+.frame-arch .frame-3 {
+  width: 165px;
+  height: 185px;
+  top: 48%;
+  left: 41%;
+  transform: translate(-50%, -50%);
+  border-radius: 85px 85px 12px 12px;
+  border-width: 3px;
+  z-index: 4;
+}
+
+.frame-arch .frame-4 {
+  width: 100px;
+  height: 125px;
+  top: 24%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  border-radius: 50px 50px 10px 10px;
+  border-width: 3px;
+  z-index: 2;
+}
+
+.frame-arch .frame-5 {
+  width: 100px;
+  height: 140px;
+  top: 55%;
+  left: 79%;
+  transform: translate(-50%, -50%);
+  border-radius: 50px 50px 10px 10px;
+  border-width: 3px;
+  z-index: 2;
+}
+
+.frame-arch .frame-6 {
+  width: 90px;
+  height: 105px;
+  top: 80%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  border-radius: 45px 45px 10px 10px;
+  border-width: 3px;
+  z-index: 2;
+}
+
+/* =========================================================
+   SLIDE 5
+   POLAROID FASHION FRAMES
+========================================================= */
+
+.frame-polaroid .frame-1 {
+  width: 100px;
+  height: 130px;
+  top: 55%;
+  left: 5%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  border-radius: 4px;
+  border: 5px solid white;
+  border-bottom-width: 18px;
+  z-index: 2;
+}
+
+.frame-polaroid .frame-2 {
+  width: 100px;
+  height: 125px;
+  top: 24%;
+  left: 21%;
+  transform: translate(-50%, -50%) rotate(-6deg);
+  border-radius: 4px;
+  border: 5px solid white;
+  border-bottom-width: 18px;
+  z-index: 2;
+}
+
+.frame-polaroid .frame-3 {
+  width: 165px;
+  height: 180px;
+  top: 48%;
+  left: 41%;
+  transform: translate(-50%, -50%) rotate(1deg);
+  border-radius: 5px;
+  border: 5px solid white;
+  border-bottom-width: 22px;
+  z-index: 4;
+}
+
+.frame-polaroid .frame-4 {
+  width: 100px;
+  height: 125px;
+  top: 24%;
+  left: 60%;
+  transform: translate(-50%, -50%) rotate(7deg);
+  border-radius: 4px;
+  border: 5px solid white;
+  border-bottom-width: 18px;
+  z-index: 2;
+}
+
+.frame-polaroid .frame-5 {
+  width: 105px;
+  height: 135px;
+  top: 56%;
+  left: 79%;
+  transform: translate(-50%, -50%) rotate(12deg);
+  border-radius: 4px;
+  border: 5px solid white;
+  border-bottom-width: 18px;
+  z-index: 2;
+}
+
+.frame-polaroid .frame-6 {
+  width: 90px;
+  height: 105px;
+  top: 80%;
+  left: 30%;
+  transform: translate(-50%, -50%) rotate(-4deg);
+  border-radius: 4px;
+  border: 5px solid white;
+  border-bottom-width: 16px;
+  z-index: 2;
+}
+
+/* =========================================================
+   HERO CONTROLS
+========================================================= */
+
+.hero-controls {
+  position: absolute;
+
+  right: 20px;
+  bottom: 10px;
+
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+/* =========================================================
+   DOTS
+========================================================= */
+
+.hero-dots {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.hero-dot {
+  width: 6px;
+  height: 6px;
+
+  padding: 0;
+
+  border: 1px solid #222;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transition:
+    width 0.25s ease,
+    height 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.hero-dot:hover {
+  transform: scale(1.2);
+}
+
+.hero-dot.active {
+  width: 7px;
+  height: 7px;
+
+  background: #111;
+
+  transform: scale(1.15);
+}
+
+/* =========================================================
+   LARGE SCREEN
+========================================================= */
+
+@media (min-width: 1601px) {
+  .hero {
+    min-height: 200px;
+  }
+
+  .hero-copy {
+  }
+
+  .hero h1 {
+    font-size: 40px;
+  }
+
+  .hero-copy p {
+    font-size: 15px;
+  }
+
+  .hero-art {
+    right: -10px;
+    width: 62%;
+  }
+}
+
+/* =========================================================
+   LAPTOP
+========================================================= */
+
+@media (max-width: 1200px) {
+  .hero {
+    width: calc(100% - 60px);
+    margin-left: 30px;
+    margin-right: 30px;
+    min-height: 200px;
+  }
+
+  .hero-copy {
+    width: 50%;
+  }
+
+  .hero h1 {
+    font-size: clamp(21px, 2.6vw, 32px);
+  }
+
+  .hero-copy p {
+    font-size: clamp(11px, 1vw, 14px);
+  }
+
+  .hero-art {
+    right: -10px;
+    width: 60%;
+  }
+
+  .frame-overlap .frame-6,
+  .frame-circle .frame-6,
+  .frame-angled .frame-6,
+  .frame-arch .frame-6,
+  .frame-polaroid .frame-6 {
+    display: none;
+  }
+
+  .frame-overlap .frame-1,
+  .frame-circle .frame-1,
+  .frame-angled .frame-1,
+  .frame-arch .frame-1,
+  .frame-polaroid .frame-1 {
+    left: 3%;
+  }
+
+  .frame-overlap .frame-2,
+  .frame-circle .frame-2,
+  .frame-angled .frame-2,
+  .frame-arch .frame-2,
+  .frame-polaroid .frame-2 {
+    left: 21%;
+  }
+
+  .frame-overlap .frame-3,
+  .frame-circle .frame-3,
+  .frame-angled .frame-3,
+  .frame-arch .frame-3,
+  .frame-polaroid .frame-3 {
+    left: 40%;
+  }
+
+  .frame-overlap .frame-4,
+  .frame-circle .frame-4,
+  .frame-angled .frame-4,
+  .frame-arch .frame-4,
+  .frame-polaroid .frame-4 {
+    left: 60%;
+  }
+
+  .frame-overlap .frame-5,
+  .frame-circle .frame-5,
+  .frame-angled .frame-5,
+  .frame-arch .frame-5,
+  .frame-polaroid .frame-5 {
+    left: 80%;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .hero {
+    width: calc(100% - 40px);
+
+    margin-left: 20px;
+    margin-right: 20px;
+
+    min-height: 380px;
+
+    align-items: flex-start;
+  }
+
+  .hero-copy {
+    width: 100%;
+
+    padding: 30px 35px 0 45px;
+
+    z-index: 10;
+  }
+
+  .hero-category {
+    font-size: 11px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .hero-copy p {
+    font-size: 11px;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .hero-art {
+    top: auto;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 58%;
+  }
+
+  .frame-overlap .frame-3,
+  .frame-circle .frame-3,
+  .frame-angled .frame-3,
+  .frame-arch .frame-3,
+  .frame-polaroid .frame-3 {
+    left: 50%;
+  }
+
+  .frame-overlap .frame-1,
+  .frame-circle .frame-1,
+  .frame-angled .frame-1,
+  .frame-arch .frame-1,
+  .frame-polaroid .frame-1 {
+    left: 15%;
+  }
+
+  .frame-overlap .frame-2,
+  .frame-circle .frame-2,
+  .frame-angled .frame-2,
+  .frame-arch .frame-2,
+  .frame-polaroid .frame-2 {
+    left: 33%;
+  }
+
+  .frame-overlap .frame-4,
+  .frame-circle .frame-4,
+  .frame-angled .frame-4,
+  .frame-arch .frame-4,
+  .frame-polaroid .frame-4 {
+    left: 67%;
+  }
+
+  .frame-overlap .frame-5,
+  .frame-circle .frame-5,
+  .frame-angled .frame-5,
+  .frame-arch .frame-5,
+  .frame-polaroid .frame-5,
+  .frame-overlap .frame-6,
+  .frame-circle .frame-6,
+  .frame-angled .frame-6,
+  .frame-arch .frame-6,
+  .frame-polaroid .frame-6 {
+    display: none;
+  }
+
+  .hero-controls {
+    right: 20px;
+    bottom: 10px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .hero {
+    width: calc(100% - 20px);
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+    min-height: 430px;
+
+    border-radius: 16px;
+  }
+
+  .hero-copy {
+    width: 100%;
+
+    padding: 25px 22px 0 32px;
+  }
+
+  .hero-category {
+    margin-bottom: 8px;
+
+    font-size: 10px;
+  }
+
+  .category-line {
+    width: 20px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+    max-width: 100%;
+    white-space: normal;
+
+    line-height: 1.05;
+
+    letter-spacing: -0.8px;
+  }
+
+  .hero-copy p {
+    margin: 10px 0 15px;
+    max-width: 100%;
+    white-space: normal;
+
+    font-size: 10px;
+
+    line-height: 1.4;
+  }
+
+  .hero-copy p br {
+    display: none;
+  }
+
+  .hero-art {
+    height: 48%;
+  }
+
+  .frame-overlap .frame-3,
+  .frame-circle .frame-3,
+  .frame-angled .frame-3,
+  .frame-arch .frame-3,
+  .frame-polaroid .frame-3 {
+    width: 135px;
+    height: 140px;
+    left: 50%;
+  }
+
+  .frame-overlap .frame-1,
+  .frame-circle .frame-1,
+  .frame-angled .frame-1,
+  .frame-arch .frame-1,
+  .frame-polaroid .frame-1 {
+    left: 18%;
+  }
+
+  .frame-overlap .frame-2,
+  .frame-circle .frame-2,
+  .frame-angled .frame-2,
+  .frame-arch .frame-2,
+  .frame-polaroid .frame-2 {
+    left: 35%;
+  }
+
+  .frame-overlap .frame-4,
+  .frame-circle .frame-4,
+  .frame-angled .frame-4,
+  .frame-arch .frame-4,
+  .frame-polaroid .frame-4,
+  .frame-overlap .frame-5,
+  .frame-circle .frame-5,
+  .frame-angled .frame-5,
+  .frame-arch .frame-5,
+  .frame-polaroid .frame-5,
+  .frame-overlap .frame-6,
+  .frame-circle .frame-6,
+  .frame-angled .frame-6,
+  .frame-arch .frame-6,
+  .frame-polaroid .frame-6 {
+    display: none;
+  }
+
+  .hero-controls {
+    right: 12px;
+    bottom: 8px;
+
+    gap: 6px;
+  }
+
+  .hero-dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .hero-dot.active {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+  .hero {
+    width: calc(100% - 16px);
+
+    margin-left: 8px;
+    margin-right: 8px;
+
+    min-height: 410px;
+  }
+
+  .hero-copy {
+    padding: 22px 18px 0 28px;
+  }
+
+  .hero h1 {
+    font-size: 25px;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .hero-copy p {
+    font-size: 9px;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .hero-art {
+    height: 46%;
+  }
+
+  .frame-overlap .frame-3,
+  .frame-circle .frame-3,
+  .frame-angled .frame-3,
+  .frame-arch .frame-3,
+  .frame-polaroid .frame-3 {
+    width: 125px;
+    height: 130px;
+  }
+
+  .frame-overlap .frame-1,
+  .frame-circle .frame-1,
+  .frame-angled .frame-1,
+  .frame-arch .frame-1,
+  .frame-polaroid .frame-1 {
+    left: 16%;
+  }
+
+  .frame-overlap .frame-2,
+  .frame-circle .frame-2,
+  .frame-angled .frame-2,
+  .frame-arch .frame-2,
+  .frame-polaroid .frame-2 {
+    left: 35%;
+  }
+
+  .frame-overlap .frame-4,
+  .frame-circle .frame-4,
+  .frame-angled .frame-4,
+  .frame-arch .frame-4,
+  .frame-polaroid .frame-4,
+  .frame-overlap .frame-5,
+  .frame-circle .frame-5,
+  .frame-angled .frame-5,
+  .frame-arch .frame-5,
+  .frame-polaroid .frame-5,
+  .frame-overlap .frame-6,
+  .frame-circle .frame-6,
+  .frame-angled .frame-6,
+  .frame-arch .frame-6,
+  .frame-polaroid .frame-6 {
+    display: none;
+  }
+}

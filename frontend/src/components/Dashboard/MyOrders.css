@@ -1,0 +1,638 @@
+.my-orders-page {
+  width: 100%;
+}
+
+.my-orders-header {
+  background: #ffffff;
+  border: 1px solid #e1e8e4;
+  border-radius: 16px 16px 0 0;
+  padding: 22px 26px 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.my-orders-header h1 {
+  margin: 0 0 6px;
+  font-size: 25px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.my-orders-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #667085;
+}
+
+.order-sort {
+  min-width: 155px;
+  padding: 10px 14px;
+  border: 1px solid #d9e3de;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #17352b;
+  font-size: 14px;
+  outline: none;
+}
+
+.order-tabs {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background: #ffffff;
+  border-left: 1px solid #e1e8e4;
+  border-right: 1px solid #e1e8e4;
+  border-bottom: 1px solid #dfe7e3;
+  padding: 0 26px;
+}
+
+.order-tabs button {
+  position: relative;
+  border: 0;
+  background: transparent;
+  padding: 15px 0 13px;
+  color: #667085;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.order-tabs button.active {
+  color: #087f5b;
+  font-weight: 700;
+}
+
+.order-tabs button.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: #087f5b;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.my-order-card {
+  background: #ffffff;
+  border: 1px solid #dfe7e3;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* ORDER HEADER */
+
+.order-card-header {
+  min-height: 50px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  border-bottom: 1px solid #e8ecea;
+  color: #667085;
+  font-size: 13px;
+}
+
+.order-card-header strong {
+  color: #172026;
+}
+
+.order-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.order-status.delivered {
+  background: #e5f7ee;
+  color: #087f5b;
+}
+
+.order-status.delivered .status-dot {
+  background: #12a66a;
+}
+
+.order-status.processing {
+  background: #fff4d6;
+  color: #b77900;
+}
+
+.order-status.processing .status-dot {
+  background: #f0a800;
+}
+
+.order-status.cancelled {
+  background: #ffe7e7;
+  color: #d92d20;
+}
+
+.order-status.cancelled .status-dot {
+  background: #e03131;
+}
+
+.invoice-button {
+  border: 0;
+  background: transparent;
+  color: #344054;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ORDER BODY */
+
+.order-card-body {
+  display: grid;
+  grid-template-columns: 34% 42% 24%;
+  min-height: 190px;
+}
+
+/* PRODUCT SECTION */
+
+.order-product-section {
+  display: flex;
+  gap: 18px;
+  padding: 20px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.order-product-image {
+  width: 125px;
+  height: 125px;
+  object-fit: cover;
+  border-radius: 9px;
+  border: 1px solid #e4e9e7;
+  flex-shrink: 0;
+}
+
+.order-product-details {
+  min-width: 0;
+  flex: 1;
+}
+
+.order-product-details h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  color: #101828;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.order-product-details p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #667085;
+}
+
+.order-product-details p span {
+  color: #475467;
+  font-weight: 600;
+}
+
+.order-product-price {
+  display: block;
+  margin-top: 9px;
+  font-size: 17px;
+  color: #111827;
+}
+
+/* PRODUCT BUTTONS */
+
+.order-product-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 14px;
+  width: 100%;
+  min-width: 0;
+}
+
+.outline-order-button,
+.primary-order-button {
+  border-radius: 7px;
+  padding: 8px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.outline-order-button {
+  border: 1px solid #0a8f68;
+  background: #ffffff;
+  color: #087f5b;
+}
+
+.primary-order-button {
+  border: 1px solid #087f5b;
+  background: #087f5b;
+  color: #ffffff;
+}
+
+/* TRACKING SECTION */
+
+.order-tracking-section {
+  border-left: 1px solid #e7ece9;
+  border-right: 1px solid #e7ece9;
+  padding: 20px 18px;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.order-timeline {
+  width: 100%;
+  min-width: 0;
+}
+
+/* TIMELINE */
+
+.timeline-line {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 0 6px;
+}
+
+/*
+  The line is placed behind the circles.
+  It starts and ends around the center of
+  the first and last timeline circles.
+*/
+
+.timeline-line::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: #dce4e1;
+  z-index: 0;
+}
+
+.timeline-step {
+  position: relative;
+  z-index: 2;
+  width: 25%;
+  text-align: center;
+  min-width: 0;
+}
+
+/*
+  White border creates a clean gap between
+  the horizontal line and the circle.
+*/
+
+.timeline-circle {
+  position: relative;
+  z-index: 3;
+  width: 25px;
+  height: 25px;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  background: #e5e9e7;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  border: 3px solid #ffffff;
+  box-sizing: border-box;
+}
+
+.timeline-circle.completed {
+  background: #0a8f68;
+}
+
+.timeline-circle.current {
+  background: #ffffff;
+  border: 3px solid #0a8f68;
+  box-shadow: inset 0 0 0 5px #0a8f68;
+}
+
+.timeline-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #344054;
+  white-space: nowrap;
+}
+
+.timeline-date {
+  margin-top: 4px;
+  font-size: 10px;
+  color: #98a2b3;
+  white-space: nowrap;
+}
+
+/* STATUS MESSAGE */
+
+.order-status-message {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.success-message {
+  background: #eaf8f2;
+  color: #087f5b;
+}
+
+.processing-message {
+  background: #fff8e6;
+  color: #a15c00;
+}
+
+.status-message-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: currentColor;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.order-status-message strong {
+  display: block;
+  font-size: 12px;
+}
+
+.order-status-message p {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: #667085;
+  line-height: 1.4;
+}
+
+/* SHIPPING ADDRESS */
+
+.order-address-section {
+  padding: 20px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.order-address-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #172026;
+}
+
+.address-icon {
+  font-size: 17px;
+  color: #087f5b;
+}
+
+.shipping-details strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #344054;
+}
+
+.shipping-details p {
+  margin: 3px 0;
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.payment-details {
+  display: flex;
+  gap: 6px;
+  margin-top: 13px;
+  padding-top: 11px;
+  border-top: 1px solid #edf0ef;
+  font-size: 11px;
+  color: #667085;
+}
+
+.payment-details strong {
+  color: #344054;
+}
+
+/* CANCELLATION */
+
+.order-cancellation {
+  display: flex;
+  gap: 10px;
+  padding: 13px;
+  background: #fff1f1;
+  border-radius: 8px;
+  color: #c92a2a;
+}
+
+.cancellation-icon {
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e03131;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.order-cancellation strong {
+  font-size: 12px;
+}
+
+.order-cancellation p {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: #667085;
+  line-height: 1.4;
+}
+
+.refund-status {
+  color: #087f5b;
+}
+
+.cancellation-details {
+  font-size: 12px;
+  color: #667085;
+}
+
+.cancellation-details p {
+  margin: 7px 0;
+  line-height: 1.4;
+}
+
+.cancellation-details span:not(.refund-status) {
+  font-weight: 600;
+  color: #475467;
+  margin-right: 5px;
+}
+
+.cancellation-details .outline-order-button {
+  margin-top: 10px;
+}
+
+/* 1250px */
+
+@media (max-width: 1250px) {
+  .order-card-header {
+    gap: 15px;
+  }
+
+  .order-card-body {
+    grid-template-columns: 35% 40% 25%;
+  }
+
+  .order-product-section {
+    gap: 12px;
+  }
+
+  .order-product-image {
+    width: 105px;
+    height: 105px;
+  }
+
+  .timeline-label {
+    font-size: 10px;
+  }
+
+  .timeline-date {
+    font-size: 9px;
+  }
+
+  .outline-order-button,
+  .primary-order-button {
+    padding: 8px 10px;
+  }
+}
+
+/* 950px */
+
+@media (max-width: 950px) {
+  .order-card-body {
+    grid-template-columns: 1fr;
+  }
+
+  .order-tracking-section {
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid #e7ece9;
+    border-bottom: 1px solid #e7ece9;
+  }
+
+  .order-address-section {
+    border-top: 0;
+  }
+
+  .order-card-header {
+    flex-wrap: wrap;
+  }
+
+  .order-status {
+    margin-left: 0;
+  }
+
+  .order-product-section {
+    padding: 20px;
+  }
+
+  .order-tracking-section {
+    padding: 25px 30px;
+  }
+}
+
+/* 650px */
+
+@media (max-width: 650px) {
+  .my-orders-header {
+    flex-direction: column;
+  }
+
+  .order-sort {
+    width: 100%;
+  }
+
+  .order-tabs {
+    gap: 18px;
+    overflow-x: auto;
+  }
+
+  .order-tabs button {
+    white-space: nowrap;
+  }
+
+  .order-product-section {
+    flex-direction: column;
+  }
+
+  .order-product-image {
+    width: 130px;
+    height: 130px;
+  }
+
+  .order-card-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .order-status {
+    margin-left: 0;
+  }
+
+  .order-product-actions {
+    flex-wrap: wrap;
+  }
+
+  .order-tracking-section {
+    padding: 22px 15px;
+  }
+
+  .timeline-label {
+    font-size: 9px;
+  }
+
+  .timeline-date {
+    font-size: 8px;
+  }
+
+  .timeline-line::before {
+    left: 12%;
+    right: 12%;
+  }
+
+  .order-address-section {
+    padding: 18px;
+  }
+}

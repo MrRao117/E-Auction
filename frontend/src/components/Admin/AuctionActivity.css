@@ -1,0 +1,374 @@
+/* =========================================
+   AUCTION ACTIVITY CHART
+   eAuction Admin Dashboard
+========================================= */
+
+.admin-chart-card {
+  width: 100%;
+  min-width: 0;
+  padding: 20px;
+
+  background: #ffffff;
+  border: 1px solid #e2eee9;
+  border-radius: 10px;
+
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.025);
+  box-sizing: border-box;
+}
+
+.admin-chart-card * {
+  box-sizing: border-box;
+}
+
+/* =========================================
+   CHART HEADER
+========================================= */
+
+.admin-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-bottom: 18px;
+}
+
+.admin-chart-header h2 {
+  margin: 0;
+
+  color: #111936;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* =========================================
+   CHART LEGEND
+========================================= */
+
+.admin-chart-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Legend dots */
+
+.legend-dot {
+  display: inline-block;
+
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+
+  border-radius: 50%;
+}
+
+.legend-dot.live {
+  background: #059669;
+}
+
+.legend-dot.completed {
+  background: #6fcf97;
+}
+
+/* =========================================
+   CHART CONTAINER
+========================================= */
+
+.auction-chart {
+  width: 100%;
+  height: 190px;
+  min-width: 0;
+
+  overflow: hidden;
+}
+
+.auction-chart svg {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+}
+
+/* =========================================
+   HORIZONTAL GRID LINES
+========================================= */
+
+.auction-chart .chart-grid-line {
+  stroke: #e5eee9;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* =========================================
+   VERTICAL GRID LINES
+========================================= */
+
+.auction-chart .chart-vertical-line {
+  stroke: #edf2f5;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* =========================================
+   Y-AXIS LABELS
+========================================= */
+
+.auction-chart .chart-axis-label {
+  fill: #64748b;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+/* =========================================
+   X-AXIS MONTH LABELS
+========================================= */
+
+.auction-chart .chart-month-label {
+  fill: #64748b;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 400;
+  text-anchor: middle;
+}
+
+/* =========================================
+   LIVE AUCTION AREA
+========================================= */
+
+.auction-chart .live-area {
+  fill: rgba(5, 150, 105, 0.12);
+  stroke: none;
+}
+
+/* =========================================
+   COMPLETED AUCTION AREA
+========================================= */
+
+.auction-chart .completed-area {
+  fill: rgba(111, 207, 151, 0.18);
+  stroke: none;
+}
+
+/* =========================================
+   LIVE AUCTION LINE
+========================================= */
+
+.auction-chart .live-line {
+  fill: none;
+
+  stroke: #059669;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  vector-effect: non-scaling-stroke;
+}
+
+/* =========================================
+   COMPLETED AUCTION LINE
+========================================= */
+
+.auction-chart .completed-line {
+  fill: none;
+
+  stroke: #6fcf97;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  vector-effect: non-scaling-stroke;
+}
+
+/* =========================================
+   LIVE AUCTION DATA POINTS
+========================================= */
+
+.auction-chart .live-point {
+  fill: #059669;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+
+  vector-effect: non-scaling-stroke;
+
+  transition: r 0.2s ease;
+}
+
+/* =========================================
+   COMPLETED AUCTION DATA POINTS
+========================================= */
+
+.auction-chart .completed-point {
+  fill: #6fcf97;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+
+  vector-effect: non-scaling-stroke;
+
+  transition: r 0.2s ease;
+}
+
+/* =========================================
+   HOVER EFFECTS
+========================================= */
+
+.auction-chart .live-point:hover {
+  r: 5;
+  fill: #047857;
+}
+
+.auction-chart .completed-point:hover {
+  r: 5;
+  fill: #34a66b;
+}
+
+/* =========================================
+   TABLET RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+  .admin-chart-card {
+    padding: 18px;
+  }
+
+  .admin-chart-header {
+    gap: 12px;
+  }
+
+  .admin-chart-header h2 {
+    font-size: 19px;
+  }
+
+  .admin-chart-legend {
+    gap: 14px;
+  }
+
+  .auction-chart {
+    height: 180px;
+  }
+}
+
+/* =========================================
+   SMALL TABLET
+========================================= */
+
+@media (max-width: 768px) {
+  .admin-chart-card {
+    padding: 16px;
+  }
+
+  .admin-chart-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .admin-chart-header h2 {
+    font-size: 18px;
+  }
+
+  .admin-chart-legend {
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
+  .admin-chart-legend span {
+    font-size: 11px;
+  }
+
+  .auction-chart {
+    height: 175px;
+  }
+
+  .auction-chart .chart-axis-label,
+  .auction-chart .chart-month-label {
+    font-size: 10px;
+  }
+}
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+
+@media (max-width: 480px) {
+  .admin-chart-card {
+    padding: 14px 12px;
+    border-radius: 8px;
+  }
+
+  .admin-chart-header {
+    margin-bottom: 14px;
+  }
+
+  .admin-chart-header h2 {
+    font-size: 17px;
+  }
+
+  .admin-chart-legend {
+    gap: 12px;
+  }
+
+  .admin-chart-legend span {
+    gap: 5px;
+    font-size: 10px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .auction-chart {
+    height: 155px;
+  }
+
+  .auction-chart .chart-axis-label,
+  .auction-chart .chart-month-label {
+    font-size: 9px;
+  }
+}
+
+/* =========================================
+   EXTRA SMALL MOBILE
+========================================= */
+
+@media (max-width: 360px) {
+  .admin-chart-card {
+    padding: 12px 8px;
+  }
+
+  .admin-chart-header h2 {
+    font-size: 16px;
+  }
+
+  .admin-chart-legend {
+    gap: 9px;
+  }
+
+  .admin-chart-legend span {
+    font-size: 9px;
+  }
+
+  .auction-chart {
+    height: 140px;
+  }
+}

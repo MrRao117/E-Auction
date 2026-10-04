@@ -1,0 +1,509 @@
+/* =========================================================
+   SELLER VERIFICATION MODAL OVERLAY
+========================================================= */
+
+.seller-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.58);
+  z-index: 5000;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+.seller-modal {
+  position: relative;
+  width: min(990px, 100%);
+  max-height: 92vh;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 34px 42px 30px;
+  box-sizing: border-box;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgba(0, 40, 25, 0.25);
+}
+
+.seller-modal::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.seller-modal-close {
+  position: absolute;
+  top: 17px;
+  right: 20px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #333333;
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.seller-modal-close:hover {
+  color: #087d46;
+  transform: scale(1.08);
+}
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.seller-modal-header {
+  text-align: center;
+  padding: 0 35px;
+  margin-bottom: 28px;
+}
+
+.seller-modal-header h2 {
+  margin: 0 0 7px;
+  color: #202522;
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.seller-modal-header p {
+  max-width: 650px;
+  margin: 0 auto;
+  color: #606a65;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+/* =========================================================
+   POLICY GRID
+========================================================= */
+
+.seller-policy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 38px;
+  margin-bottom: 18px;
+}
+
+.seller-policy-section h3 {
+  margin: 0 0 10px;
+  color: #202522;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+/* =========================================================
+   POLICY TEXTAREA
+========================================================= */
+
+.seller-policy-box {
+  width: 100%;
+  height: 260px;
+  display: block;
+  box-sizing: border-box;
+  resize: none;
+  padding: 16px;
+  border: 1px solid #c8dcd0;
+  border-radius: 9px;
+  outline: none;
+  background: #ffffff;
+  color: #303734;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.65;
+  overflow-y: auto;
+  cursor: default;
+}
+
+.seller-policy-box:focus {
+  border-color: #087d46;
+}
+
+/* =========================================================
+   SCROLL STATUS
+========================================================= */
+
+.seller-scroll-status {
+  margin-top: 7px;
+  color: #68736d;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.seller-scroll-status.read {
+  color: #087d46;
+  font-weight: 700;
+}
+
+/* =========================================================
+   AGREEMENT
+========================================================= */
+
+.seller-agreement {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 13px 0 18px;
+  border-bottom: 1px solid #dfe7e2;
+  color: #414943;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.seller-agreement.disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.seller-agreement input {
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  flex-shrink: 0;
+  accent-color: #087d46;
+  cursor: pointer;
+}
+
+.seller-agreement input:disabled {
+  cursor: not-allowed;
+}
+
+.seller-agreement strong {
+  color: #087d46;
+  font-weight: 700;
+}
+
+/* =========================================================
+   DOCUMENT SECTION
+========================================================= */
+
+.seller-document-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 38px;
+  margin-top: 21px;
+}
+
+.seller-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seller-field label {
+  color: #202522;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.seller-field select,
+.seller-field input {
+  width: 100%;
+  height: 43px;
+  box-sizing: border-box;
+  padding: 0 13px;
+  border: 1px solid #c8dcd0;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #303734;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.seller-field select {
+  cursor: pointer;
+}
+
+.seller-field input:focus,
+.seller-field select:focus {
+  border-color: #087d46;
+  box-shadow: 0 0 0 2px rgba(8, 125, 70, 0.08);
+}
+
+.seller-field input:disabled {
+  background: #f5f7f6;
+  color: #999999;
+  cursor: not-allowed;
+}
+
+.seller-field input::placeholder {
+  color: #929a96;
+}
+
+/* =========================================================
+   DOCUMENT NOTE
+========================================================= */
+
+.seller-document-note {
+  margin: 7px 0 0;
+  color: #737c77;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   VERIFY NUMBER BUTTON
+========================================================= */
+.verify-number-btn {
+  width: 140px;
+  height: 34px;
+  margin: 12px auto 0;
+  padding: 0 20px;
+  display: block;
+  border: none;
+  border-radius: 8px;
+  background: #087d46;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.verify-number-btn:hover:not(:disabled) {
+  background: #075b42;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(8, 125, 70, 0.18);
+}
+
+.verify-number-btn:disabled {
+  background: #b9c9c0;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+/* =========================================================
+   VERIFIED BADGE
+========================================================= */
+
+.verified-badge {
+  width: 100%;
+  height: 43px;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: #eef7f1;
+  color: #087d46;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+/* =========================================================
+   VERIFICATION MESSAGE
+========================================================= */
+
+.seller-verification-message {
+  margin-top: 13px;
+  padding: 9px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.seller-verification-message.error {
+  border: 1px solid #f0caca;
+  background: #fff4f4;
+  color: #b33a3a;
+}
+
+.seller-verification-message.success {
+  border: 1px solid #c8dcd0;
+  background: #eef7f1;
+  color: #087d46;
+}
+
+/* =========================================================
+   OTP SECTION
+========================================================= */
+
+.seller-otp-section {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #dfe7e2;
+}
+
+.seller-otp-content {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+}
+
+.seller-otp-content .seller-field {
+  width: 230px;
+}
+
+.seller-otp-content input {
+  text-align: center;
+  letter-spacing: 5px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   VERIFY OTP BUTTON
+========================================================= */
+
+.verify-otp-btn {
+  height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  background: #087d46;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.verify-otp-btn:hover:not(:disabled) {
+  background: #075b42;
+  transform: translateY(-1px);
+}
+
+.verify-otp-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.verify-otp-btn:disabled {
+  background: #b9c9c0;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.seller-modal-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.verify-request-btn {
+  min-width: 245px;
+  height: 46px;
+  padding: 0 28px;
+  border: none;
+  border-radius: 8px;
+  background: #087d46;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.verify-request-btn:hover:not(:disabled) {
+  background: #075b42;
+  transform: translateY(-1px);
+}
+
+.verify-request-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.verify-request-btn:disabled {
+  background: #b9c9c0;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+  .seller-modal {
+    padding: 28px 24px 25px;
+  }
+
+  .seller-policy-grid,
+  .seller-document-section {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .seller-policy-box {
+    height: 220px;
+  }
+}
+
+@media (max-width: 500px) {
+  .seller-modal-overlay {
+    padding: 10px;
+  }
+
+  .seller-modal {
+    max-height: 95vh;
+    padding: 25px 17px 20px;
+    border-radius: 11px;
+  }
+
+  .seller-modal-header {
+    padding: 0 20px;
+  }
+
+  .seller-modal-header h2 {
+    font-size: 22px;
+  }
+
+  .seller-modal-header p {
+    font-size: 12px;
+  }
+
+  .seller-policy-box {
+    height: 200px;
+  }
+
+  .verify-number-btn {
+    height: 42px;
+  }
+
+  .verify-request-btn {
+    width: 100%;
+  }
+}

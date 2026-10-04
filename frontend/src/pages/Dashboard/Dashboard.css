@@ -1,0 +1,2045 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+
+  background: #f7faf8;
+  color: #17201d;
+
+  font-family: "Inter", sans-serif;
+}
+
+/* =========================================================
+   SIDEBAR
+   Compact typography as requested
+========================================================= */
+
+.dashboard-sidebar {
+  width: 260px;
+  height: calc(100vh - 92px);
+
+  margin: 0;
+
+  position: fixed;
+  top: 100px;
+  left: 16px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e9e5;
+  border-radius: 14px;
+
+  padding: 22px 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: 0 2px 10px rgba(30, 60, 45, 0.04);
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.brand {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 10px 26px;
+}
+
+.brand h2 {
+  margin: 0;
+
+  font-size: 19px;
+  font-weight: 700;
+
+  color: #17201d;
+}
+
+.brand span {
+  font-size: 9px;
+  color: #66716c;
+}
+
+/* =========================================================
+   SIDEBAR NAVIGATION
+========================================================= */
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.nav-item {
+  border: none;
+  background: transparent;
+
+  width: 100%;
+  min-height: 44px;
+
+  padding: 0 15px;
+
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  color: #202825;
+
+  font-family: "Inter", sans-serif;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.nav-item span:first-child {
+  width: 18px;
+
+  font-size: 18px;
+
+  color: #30403a;
+}
+
+.nav-item:hover {
+  background: #edf5f1;
+}
+
+.nav-item.active {
+  background: #075b42;
+  color: white;
+}
+
+.nav-item.active span:first-child {
+  color: white;
+}
+
+.message-count {
+  margin-left: auto;
+
+  width: 21px;
+  height: 21px;
+
+  border-radius: 50%;
+
+  background: #e4eee9;
+  color: #075b42;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 10px;
+}
+
+.logout {
+  margin-top: 8px;
+}
+
+/* =========================================================
+   HELP CARD
+========================================================= */
+
+.help-card {
+  margin-top: 10px;
+  background: #eef6f2;
+  text-align: center;
+  border-radius: 10px;
+  padding: 5px 16px 5px;
+}
+
+.help-card h4 {
+  margin: 0 0 7px;
+  color: #075b42;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.help-card p {
+  margin: 0 0 13px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #5d6863;
+}
+
+.help-card button {
+  width: 100%;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: white;
+  border: 1px solid #5c8b77;
+  border-radius: 6px;
+  color: #075b42;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.dashboard-main {
+  flex: 1;
+  min-width: 0;
+  width: calc(100% - 292px);
+  margin-left: 292px;
+  margin-top: 76px;
+
+  padding: 20px 24px 24px 20px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.dashboard-header {
+  min-height: 70px;
+
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  margin-bottom: 22px;
+}
+
+.welcome span {
+  font-size: 14px;
+
+  color: #5e6964;
+}
+
+.welcome h1 {
+  margin: 5px 0 0;
+
+  font-size: 28px;
+
+  line-height: 1.2;
+
+  font-weight: 700;
+
+  color: #17201d;
+}
+
+.header-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+.search-box {
+  width: 380px;
+  height: 44px;
+
+  border: 1px solid #dbe3df;
+
+  background: white;
+
+  border-radius: 8px;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 14px;
+}
+
+.search-box input {
+  flex: 1;
+
+  border: none;
+
+  outline: none;
+
+  font-family: "Inter", sans-serif;
+
+  font-size: 13px;
+
+  color: #252d29;
+}
+
+.search-box input::placeholder {
+  color: #8b9490;
+}
+
+.search-box span {
+  font-size: 22px;
+}
+
+.cart-icon {
+  border: none;
+
+  background: transparent;
+
+  font-size: 23px;
+
+  cursor: pointer;
+
+  position: relative;
+}
+
+.cart-icon span {
+  position: absolute;
+
+  right: -7px;
+  top: -6px;
+
+  width: 19px;
+  height: 19px;
+
+  border-radius: 50%;
+
+  background: #075b42;
+
+  color: white;
+
+  font-size: 9px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.profile {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.profile-avatar {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  background: #274f40;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.profile span {
+  font-size: 17px;
+}
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.stats-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 20px;
+
+  margin-bottom: 22px;
+}
+
+.stat-card {
+  min-height: 105px;
+
+  background: #ffffff;
+
+  border: 1px solid #e0e7e3;
+
+  border-radius: 12px;
+
+  padding: 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  box-shadow: 0 2px 8px rgba(30, 60, 45, 0.025);
+}
+
+.stat-icon {
+  width: 46px;
+  height: 46px;
+
+  border-radius: 50%;
+
+  background: #e4f1eb;
+
+  color: #229263;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;
+
+  flex-shrink: 0;
+}
+
+.stat-icon.heart {
+  font-size: 24px;
+}
+
+.stat-card p {
+  margin: 0 0 7px;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  color: #65706b;
+}
+
+.stat-card h2 {
+  margin: 0;
+
+  font-size: 23px;
+
+  font-weight: 700;
+}
+
+.stat-card a {
+  margin-left: auto;
+
+  text-decoration: none;
+
+  color: #087450;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   COMMON CARD
+========================================================= */
+
+.dashboard-card {
+  width: 100%;
+  min-width: 0;
+
+  background: #ffffff;
+
+  border: 1px solid #e0e7e3;
+
+  border-radius: 12px;
+
+  padding: 24px;
+
+  box-shadow: 0 2px 8px rgba(30, 60, 45, 0.025);
+}
+
+.card-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 18px;
+}
+
+.card-header h2 {
+  margin: 0;
+
+  font-size: 19px;
+
+  font-weight: 600;
+
+  color: #17201d;
+}
+
+.card-header a {
+  color: #087450;
+
+  text-decoration: none;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+/* =========================================================
+   REAL-TIME CLOCK
+========================================================= */
+
+.real-time-watch {
+  width: 100%;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding: 14px;
+  box-sizing: border-box;
+  border: 1px solid #c8dcd0;
+  border-radius: 12px;
+  background: #eef7f1;
+}
+
+.watch-details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  text-align: center;
+}
+
+.watch-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #355b49;
+}
+
+.watch-time {
+  font-size: 17px;
+  line-height: 1.25;
+  font-weight: 800;
+  color: #087d46;
+  white-space: nowrap;
+}
+
+.watch-date {
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 500;
+  color: #66756d;
+  white-space: nowrap;
+}
+
+@media (max-width: 1250px) {
+  .real-time-watch {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .watch-clock {
+    width: 64px;
+    height: 64px;
+  }
+
+  .watch-time {
+    font-size: 15px;
+  }
+
+  .watch-date {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 900px) {
+  .real-time-watch {
+    justify-content: center;
+    min-height: 70px;
+    margin-bottom: 18px;
+    padding: 8px;
+  }
+
+  .watch-clock {
+    width: 48px;
+    height: 48px;
+    border-width: 3px;
+  }
+
+  .watch-clock .icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .watch-details {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .real-time-watch {
+    width: 100%;
+    min-height: 96px;
+    justify-content: flex-start;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding: 12px 14px;
+  }
+
+  .watch-clock {
+    width: 64px;
+    height: 64px;
+    border-width: 3px;
+  }
+
+  .watch-clock .icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .watch-details {
+    display: flex;
+  }
+
+  .watch-label {
+    font-size: 10px;
+  }
+
+  .watch-time {
+    font-size: 16px;
+  }
+
+  .watch-date {
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   ACCOUNT SUMMARY
+========================================================= */
+
+.account-summary-row {
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+.account-card {
+  width: 100%;
+  padding: 22px 24px;
+}
+
+.account-card .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.account-card .card-header h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: #17201d;
+}
+
+.edit-profile-button {
+  border: none;
+  background: transparent;
+  padding: 4px 0;
+  color: #075b42;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-profile-button:hover {
+  color: #043f2e;
+  text-decoration: underline;
+}
+
+.account-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) minmax(0, 1.8fr) minmax(0, 1.05fr)
+    minmax(0, 0.8fr) minmax(0, 1.25fr) minmax(0, 1.1fr);
+  padding-top: 16px;
+  border-top: 1px solid #edf0ee;
+}
+
+.account-item {
+  min-width: 0;
+  min-height: 55px;
+  padding: 0 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  border-right: 1px solid #edf0ee;
+}
+
+.account-item:first-child {
+  padding-left: 0;
+}
+
+.account-item:last-child {
+  padding-right: 0;
+  border-right: none;
+}
+
+.account-item span {
+  display: block;
+  margin: 0;
+  color: #69736e;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.account-item strong {
+  display: block;
+  margin: 0;
+  color: #17201d;
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   ACTIVE BIDS + WATCHLIST
+========================================================= */
+
+.dashboard-columns {
+  display: grid;
+
+  gap: 22px;
+
+  margin-bottom: 22px;
+}
+
+.active-bids-row {
+  grid-template-columns:
+    minmax(0, 1.65fr)
+    minmax(0, 1fr);
+}
+
+.dashboard-columns > .dashboard-card {
+  width: 100%;
+  min-width: 0;
+}
+
+/* =========================================================
+   ACTIVE BIDS
+========================================================= */
+
+.bid-item {
+  min-height: 120px;
+
+  display: grid;
+
+  grid-template-columns:
+    120px
+    minmax(0, 1fr)
+    135px
+    75px;
+
+  align-items: center;
+
+  gap: 18px;
+
+  border-top: 1px solid #edf0ee;
+}
+
+.bid-item:first-child {
+  border-top: none;
+}
+
+.bid-item img {
+  width: 120px;
+  height: 92px;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+}
+
+.bid-info {
+  min-width: 0;
+}
+
+.bid-info h3 {
+  margin: 0 0 8px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  color: #17201d;
+}
+
+.bid-info span {
+  display: block;
+
+  color: #737d78;
+
+  font-size: 12px;
+
+  margin-bottom: 6px;
+}
+
+.bid-info strong {
+  font-size: 17px;
+
+  font-weight: 600;
+
+  color: #17201d;
+}
+
+.bid-time {
+  text-align: center;
+}
+
+.bid-time strong {
+  display: block;
+
+  padding: 9px;
+
+  border-radius: 7px;
+
+  background: #eef6f2;
+
+  color: #075b42;
+
+  font-size: 14px;
+
+  letter-spacing: 1px;
+}
+
+.bid-time small {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #7a837f;
+
+  font-size: 11px;
+}
+
+.bid-count {
+  color: #5d6863;
+
+  font-size: 11px;
+
+  text-align: right;
+}
+
+/* =========================================================
+   WATCHLIST
+========================================================= */
+
+.watch-item {
+  min-height: 120px;
+
+  display: grid;
+
+  grid-template-columns:
+    110px
+    minmax(0, 1fr)
+    32px;
+
+  gap: 16px;
+
+  align-items: center;
+
+  border-top: 1px solid #edf0ee;
+}
+
+.watch-item:first-child {
+  border-top: none;
+}
+
+.watch-item img {
+  width: 110px;
+  height: 88px;
+
+  object-fit: cover;
+
+  border-radius: 9px;
+}
+
+.watch-item h3 {
+  margin: 0 0 8px;
+
+  font-size: 15px;
+
+  font-weight: 600;
+}
+
+.watch-item strong {
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+.watch-item p {
+  margin: 8px 0 0;
+
+  font-size: 11px;
+
+  color: #69736e;
+}
+
+.watch-item p span {
+  background: #edf5f1;
+
+  color: #075b42;
+
+  padding: 5px 8px;
+
+  border-radius: 5px;
+
+  font-size: 10px;
+}
+
+.heart-button {
+  border: none;
+
+  background: transparent;
+
+  color: #075b42;
+
+  font-size: 23px;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   WON AUCTIONS
+   FULL WIDTH
+========================================================= */
+
+.won-auctions-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.won-auctions-row > .dashboard-card {
+  width: 100%;
+  min-width: 0;
+}
+
+.won-item {
+  min-height: 115px;
+
+  display: grid;
+
+  grid-template-columns: 110px minmax(0, 1fr);
+
+  gap: 17px;
+
+  align-items: center;
+
+  border-top: 1px solid #edf0ee;
+}
+
+.won-item:first-child {
+  border-top: none;
+}
+
+.won-item img {
+  width: 110px;
+  height: 88px;
+
+  object-fit: cover;
+
+  border-radius: 9px;
+}
+
+.won-item h3 {
+  margin: 0 0 8px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+.won-item strong {
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+.won-item p {
+  margin: 7px 0 0;
+
+  font-size: 11px;
+
+  color: #69736e;
+}
+
+/* =========================================================
+   WON AUCTIONS + RECENT ACTIVITY + MESSAGES
+   SAME ROW
+========================================================= */
+
+.bottom-three-row {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 22px;
+
+  margin-bottom: 22px;
+}
+
+.bottom-three-row > .dashboard-card {
+  width: 100%;
+  min-width: 0;
+}
+
+/* =========================================================
+   RECENT ACTIVITY + MESSAGES
+========================================================= */
+
+.bottom-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 22px;
+
+  margin-bottom: 22px;
+}
+
+/* =========================================================
+   RECENT ACTIVITY
+========================================================= */
+
+.activity-item {
+  min-height: 70px;
+
+  display: grid;
+
+  grid-template-columns:
+    38px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 13px;
+
+  border-top: 1px solid #edf0ee;
+}
+
+.activity-item:first-child {
+  border-top: none;
+}
+
+.activity-icon {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  background: #e1eee8;
+
+  color: #075b42;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 14px;
+}
+
+.activity-item p {
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.45;
+}
+
+.activity-item small {
+  color: #6e7873;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+.message-item {
+  min-height: 70px;
+
+  border-top: 1px solid #edf0ee;
+
+  display: grid;
+
+  grid-template-columns:
+    40px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 13px;
+}
+
+.message-item:first-child {
+  border-top: none;
+}
+
+.message-avatar {
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+
+  background: #526c62;
+
+  color: white;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.message-content strong {
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.message-content p {
+  margin: 5px 0 0;
+
+  font-size: 11px;
+
+  color: #69736e;
+}
+
+.message-item small {
+  font-size: 10px;
+
+  color: #68716d;
+}
+
+/* =========================================================
+   COPYRIGHT
+========================================================= */
+
+.dashboard-footer {
+  margin-top: 22px;
+
+  padding: 18px 0;
+
+  border-top: 1px solid #e1e7e4;
+
+  text-align: center;
+}
+
+.dashboard-footer .copyright {
+  margin: 0;
+
+  font-size: 10px;
+
+  color: #69736e;
+}
+
+/* =========================================================
+   LARGE SCREEN
+========================================================= */
+
+@media (min-width: 1450px) {
+  .dashboard-main {
+    padding: 24px 30px 28px 24px;
+  }
+
+  .dashboard-columns {
+    gap: 24px;
+  }
+
+  .bottom-three-row {
+    gap: 24px;
+  }
+
+  .dashboard-card {
+    padding: 26px;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1250px) {
+  .dashboard-sidebar {
+    width: 220px;
+  }
+
+  .dashboard-main {
+    width: calc(100% - 252px);
+    margin-left: 252px;
+    padding: 18px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Active Bids + Watchlist */
+  .active-bids-row {
+    grid-template-columns:
+      minmax(0, 1.4fr)
+      minmax(0, 1fr);
+  }
+
+  /* Won Auctions remains full width */
+  .won-auctions-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Won Auctions + Recent Activity + Messages */
+  .bottom-three-row {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+  }
+
+  /* Account Summary */
+  .account-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 18px;
+  }
+
+  .account-item:nth-child(2) {
+    border-right: none;
+  }
+
+  .account-item:nth-child(3) {
+    padding-left: 0;
+    padding-top: 15px;
+  }
+
+  .account-item:nth-child(4) {
+    padding-top: 15px;
+  }
+
+  .search-box {
+    width: 280px;
+  }
+
+  /* Active bids */
+  .bid-item {
+    grid-template-columns:
+      85px
+      minmax(0, 1fr);
+
+    padding: 12px 0;
+  }
+
+  .bid-item img {
+    width: 85px;
+    height: 75px;
+  }
+
+  .bid-time,
+  .bid-count {
+    grid-column: 2;
+
+    text-align: left;
+  }
+}
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .dashboard-sidebar {
+    width: 70px;
+
+    padding: 15px 8px;
+  }
+
+  .dashboard-main {
+    width: calc(100% - 102px);
+    margin-left: 102px;
+  }
+
+  .brand {
+    justify-content: center;
+
+    padding: 0 0 25px;
+  }
+
+  .brand > div:last-child {
+    display: none;
+  }
+
+  .nav-item {
+    justify-content: center;
+
+    padding: 0;
+
+    font-size: 0;
+  }
+
+  .nav-item span:first-child {
+    font-size: 18px;
+  }
+
+  .message-count {
+    display: none;
+  }
+
+  .help-card {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 10px;
+  }
+
+  .search-box {
+    width: 230px;
+  }
+
+  /* Stack dashboard cards */
+  .active-bids-row,
+  .won-auctions-row,
+  .bottom-three-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+  .dashboard {
+    display: block;
+  }
+
+  .dashboard-sidebar {
+    width: calc(100% - 32px);
+
+    height: auto;
+
+    min-height: auto;
+
+    margin: 16px;
+
+    position: relative;
+
+    top: auto;
+
+    border: 1px solid #e2e9e5;
+
+    border-radius: 14px;
+  }
+
+  .brand {
+    justify-content: flex-start;
+  }
+
+  .brand > div:last-child {
+    display: block;
+  }
+
+  .sidebar-nav {
+    display: none;
+  }
+
+  .dashboard-main {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0;
+    padding: 14px 16px 20px;
+  }
+
+  .dashboard-header {
+    display: block;
+  }
+
+  .welcome h1 {
+    font-size: 24px;
+  }
+
+  .header-actions {
+    margin-top: 15px;
+
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Account Summary */
+  .account-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .account-item {
+    padding: 12px 10px;
+    border-right: none;
+    border-bottom: 1px solid #edf0ee;
+  }
+
+  .account-item strong {
+    font-size: 14px;
+  }
+
+  /* Active Bids */
+  .bid-item {
+    grid-template-columns:
+      75px
+      minmax(0, 1fr);
+
+    padding: 12px 0;
+  }
+
+  .bid-item img {
+    width: 75px;
+    height: 70px;
+  }
+
+  .bid-time,
+  .bid-count {
+    grid-column: 2;
+
+    text-align: left;
+  }
+
+  /* Watchlist */
+  .watch-item {
+    grid-template-columns:
+      80px
+      minmax(0, 1fr)
+      28px;
+  }
+
+  .watch-item img {
+    width: 80px;
+    height: 68px;
+  }
+
+  /* Won Auctions */
+  .won-item {
+    grid-template-columns:
+      80px
+      minmax(0, 1fr);
+  }
+
+  .won-item img {
+    width: 80px;
+    height: 68px;
+  }
+
+  .won-auctions-row {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-three-row {
+    grid-template-columns: 1fr;
+  }
+
+  .account-row {
+    grid-template-columns: 1fr;
+  }
+
+  .account-item,
+  .account-item:nth-child(3),
+  .account-item:nth-child(4) {
+    padding: 14px 0;
+    border-right: none;
+    border-bottom: 1px solid #edf0ee;
+  }
+
+  .account-item:last-child {
+    border-bottom: none;
+  }
+
+  .dashboard-footer {
+    margin-top: 18px;
+
+    padding: 15px 0;
+  }
+}
+
+/* =========================================================
+   DASHBOARD HEADER PROFILE
+   Circular name tag + profile name
+========================================================= */
+
+.profile-wrapper {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+}
+
+.profile-btn {
+  border: none;
+
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 5px 2px;
+
+  color: #17201d;
+
+  font-family: "Inter", sans-serif;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.profile-btn:hover {
+  color: #075b42;
+}
+
+/* Circular name/initial tag */
+
+.profile-btn .profile-avatar {
+  width: 36px;
+  height: 36px;
+
+  min-width: 36px;
+
+  border-radius: 50%;
+
+  background: #e4f1eb;
+
+  color: #075b42;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+/* Profile name */
+
+.profile-btn .profile-name {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #17201d;
+
+  white-space: nowrap;
+}
+
+.profile-btn:hover .profile-name {
+  color: #075b42;
+}
+
+/* Dropdown arrow */
+
+.profile-arrow {
+  font-size: 9px;
+
+  color: #68736e;
+
+  margin-left: 2px;
+}
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
+.profile-menu {
+  position: absolute;
+
+  top: calc(100% + 8px);
+
+  right: 0;
+
+  width: 180px;
+
+  background: #ffffff;
+
+  border: 1px solid #e0e7e3;
+
+  border-radius: 10px;
+
+  padding: 6px;
+
+  box-shadow: 0 8px 24px rgba(30, 60, 45, 0.12);
+
+  z-index: 1000;
+}
+
+.profile-menu-item {
+  width: 100%;
+
+  border: none;
+
+  background: transparent;
+
+  padding: 10px 12px;
+
+  border-radius: 7px;
+
+  color: #17201d;
+
+  font-family: "Inter", sans-serif;
+
+  font-size: 12px;
+
+  font-weight: 500;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.profile-menu-item:hover {
+  background: #edf5f1;
+
+  color: #075b42;
+}
+
+.profile-menu-item.logout-item {
+  color: #b23b3b;
+}
+
+.profile-menu-item.logout-item:hover {
+  background: #fff1f1;
+
+  color: #a52f2f;
+}
+
+/* =========================================================
+   PROFILE RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+  .profile-btn .profile-name {
+    display: none;
+  }
+
+  .profile-arrow {
+    display: none;
+  }
+
+  .profile-btn .profile-avatar {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .profile-menu {
+    right: 0;
+    width: 170px;
+  }
+}
+
+/* =========================================================
+   FULL MESSAGES & NOTIFICATIONS
+   Added without changing existing styles
+========================================================= */
+
+.messages-full-page {
+  width: 100%;
+}
+
+.messages-full-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.messages-full-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.messages-full-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.messages-full-title-row h2 {
+  margin: 0;
+}
+
+.messages-full-header p {
+  margin: 5px 0 0;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.messages-full-unread-count {
+  min-width: 21px;
+  height: 21px;
+  padding: 0 6px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #087f5b;
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.messages-full-mark-read {
+  padding: 4px 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #087f5b;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+.messages-full-mark-read:hover {
+  color: #065f46;
+}
+
+.messages-full-tabs {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 22px;
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid #eaecf0;
+}
+
+.messages-full-tabs button {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 8px 15px;
+
+  border: 0;
+
+  border-radius: 6px;
+
+  background: transparent;
+
+  color: #667085;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.messages-full-tabs button:hover {
+  background: #f2f4f7;
+  color: #344054;
+}
+
+.messages-full-tabs button.active {
+  background: #e8f5f0;
+  color: #087f5b;
+}
+
+.messages-full-tabs button span {
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 5px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #087f5b;
+  color: #ffffff;
+
+  font-size: 10px;
+}
+
+.messages-full-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-full-item {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  min-height: 78px;
+
+  padding: 13px 8px;
+
+  border-bottom: 1px solid #f0f2f5;
+
+  box-sizing: border-box;
+}
+
+.messages-full-item:last-child {
+  border-bottom: 0;
+}
+
+.messages-full-item.unread {
+  background: #f8fcfa;
+}
+
+.messages-full-icon {
+  width: 44px;
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.message-full-icon {
+  background: #e8f5f0;
+  color: #087f5b;
+}
+
+.notification-full-icon {
+  background: #f2f4f7;
+  color: #475467;
+
+  font-size: 17px;
+}
+
+.messages-full-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.messages-full-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.messages-full-item-top strong {
+  color: #1d2939;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.messages-full-item-top small {
+  flex-shrink: 0;
+
+  color: #98a2b3;
+
+  font-size: 11px;
+}
+
+.messages-full-content p {
+  margin: 5px 0 0;
+
+  color: #667085;
+
+  font-size: 13px;
+
+  line-height: 1.45;
+}
+
+.messages-full-unread-dot {
+  width: 8px;
+  height: 8px;
+
+  flex: 0 0 8px;
+
+  border-radius: 50%;
+
+  background: #087f5b;
+}
+
+.messages-full-empty {
+  min-height: 250px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.messages-full-empty > div {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 12px;
+
+  border-radius: 50%;
+
+  background: #e8f5f0;
+
+  color: #087f5b;
+
+  font-size: 20px;
+}
+
+.messages-full-empty strong {
+  color: #344054;
+
+  font-size: 14px;
+}
+
+.messages-full-empty p {
+  margin: 5px 0 0;
+
+  color: #98a2b3;
+
+  font-size: 12px;
+}
+
+@media (max-width: 650px) {
+  .messages-full-header {
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .messages-full-mark-read {
+    align-self: flex-start;
+  }
+
+  .messages-full-item {
+    gap: 10px;
+  }
+
+  .messages-full-icon {
+    width: 38px;
+    height: 38px;
+
+    flex-basis: 38px;
+  }
+}
+
+@media (max-width: 480px) {
+  .messages-full-tabs {
+    overflow-x: auto;
+  }
+
+  .messages-full-tabs button {
+    white-space: nowrap;
+  }
+
+  .messages-full-item-top small {
+    display: none;
+  }
+}
+
+html {
+  overflow-y: scroll;
+}
+
+/* Highlight the entire auction row when the countdown reaches zero */
+.bid-item.auction-time-zero {
+  background-color: #006b55;
+  color: #ffffff;
+  border-color: #006b55;
+}
+
+/* Keep all row text readable */
+.bid-item.auction-time-zero h3,
+.bid-item.auction-time-zero span,
+.bid-item.auction-time-zero strong,
+.bid-item.auction-time-zero small {
+  color: #ffffff;
+}

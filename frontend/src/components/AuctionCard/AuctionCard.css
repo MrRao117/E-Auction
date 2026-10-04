@@ -1,0 +1,537 @@
+/* =========================================================
+   AUCTION CARD
+========================================================= */
+
+.auction-card {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+
+  border: 1px solid #c4d2ca;
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.auction-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
+}
+
+/* =========================================================
+   PRODUCT IMAGE
+   SMALLER IMAGE AREA
+========================================================= */
+
+.auction-image-wrapper {
+  position: relative;
+
+  width: 100%;
+
+  height: 145px;
+
+  overflow: hidden;
+
+  background: #edf2ef;
+}
+
+.auction-image {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  background: #edf2ef;
+
+  transition: transform 0.35s ease;
+}
+
+.auction-card:hover .auction-image {
+  transform: none;
+}
+
+/* =========================================================
+   VERIFIED
+========================================================= */
+
+.auction-verified {
+  position: absolute;
+
+  top: 8px;
+  left: 8px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+  padding: 4px 8px;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  color: #087447;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.12);
+}
+
+.verified-check {
+  width: 14px;
+  height: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #07945c;
+
+  color: #ffffff;
+
+  font-size: 8px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   WISHLIST
+========================================================= */
+
+.auction-wishlist {
+  position: absolute;
+
+  top: 8px;
+  right: 8px;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  color: #174c3a;
+
+  font-size: 21px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.12);
+
+  transition: transform 0.2s ease;
+}
+
+.auction-wishlist:hover {
+  transform: scale(1.08);
+}
+
+/* =========================================================
+   IMAGE COUNT
+========================================================= */
+
+.auction-image-count {
+  position: absolute;
+
+  right: 8px;
+  bottom: 8px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+  padding: 4px 7px;
+
+  border-radius: 14px;
+
+  background: rgba(20, 27, 25, 0.78);
+
+  color: #ffffff;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.image-count-icon {
+  font-size: 10px;
+}
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.auction-card-content {
+  padding: 10px;
+}
+
+/* =========================================================
+   AUCTION ID
+========================================================= */
+
+.auction-id {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-bottom: 8px;
+
+  font-size: 12px;
+
+  color: #64748b;
+}
+
+.auction-id strong {
+  color: #006b55;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   PRODUCT TITLE
+========================================================= */
+
+.auction-title {
+  margin: 0;
+
+  color: #151b19;
+
+  font-size: 16px;
+  font-weight: 800;
+
+  line-height: 1.25;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+.auction-category {
+  width: fit-content;
+
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+  margin-top: 6px;
+
+  padding: 4px 8px;
+
+  border-radius: 14px;
+
+  background: #e5f2ed;
+
+  color: #126849;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.category-icon {
+  font-size: 7px;
+}
+
+/* =========================================================
+   SELLER
+========================================================= */
+
+.auction-seller {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  margin-top: 12px;
+}
+
+.seller-avatar {
+  width: 28px;
+  height: 28px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e3f0eb;
+
+  color: #075d38;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.seller-details {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.seller-label {
+  color: #7a8581;
+
+  font-size: 10px;
+  font-weight: 500;
+
+  line-height: 1.2;
+}
+
+.seller-name {
+  margin-top: 2px;
+
+  color: #18211e;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   BOTTOM SECTION
+========================================================= */
+
+.auction-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 6px;
+
+  margin-top: 10px;
+  padding-top: 9px;
+
+  border-top: 1px solid #dfe7e3;
+}
+
+/* =========================================================
+   TIME
+========================================================= */
+
+.auction-time {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  padding-left: 55px;
+
+  gap: 5px;
+}
+
+/* =========================================================
+   TIME DETAILS
+========================================================= */
+
+.time-details {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+.countdown {
+  display: flex;
+  align-items: center;
+
+  gap: 2px;
+
+  margin-top: 3px;
+}
+
+.countdown-box {
+  min-width: 25px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 3px 2px;
+
+  border-radius: 5px;
+
+  background: #fde5e8;
+}
+
+.countdown-box strong {
+  color: #d91d34;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+.countdown-box small {
+  margin-top: 2px;
+
+  color: #9f5360;
+
+  font-size: 7px;
+  font-weight: 600;
+
+  line-height: 1;
+}
+
+.countdown-separator {
+  color: #d91d34;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .auction-image-wrapper {
+    height: 155px;
+  }
+
+  .auction-card-content {
+    padding: 10px;
+  }
+
+  .auction-title {
+    font-size: 13px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .auction-image-wrapper {
+    height: 150px;
+  }
+
+  .auction-card-content {
+    padding: 9px;
+  }
+
+  .auction-id {
+    font-size: 11px;
+  }
+
+  .auction-id strong {
+    font-size: 11px;
+  }
+
+  .auction-title {
+    font-size: 13px;
+  }
+
+  .auction-category {
+    font-size: 8px;
+  }
+
+  .seller-avatar {
+    width: 27px;
+    height: 27px;
+
+    font-size: 11px;
+  }
+
+  .seller-name {
+    font-size: 9px;
+  }
+
+  .auction-bottom {
+    gap: 5px;
+  }
+
+  .time-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .countdown-box {
+    min-width: 21px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+  .auction-image-wrapper {
+    height: 170px;
+  }
+
+  .auction-title {
+    font-size: 14px;
+  }
+
+  .auction-card-content {
+    padding: 10px;
+  }
+
+  .auction-bottom {
+    align-items: center;
+  }
+}
+
+/* =========================================================
+   SIMILAR PRODUCTS GRID
+========================================================= */
+
+.similar-products-grid .auction-bottom {
+  justify-content: center;
+}
+
+.similar-products-grid .auction-time {
+  padding-left: 0;
+  justify-content: center;
+}

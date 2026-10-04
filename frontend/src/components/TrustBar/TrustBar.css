@@ -1,0 +1,207 @@
+/* =========================================================
+   TRUST BAR
+========================================================= */
+
+.trust-bar {
+  width: calc(100% - 60px);
+  max-width: 1440px;
+
+  margin: 30px auto 0;
+
+  background: #f3f3f3;
+
+  border: 1px solid #d8e3dc;
+  border-radius: 12px;
+
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   TRUST FEATURES
+========================================================= */
+
+.trust-features {
+  width: 100%;
+
+  min-height: 100px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   TRUST FEATURE
+========================================================= */
+
+.trust-feature {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 14px;
+}
+
+/* =========================================================
+   ICON CIRCLE
+========================================================= */
+
+.trust-feature-icon {
+  width: 55px;
+  height: 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 55px;
+
+  border-radius: 50%;
+
+  background: #e4f3e9;
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   ICON IMAGE
+========================================================= */
+
+.trust-feature-icon img {
+  width: 49px;
+  height: 49px;
+
+  display: block;
+
+  max-width: 49px;
+  max-height: 49px;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.trust-feature-content {
+  min-width: 0;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.trust-feature-content h3 {
+  margin: 0 0 5px;
+
+  color: #202020;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  line-height: 1.3;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.trust-feature-content p {
+  margin: 0;
+
+  color: #6a6a6a;
+
+  font-size: 13px;
+  font-weight: 400;
+
+  line-height: 1.4;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .trust-features {
+    flex-wrap: wrap;
+
+    row-gap: 20px;
+  }
+
+  .trust-feature {
+    flex: 0 0 calc(50% - 12px);
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .trust-bar {
+    width: calc(100% - 40px);
+  }
+
+  .trust-features {
+    flex-direction: column;
+    align-items: stretch;
+
+    justify-content: flex-start;
+
+    gap: 16px;
+
+    padding: 20px;
+  }
+
+  .trust-feature {
+    width: 100%;
+
+    flex: none;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+  .trust-features {
+    padding: 16px 18px;
+  }
+
+  .trust-feature-icon {
+    width: 45px;
+    height: 45px;
+
+    flex-basis: 45px;
+  }
+
+  .trust-feature-icon img {
+    width: 39px;
+    height: 39px;
+
+    max-width: 39px;
+    max-height: 39px;
+  }
+
+  .trust-feature-content h3 {
+    font-size: 14px;
+  }
+
+  .trust-feature-content p {
+    font-size: 11px;
+  }
+}

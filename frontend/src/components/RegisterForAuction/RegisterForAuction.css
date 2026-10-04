@@ -1,0 +1,853 @@
+/* ================================
+   MODAL OVERLAY
+================================ */
+
+.register-auction-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.58);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  overflow-y: auto;
+}
+
+.register-auction-modal {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 24px;
+  width: min(1040px, 100%);
+  max-height: calc(100vh - 48px);
+  padding: 18px 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  color: #111936;
+  font-family: inherit;
+}
+
+.register-auction-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #111936;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.register-auction-close:hover {
+  color: #00866a;
+}
+
+/* ================================
+   LEFT: PRODUCT SECTION
+================================ */
+
+.register-product-section {
+  min-width: 0;
+  padding-right: 0;
+  border-right: 1px solid #edf0f4;
+}
+
+.register-product-gallery {
+  margin-bottom: 12px;
+}
+
+.register-main-image {
+  position: relative;
+  width: 100%;
+  height: 290px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: #f1f5f9;
+}
+
+.register-main-image > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.register-live-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #087c62;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.register-live-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #ef4444;
+}
+
+.register-image-arrow {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  color: #111936;
+  font-size: 28px;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 0.2s ease;
+}
+
+.register-image-arrow:hover {
+  background: #dff5ec;
+}
+
+.register-image-prev {
+  left: 12px;
+}
+
+.register-image-next {
+  right: 12px;
+}
+
+/* THUMBNAILS */
+
+.register-thumbnail-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.register-thumbnail {
+  height: 66px;
+  padding: 3px;
+  border: 1px solid #dfe5eb;
+  border-radius: 7px;
+  background: #ffffff;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.register-thumbnail-active {
+  border: 2px solid #00866a;
+  padding: 2px;
+}
+
+.register-thumbnail img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* PRODUCT TITLE */
+
+.register-product-title {
+  margin: 12px 0 5px;
+  color: #111936;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.register-product-meta {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+  color: #52617d;
+  font-size: 14px;
+}
+
+.register-product-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 12px;
+}
+
+.register-product-tags span {
+  padding: 6px 11px;
+  border-radius: 20px;
+  background: #e8f7f1;
+  color: #087c62;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.register-product-tags span:nth-child(n + 3) {
+  background: #eef5f7;
+  color: #263b4b;
+}
+
+.register-product-description {
+  margin: 0 0 12px;
+  color: #394763;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* PRODUCT SPECIFICATIONS */
+
+.register-product-specs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  padding: 10px 5px;
+  border: 1px solid #e6ebf0;
+  border-radius: 8px;
+}
+
+.register-product-specs > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  text-align: center;
+}
+
+.register-product-specs strong {
+  color: #172443;
+  font-size: 18px;
+}
+
+.register-product-specs span {
+  color: #172443;
+  font-size: 12px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.register-product-specs small {
+  color: #52617d;
+  font-size: 10px;
+}
+
+/* AUCTION COUNTDOWN */
+
+.register-auction-summary {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 1px solid #e0f1eb;
+  border-radius: 9px;
+  background: #f2faf7;
+}
+
+.register-auction-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.register-auction-status > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #087c62;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.register-auction-status small {
+  color: #087c62;
+  font-size: 11px;
+  text-align: right;
+}
+
+.register-countdown {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.register-countdown > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 7px 4px;
+  border-radius: 7px;
+  background: #e4f5ef;
+}
+
+.register-countdown strong {
+  color: #111936;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.register-countdown span {
+  color: #52617d;
+  font-size: 11px;
+}
+
+/* BASE PRICE AND PARTICIPANTS */
+
+.register-price-participants {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #e0f1eb;
+  border-radius: 9px;
+  background: #f2faf7;
+}
+
+.register-base-price,
+.register-participants {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.register-participants {
+  padding-left: 12px;
+  border-left: 1px solid #d1e4dc;
+}
+
+.register-summary-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #dff5ec;
+  color: #087c62;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.register-participants .register-summary-icon {
+  background: #e0edff;
+  color: #1873d5;
+}
+
+.register-base-price > div,
+.register-participants > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.register-base-price small,
+.register-participants small {
+  color: #52617d;
+  font-size: 12px;
+}
+
+.register-base-price strong {
+  color: #087c62;
+  font-size: 22px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.register-participants strong {
+  color: #111936;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* ================================
+   RIGHT: REGISTRATION FORM
+================================ */
+
+.register-form-section {
+  min-width: 0;
+  padding: 10px 0 4px;
+}
+
+.register-form-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 24px;
+}
+
+.register-heading-icon {
+  color: #00866a;
+  font-size: 30px;
+}
+
+.register-form-heading h1 {
+  margin: 0;
+  color: #111936;
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.register-form-subtitle {
+  margin: 8px 0 16px;
+  color: #52617d;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* WHY REGISTER */
+
+.register-why-box {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  margin-bottom: 22px;
+  border: 1px solid #d5e9fb;
+  border-radius: 9px;
+  background: #edf6ff;
+}
+
+.register-info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #1879e8;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.register-why-box h3 {
+  margin: 2px 0 10px;
+  color: #111936;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.register-why-box ul {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.register-why-box li {
+  position: relative;
+  padding-left: 27px;
+  color: #243653;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.register-why-box li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #087c62;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* FORM FIELDS */
+
+.register-details-title {
+  margin: 0 0 12px;
+  color: #111936;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.register-auction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.register-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.register-field label {
+  color: #394763;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.register-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid #dce3ec;
+  border-radius: 8px;
+  background: #ffffff;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.register-input-wrapper:focus-within {
+  border-color: #00866a;
+  box-shadow: 0 0 0 3px rgba(0, 134, 106, 0.1);
+}
+
+.register-input-icon {
+  flex-shrink: 0;
+  color: #263b5a;
+  font-size: 20px;
+}
+
+.register-input-wrapper input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #172443;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.register-input-wrapper input::placeholder {
+  color: #94a0b5;
+}
+
+.register-address-wrapper {
+  min-height: 48px;
+}
+
+/* TERMS */
+
+.register-terms {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 4px 0 0;
+  color: #243653;
+  font-size: 13px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.register-terms input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: #087c62;
+  cursor: pointer;
+}
+
+.register-terms a {
+  color: #087c62;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* SUBMIT BUTTON */
+
+.register-submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #00866a;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.register-submit-button:hover:not(:disabled) {
+  background: #006b55;
+}
+
+.register-submit-button:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.register-submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.register-submit-button span {
+  font-size: 21px;
+}
+
+/* SECURITY BOX */
+
+.register-security-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 14px;
+  border: 1px solid #e0f1eb;
+  border-radius: 9px;
+  background: #eaf8f3;
+}
+
+.register-security-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #087c62;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.register-security-box strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #087c62;
+  font-size: 14px;
+}
+
+.register-security-box p {
+  margin: 0;
+  color: #394763;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ================================
+   TABLET
+================================ */
+
+@media (max-width: 900px) {
+  .register-auction-overlay {
+    padding: 16px;
+  }
+
+  .register-auction-modal {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    width: min(600px, 100%);
+    max-height: calc(100vh - 32px);
+    padding: 22px;
+  }
+
+  .register-product-section {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid #edf0f4;
+    padding-bottom: 20px;
+  }
+
+  .register-main-image {
+    height: 320px;
+  }
+
+  .register-form-section {
+    padding-top: 0;
+  }
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+  .register-auction-overlay {
+    align-items: flex-start;
+    padding: 8px;
+  }
+
+  .register-auction-modal {
+    width: 100%;
+    max-height: calc(100vh - 16px);
+    padding: 16px;
+    border-radius: 10px;
+    gap: 18px;
+  }
+
+  .register-auction-close {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 29px;
+  }
+
+  .register-main-image {
+    height: 230px;
+  }
+
+  .register-thumbnail-list {
+    gap: 6px;
+  }
+
+  .register-thumbnail {
+    height: 52px;
+  }
+
+  .register-product-title {
+    font-size: 20px;
+    padding-right: 10px;
+  }
+
+  .register-product-tags {
+    gap: 6px;
+  }
+
+  .register-product-tags span {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .register-product-specs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .register-price-participants {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .register-base-price,
+  .register-participants {
+    gap: 7px;
+  }
+
+  .register-participants {
+    padding-left: 8px;
+  }
+
+  .register-summary-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 18px;
+  }
+
+  .register-base-price strong,
+  .register-participants strong {
+    font-size: 17px;
+  }
+
+  .register-base-price small,
+  .register-participants small {
+    font-size: 10px;
+  }
+
+  .register-form-heading {
+    gap: 8px;
+  }
+
+  .register-form-heading h1 {
+    font-size: 22px;
+  }
+
+  .register-heading-icon {
+    font-size: 25px;
+  }
+
+  .register-form-subtitle {
+    font-size: 13px;
+  }
+
+  .register-why-box {
+    gap: 10px;
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+
+  .register-why-box li {
+    font-size: 12px;
+  }
+
+  .register-auction-form {
+    gap: 11px;
+  }
+
+  .register-input-wrapper {
+    gap: 10px;
+    padding: 0 11px;
+  }
+
+  .register-input-wrapper input {
+    font-size: 13px;
+  }
+
+  .register-submit-button {
+    min-height: 48px;
+    font-size: 14px;
+  }
+
+  .register-security-box {
+    gap: 10px;
+    margin-top: 16px;
+    padding: 12px;
+  }
+
+  .register-security-box strong {
+    font-size: 13px;
+  }
+
+  .register-security-box p {
+    font-size: 11px;
+  }
+}

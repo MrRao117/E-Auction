@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+:root {
+  --green: #075d38;
+  --green-dark: #064b2e;
+  --green-light: #dff3e8;
+  --text: #161616;
+  --muted: #686868;
+}
+
+/* =========================================================
+   GLOBAL RESET
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+
+  background: #ffffff;
+  color: var(--text);
+
+  font-family: "Inter", Arial, sans-serif;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* =========================================================
+   GLOBAL PAGE CONTAINER
+========================================================= */
+
+.page-container {
+  width: calc(100% - 60px);
+  max-width: 1455px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  box-sizing: border-box;
+}

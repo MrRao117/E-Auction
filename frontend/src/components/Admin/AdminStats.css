@@ -1,0 +1,328 @@
+/* =========================================
+   ADMIN DASHBOARD STATISTICS
+========================================= */
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 20px;
+  align-items: stretch;
+}
+
+/* =========================================
+   STATISTIC CARD
+========================================= */
+
+.admin-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  min-width: 0;
+  min-height: 106px;
+  height: 100%;
+  padding: 18px;
+
+  background: #ffffff;
+  border: 1px solid #e2eee9;
+  border-radius: 9px;
+
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  box-sizing: border-box;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.06);
+}
+
+/* =========================================
+   ICON CONTAINER
+========================================= */
+
+.admin-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+
+  border-radius: 50%;
+}
+
+.admin-stat-icon.blue {
+  color: #2563eb;
+  background: #dbeafe;
+}
+
+.admin-stat-icon.green {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.admin-stat-icon.yellow {
+  color: #a16207;
+  background: #fef3c7;
+}
+
+.admin-stat-icon.red {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+.admin-stat-icon.mint {
+  color: #059669;
+  background: #d1fae5;
+}
+
+/* =========================================
+   STATISTIC CONTENT
+========================================= */
+
+.admin-stat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-stat-title {
+  display: block;
+  margin-bottom: 8px;
+
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* =========================================
+   VALUE AND TREND ROW
+========================================= */
+
+.admin-stat-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.admin-stat-value-row > strong {
+  min-width: 0;
+
+  color: #111936;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   REVENUE CARD
+   Stack amount and change vertically
+   Keep the same amount font size
+========================================= */
+
+.revenue-stat-card .admin-stat-value-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.revenue-stat-card .admin-stat-value-row > strong {
+  font-size: inherit;
+  line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.revenue-stat-card .admin-stat-change {
+  align-items: flex-start;
+}
+
+/* =========================================
+   MONTHLY CHANGE
+========================================= */
+
+.admin-stat-change {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+
+  flex-shrink: 0;
+}
+
+.admin-stat-change > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-stat-change.positive > span {
+  color: #059669;
+}
+
+.admin-stat-change.negative > span {
+  color: #dc2626;
+}
+
+.admin-stat-change small {
+  color: #7b8495;
+  font-size: 11px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* =========================================
+   TABLET RESPONSIVE
+========================================= */
+
+@media (max-width: 1200px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .admin-stat-card {
+    padding: 18px;
+  }
+
+  .admin-stat-value-row > strong {
+    font-size: 26px;
+  }
+}
+
+/* =========================================
+   SMALL TABLET
+========================================= */
+
+@media (max-width: 768px) {
+  .admin-stats-grid {
+    gap: 12px;
+  }
+
+  .admin-stat-card {
+    gap: 12px;
+    min-height: 100px;
+    padding: 14px;
+  }
+
+  .admin-stat-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .admin-stat-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .admin-stat-title {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .admin-stat-value-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .admin-stat-value-row > strong {
+    font-size: 24px;
+  }
+
+  .admin-stat-change {
+    align-items: flex-start;
+  }
+
+  .admin-stat-change > span {
+    font-size: 13px;
+  }
+
+  .admin-stat-change small {
+    font-size: 10px;
+  }
+}
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+
+@media (max-width: 480px) {
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .admin-stat-card {
+    min-height: 88px;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .admin-stat-icon {
+    width: 54px;
+    height: 54px;
+  }
+
+  .admin-stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .admin-stat-title {
+    margin-bottom: 0;
+    font-size: 13px;
+  }
+
+  .admin-stat-value-row {
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .admin-stat-value-row > strong {
+    font-size: 24px;
+  }
+
+  .admin-stat-change {
+    align-items: flex-end;
+  }
+
+  .admin-stat-change > span {
+    font-size: 13px;
+  }
+
+  .admin-stat-change small {
+    font-size: 10px;
+  }
+
+  /* Keep revenue amount and trend stacked */
+
+  .revenue-stat-card .admin-stat-value-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .revenue-stat-card .admin-stat-change {
+    align-items: flex-start;
+  }
+}

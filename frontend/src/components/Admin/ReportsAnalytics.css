@@ -1,0 +1,1306 @@
+/* =========================================
+   REPORTS & ANALYTICS PAGE
+========================================= */
+
+.reports-analytics-page {
+  width: 100%;
+  min-width: 0;
+  padding: 18px 16px 24px;
+  color: #111936;
+  background: #f5faf9;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.reports-analytics-page *,
+.reports-analytics-page *::before,
+.reports-analytics-page *::after {
+  box-sizing: border-box;
+}
+
+.reports-analytics-page h1,
+.reports-analytics-page h2,
+.reports-analytics-page h3,
+.reports-analytics-page p {
+  margin-top: 0;
+}
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.ra-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 14px;
+  padding: 0 12px;
+}
+
+.ra-page-header h1 {
+  margin-bottom: 3px;
+  color: #111936;
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.6px;
+}
+
+.ra-page-header p {
+  margin-bottom: 0;
+  color: #697796;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ra-date-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 47px;
+  padding: 0 15px;
+  color: #526181;
+  background: #fff;
+  border: 1px solid #e1eaf2;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ra-date-button svg {
+  color: #111936;
+}
+
+/* =========================================
+   STATISTICS CARDS
+========================================= */
+
+.ra-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ra-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  min-width: 0;
+  min-height: 93px;
+  padding: 12px 16px;
+  border: 1px solid #e3ebf2;
+  border-radius: 8px;
+}
+
+.ra-stat-card.green {
+  background: #f4fcf8;
+  border-color: #dcefe6;
+}
+
+.ra-stat-card.blue {
+  background: #f5faff;
+  border-color: #e0eafa;
+}
+
+.ra-stat-card.purple {
+  background: #faf7ff;
+  border-color: #e9e0fb;
+}
+
+.ra-stat-card.orange {
+  background: #fffbf5;
+  border-color: #f4e9d9;
+}
+
+.ra-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 66px;
+  height: 66px;
+  min-width: 66px;
+  border-radius: 50%;
+}
+
+.ra-stat-card.green .ra-stat-icon {
+  color: #047857;
+  background: #dff7eb;
+}
+
+.ra-stat-card.blue .ra-stat-icon {
+  color: #0879e8;
+  background: #e0efff;
+}
+
+.ra-stat-card.purple .ra-stat-icon {
+  color: #7c3aed;
+  background: #eee2ff;
+}
+
+.ra-stat-card.orange .ra-stat-icon {
+  color: #d97706;
+  background: #fff0d8;
+}
+
+.ra-stat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ra-stat-info > span {
+  display: block;
+  margin-bottom: 9px;
+  color: #687693;
+  font-size: 12px;
+}
+
+.ra-stat-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.ra-stat-value-row strong {
+  color: #111936;
+  font-size: 23px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.ra-stat-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #059669;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ra-stat-info small {
+  display: block;
+  margin-top: 3px;
+  color: #7b87a1;
+  font-size: 11px;
+  text-align: right;
+}
+
+/* =========================================
+   NAVIGATION TABS
+========================================= */
+
+.ra-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  min-height: 40px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid #e2eaf1;
+  border-radius: 7px;
+  scrollbar-width: none;
+}
+
+.ra-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.ra-tabs button {
+  position: relative;
+  flex: 1;
+  min-width: 85px;
+  padding: 10px 15px;
+  color: #5e6b8c;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.ra-tabs button:hover {
+  color: #047857;
+  background: #f8fcfa;
+}
+
+.ra-tabs button.active {
+  color: #047857;
+  border-bottom-color: #059669;
+  font-weight: 600;
+}
+
+/* =========================================
+   GENERAL CARD STYLING
+========================================= */
+
+.ra-card {
+  min-width: 0;
+  padding: 13px 16px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e3ebf2;
+  border-radius: 8px;
+}
+
+.ra-card h3 {
+  margin-bottom: 12px;
+  color: #111936;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.25px;
+}
+
+.ra-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ra-card-header h3 {
+  margin-bottom: 0;
+}
+
+.ra-card-header select {
+  height: 35px;
+  padding: 0 10px;
+  color: #111936;
+  background: #fff;
+  border: 1px solid #dce5f1;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* =========================================
+   CHART GRID
+========================================= */
+
+.ra-chart-grid {
+  display: grid;
+  grid-template-columns: 1.75fr 1fr 1.15fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* =========================================
+   REVENUE LINE CHART
+========================================= */
+
+.ra-revenue-chart {
+  min-height: 202px;
+}
+
+.ra-line-chart {
+  display: flex;
+  height: 153px;
+  gap: 8px;
+}
+
+.ra-chart-y-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1px 0 17px;
+  color: #6e7ba0;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.ra-line-chart-main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding-bottom: 19px;
+}
+
+.ra-line-grid {
+  position: absolute;
+  inset: 0 0 19px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ra-line-grid span {
+  width: 100%;
+  border-top: 1px solid #eaf0f7;
+}
+
+.ra-line-grid span::after {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 100%;
+  background: #eaf0f7;
+}
+
+.ra-line-svg {
+  position: absolute;
+  inset: 0 0 19px;
+  width: 100%;
+  height: calc(100% - 19px);
+  overflow: visible;
+}
+
+.ra-chart-x-labels {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  color: #6e7ba0;
+  font-size: 10px;
+}
+
+/* =========================================
+   AUCTION STATISTICS DONUT
+========================================= */
+
+.ra-auction-statistics {
+  min-height: 202px;
+}
+
+.ra-auction-stat-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 14px;
+  min-height: 145px;
+}
+
+.ra-donut {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 145px;
+  height: 145px;
+  min-width: 145px;
+  border-radius: 50%;
+}
+
+.ra-auction-donut {
+  background: conic-gradient(
+    #10b981 0% 29%,
+    #ffffff 29% 30%,
+    #3b82f6 30% 71%,
+    #ffffff 71% 72%,
+    #f59e0b 72% 100%
+  );
+}
+
+.ra-donut-center {
+  position: absolute;
+  inset: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.ra-donut-center strong {
+  color: #111936;
+  font-size: 21px;
+  font-weight: 750;
+}
+
+.ra-donut-center span {
+  margin-top: 2px;
+  color: #526181;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.ra-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.ra-legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ra-legend-dot {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  min-width: 13px;
+  border-radius: 50%;
+}
+
+.ra-legend-dot.green {
+  background: #059669;
+}
+
+.ra-legend-dot.blue {
+  background: #2563eb;
+}
+
+.ra-legend-dot.orange {
+  background: #f59e0b;
+}
+
+.ra-legend-dot.red {
+  background: #ef4444;
+}
+
+.ra-legend-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #526181;
+  font-size: 11px;
+}
+
+.ra-legend-item strong {
+  color: #111936;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* =========================================
+   USER REGISTRATION BAR CHART
+========================================= */
+
+.ra-registration-chart {
+  min-height: 202px;
+}
+
+.ra-bar-chart {
+  display: flex;
+  height: 153px;
+  gap: 8px;
+}
+
+.ra-bar-y-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 17px;
+  color: #6e7ba0;
+  font-size: 10px;
+}
+
+.ra-bar-chart-main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding-bottom: 19px;
+}
+
+.ra-bar-grid {
+  position: absolute;
+  inset: 0 0 19px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ra-bar-grid span {
+  border-top: 1px solid #eaf0f7;
+}
+
+.ra-registration-bars {
+  position: absolute;
+  inset: 0 0 19px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 5px;
+  padding: 0 4px;
+}
+
+.ra-registration-column {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  min-width: 0;
+}
+
+.ra-registration-bar {
+  width: 100%;
+  max-width: 25px;
+  min-height: 2px;
+  background: linear-gradient(180deg, #b69af9, #a78bfa);
+  border-radius: 2px 2px 0 0;
+  transition: opacity 0.2s ease;
+}
+
+.ra-registration-bar:hover {
+  opacity: 0.7;
+}
+
+.ra-bar-x-labels {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  color: #6e7ba0;
+  font-size: 10px;
+}
+
+/* =========================================
+   TABLES GRID
+========================================= */
+
+.ra-tables-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ra-table-card {
+  min-width: 0;
+  padding: 12px 16px 8px;
+}
+
+.ra-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ra-section-header h3 {
+  margin-bottom: 0;
+}
+
+.ra-view-all {
+  padding: 2px 0;
+  color: #2563eb;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ra-view-all:hover {
+  color: #047857;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.ra-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.ra-table {
+  width: 100%;
+  min-width: 540px;
+  border-collapse: collapse;
+  color: #5b688a;
+  font-size: 11px;
+  text-align: left;
+}
+
+.ra-table thead th {
+  height: 28px;
+  padding: 7px 6px;
+  color: #526181;
+  background: #f6f9fc;
+  border-bottom: 1px solid #e8eef5;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ra-table tbody td {
+  height: 40px;
+  padding: 5px 6px;
+  border-bottom: 1px solid #edf1f6;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.ra-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ra-table tbody tr:hover td {
+  background: #f8fcfa;
+}
+
+/* =========================================
+   PRODUCT CELL
+========================================= */
+
+.ra-product-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 155px;
+}
+
+.ra-product-cell strong {
+  color: #111936;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.ra-product-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  color: #047857;
+  background: #e5f7ee;
+  border-radius: 6px;
+}
+
+.ra-product-icon.icon-0 {
+  color: #92400e;
+  background: #f6e8d5;
+}
+
+.ra-product-icon.icon-1 {
+  color: #2563eb;
+  background: #e5edff;
+}
+
+.ra-product-icon.icon-2 {
+  color: #1d4ed8;
+  background: #e6efff;
+}
+
+.ra-product-icon.icon-3 {
+  color: #b45309;
+  background: #fff0d8;
+}
+
+.ra-product-icon.icon-4 {
+  color: #334155;
+  background: #e8edf3;
+}
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
+.ra-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 57px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+.ra-status-badge i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.ra-status-badge.live {
+  color: #047857;
+  background: #e0f7ec;
+}
+
+.ra-status-badge.live i {
+  background: #059669;
+}
+
+.ra-status-badge.upcoming {
+  color: #b45309;
+  background: #fff2d8;
+}
+
+.ra-status-badge.upcoming i {
+  background: #f59e0b;
+}
+
+.ra-status-badge.ended {
+  color: #1d4ed8;
+  background: #e5f1ff;
+}
+
+.ra-status-badge.ended i {
+  background: #3b82f6;
+}
+
+/* =========================================
+   SELLER TABLE
+========================================= */
+
+.ra-seller-table {
+  min-width: 520px;
+}
+
+.ra-seller-cell {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 130px;
+}
+
+.ra-seller-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33px;
+  height: 33px;
+  min-width: 33px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.ra-seller-avatar.avatar-0 {
+  color: #2563eb;
+  background: #dbeafe;
+}
+
+.ra-seller-avatar.avatar-1 {
+  color: #7c3aed;
+  background: #ede9fe;
+}
+
+.ra-seller-avatar.avatar-2 {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.ra-seller-avatar.avatar-3 {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+.ra-seller-avatar.avatar-4 {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.ra-seller-cell > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ra-seller-cell strong {
+  color: #111936;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.ra-seller-cell span:not(.ra-seller-avatar) {
+  color: #7b87a1;
+  font-size: 10px;
+}
+
+.ra-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #526181;
+}
+
+.ra-rating svg {
+  color: #f59e0b;
+}
+
+/* =========================================
+   BOTTOM GRID
+========================================= */
+
+.ra-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1.05fr 1fr;
+  gap: 10px;
+}
+
+.ra-bottom-grid .ra-card {
+  min-height: 180px;
+}
+
+/* =========================================
+   PAYMENT BREAKDOWN
+========================================= */
+
+.ra-payment-card h3 {
+  margin-bottom: 14px;
+}
+
+.ra-payment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.ra-payment-row {
+  display: grid;
+  grid-template-columns: 12px minmax(80px, 0.9fr) minmax(
+      70px,
+      1.3fr
+    ) 35px minmax(75px, 0.8fr);
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.ra-payment-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.ra-payment-dot.green,
+.ra-progress-fill.green {
+  background: #059669;
+}
+
+.ra-payment-dot.blue,
+.ra-progress-fill.blue {
+  background: #2563eb;
+}
+
+.ra-payment-dot.purple,
+.ra-progress-fill.purple {
+  background: #8b5cf6;
+}
+
+.ra-payment-dot.orange,
+.ra-progress-fill.orange {
+  background: #f59e0b;
+}
+
+.ra-payment-dot.gray,
+.ra-progress-fill.gray {
+  background: #9ca3af;
+}
+
+.ra-payment-name {
+  color: #34415f;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.ra-progress-track {
+  height: 14px;
+  overflow: hidden;
+  background: #edf2f7;
+  border-radius: 3px;
+}
+
+.ra-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.ra-payment-percent {
+  color: #526181;
+  font-size: 11px;
+  text-align: right;
+}
+
+.ra-payment-amount {
+  color: #526181;
+  font-size: 11px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* =========================================
+   ORDER DISTRIBUTION
+========================================= */
+
+.ra-order-card h3 {
+  margin-bottom: 14px;
+}
+
+.ra-order-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 16px;
+}
+
+.ra-order-donut {
+  background: conic-gradient(
+    #059669 0% 79%,
+    #ffffff 79% 80%,
+    #3b82f6 80% 92%,
+    #ffffff 92% 93%,
+    #ef4444 93% 100%
+  );
+}
+
+.ra-order-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 0;
+}
+
+.ra-order-legend-item {
+  display: grid;
+  grid-template-columns: 12px minmax(65px, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  color: #526181;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.ra-order-legend-item strong {
+  color: #526181;
+  font-weight: 500;
+}
+
+.ra-order-percent {
+  color: #7b87a1;
+}
+
+/* =========================================
+   CATEGORY REVENUE
+========================================= */
+
+.ra-category-card h3 {
+  margin-bottom: 13px;
+}
+
+.ra-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ra-category-row {
+  display: grid;
+  grid-template-columns: 24px minmax(100px, 1fr) 40px minmax(75px, auto);
+  align-items: center;
+  gap: 8px;
+}
+
+.ra-category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 6px;
+}
+
+.ra-category-icon.blue {
+  color: #2563eb;
+  background: #e5efff;
+}
+
+.ra-category-icon.purple {
+  color: #7c3aed;
+  background: #f0e8ff;
+}
+
+.ra-category-icon.orange {
+  color: #d97706;
+  background: #fff0d8;
+}
+
+.ra-category-icon.green {
+  color: #047857;
+  background: #dff7eb;
+}
+
+.ra-category-icon.gray {
+  color: #64748b;
+  background: #e9eef5;
+}
+
+.ra-category-name {
+  color: #34415f;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.ra-category-percent {
+  color: #526181;
+  font-size: 11px;
+  text-align: right;
+}
+
+.ra-category-amount {
+  color: #526181;
+  font-size: 11px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* =========================================
+   LARGE TABLET
+========================================= */
+
+@media (max-width: 1250px) {
+  .ra-chart-grid {
+    grid-template-columns: 1.4fr 1fr;
+  }
+
+  .ra-registration-chart {
+    grid-column: 1 / -1;
+  }
+
+  .ra-registration-bars {
+    gap: 12px;
+  }
+
+  .ra-registration-bar {
+    max-width: 42px;
+  }
+
+  .ra-bottom-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ra-category-card {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+  .reports-analytics-page {
+    padding: 15px 12px 20px;
+  }
+
+  .ra-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+    padding: 0 4px;
+  }
+
+  .ra-page-header h1 {
+    font-size: 27px;
+  }
+
+  .ra-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ra-chart-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ra-revenue-chart {
+    grid-column: 1 / -1;
+  }
+
+  .ra-registration-chart {
+    grid-column: auto;
+  }
+
+  .ra-tables-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ra-bottom-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ra-payment-card {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .reports-analytics-page {
+    padding: 12px 9px 18px;
+  }
+
+  .ra-page-header {
+    margin-bottom: 14px;
+  }
+
+  .ra-page-header h1 {
+    font-size: 23px;
+  }
+
+  .ra-page-header p {
+    font-size: 12px;
+  }
+
+  .ra-date-button {
+    min-height: 41px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .ra-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .ra-stat-card {
+    min-height: 83px;
+    padding: 12px;
+    gap: 14px;
+  }
+
+  .ra-stat-icon {
+    width: 55px;
+    height: 55px;
+    min-width: 55px;
+  }
+
+  .ra-stat-value-row strong {
+    font-size: 21px;
+  }
+
+  .ra-tabs {
+    margin-bottom: 10px;
+  }
+
+  .ra-tabs button {
+    min-width: 78px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .ra-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ra-revenue-chart,
+  .ra-registration-chart {
+    grid-column: auto;
+  }
+
+  .ra-card {
+    padding: 13px 12px;
+  }
+
+  .ra-card h3 {
+    font-size: 14px;
+  }
+
+  .ra-auction-stat-content,
+  .ra-order-content {
+    justify-content: space-around;
+  }
+
+  .ra-donut {
+    width: 125px;
+    height: 125px;
+    min-width: 125px;
+  }
+
+  .ra-donut-center strong {
+    font-size: 19px;
+  }
+
+  .ra-tables-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ra-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ra-payment-card,
+  .ra-category-card {
+    grid-column: auto;
+  }
+
+  .ra-payment-row {
+    grid-template-columns: 12px minmax(80px, 1fr) minmax(50px, 1fr) 32px;
+    gap: 7px;
+  }
+
+  .ra-payment-amount {
+    grid-column: 2 / -1;
+    text-align: right;
+  }
+
+  .ra-category-row {
+    grid-template-columns: 24px minmax(90px, 1fr) 35px minmax(75px, auto);
+    gap: 6px;
+  }
+}
+
+/* =========================================
+   EXTRA SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+  .ra-stat-value-row strong {
+    font-size: 19px;
+  }
+
+  .ra-auction-stat-content,
+  .ra-order-content {
+    gap: 10px;
+  }
+
+  .ra-donut {
+    width: 110px;
+    height: 110px;
+    min-width: 110px;
+  }
+
+  .ra-legend {
+    gap: 10px;
+  }
+
+  .ra-legend-item {
+    gap: 7px;
+  }
+
+  .ra-order-legend-item {
+    gap: 5px;
+    font-size: 10px;
+  }
+
+  .ra-category-row {
+    grid-template-columns: 22px minmax(80px, 1fr) 30px minmax(70px, auto);
+    gap: 5px;
+  }
+
+  .ra-category-name,
+  .ra-category-amount {
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,291 @@
+/* ================================
+   WATCHLIST PAGE
+================================ */
+
+.watchlist-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ================================
+   WATCHLIST SECTION
+================================ */
+
+.watchlist-section {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ================================
+   CARD HEADER
+================================ */
+
+.watchlist-section .card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.watchlist-section .card-header h2 {
+  margin: 0;
+}
+
+.watchlist-subtitle {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: #667085;
+  line-height: 1.4;
+}
+
+/* ================================
+   VIEW ALL BUTTON
+================================ */
+
+.watchlist-view-all {
+  border: 0;
+  background: transparent;
+  color: #087f5b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.watchlist-view-all:hover {
+  color: #065f46;
+}
+
+/* ================================
+   WATCHLIST AUCTION GRID
+================================ */
+
+.watchlist-auction-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 24px;
+  row-gap: 24px;
+  margin-top: 22px;
+  align-items: stretch;
+}
+
+/* ================================
+   AUCTION CARD
+================================ */
+
+.watchlist-auction-grid .auction-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* ================================
+   AUCTION TITLE
+================================ */
+
+.watchlist-auction-grid .auction-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ================================
+   CENTER COUNTDOWN
+================================ */
+
+.watchlist-auction-grid .auction-card .auction-bottom {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.watchlist-auction-grid .auction-card .auction-time {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.watchlist-auction-grid .auction-card .time-details {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.watchlist-auction-grid .auction-card .countdown {
+  width: max-content;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ================================
+   DISCOVER MORE CARD
+================================ */
+
+.discover-more-card {
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  box-sizing: border-box;
+
+  padding: 30px 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px dashed #b8d8ce;
+  border-radius: 12px;
+
+  background: #f4faf8;
+
+  color: #087f5b;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.discover-more-card:hover {
+  transform: translateY(-2px);
+  border-color: #087f5b;
+  background: #eef8f5;
+  box-shadow: 0 8px 20px rgba(8, 127, 91, 0.08);
+}
+
+/* ================================
+   PLUS BUTTON
+================================ */
+
+.discover-more-plus {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 20px;
+
+  border-radius: 50%;
+
+  background: #e1f2ed;
+
+  color: #087f5b;
+
+  font-size: 38px;
+  font-weight: 300;
+  line-height: 1;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.discover-more-card:hover .discover-more-plus {
+  background: #d5ece5;
+  transform: scale(1.05);
+}
+
+/* ================================
+   DISCOVER MORE TITLE
+================================ */
+
+.discover-more-card strong {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #1d2939;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+/* ================================
+   DISCOVER MORE DESCRIPTION
+================================ */
+
+.discover-more-text {
+  max-width: 190px;
+
+  color: #667085;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  text-align: center;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1250px) {
+  .watchlist-auction-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 20px;
+    row-gap: 20px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .watchlist-auction-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 18px;
+    row-gap: 18px;
+  }
+
+  .discover-more-card {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 750px) {
+  .watchlist-auction-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .watchlist-section .card-header {
+    align-items: flex-start;
+  }
+
+  .discover-more-card {
+    min-height: 350px;
+  }
+}
+
+@media (max-width: 550px) {
+  .watchlist-section .card-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .watchlist-auction-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .watchlist-view-all {
+    align-self: flex-start;
+  }
+}

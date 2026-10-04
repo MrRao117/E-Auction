@@ -1,0 +1,295 @@
+/* ================================
+   Revenue Overview Card
+================================ */
+
+.admin-chart-card {
+  background: #ffffff;
+  border: 1px solid #e5eee9;
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+
+/* ================================
+   Chart Header
+================================ */
+
+.admin-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.admin-chart-header h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+}
+
+/* ================================
+   Period Dropdown
+================================ */
+
+.chart-period-select {
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #ffffff;
+  border: 1px solid #dce7e1;
+  border-radius: 8px;
+  padding: 9px 34px 9px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  outline: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+
+  transition: border-color 0.2s ease;
+}
+
+.chart-period-select:hover,
+.chart-period-select:focus {
+  border-color: #059669;
+}
+
+/* ================================
+   Revenue Chart Layout
+================================ */
+
+.revenue-chart {
+  display: flex;
+  width: 100%;
+  height: 240px;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* ================================
+   Y Axis
+================================ */
+
+.revenue-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 200px;
+  min-width: 32px;
+  padding-bottom: 28px;
+  box-sizing: content-box;
+}
+
+.revenue-y-axis span {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ================================
+   Bars Container
+================================ */
+
+.revenue-bars {
+  display: flex;
+  flex: 1;
+  gap: 12px;
+  height: 100%;
+  min-width: 0;
+  border-bottom: 1px solid #e5eee9;
+}
+
+/* ================================
+   Individual Bar Column
+================================ */
+
+.revenue-bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  gap: 10px;
+}
+
+.revenue-bar-wrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  min-height: 0;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+  background: linear-gradient(to top, #f8faf9 0%, #ffffff 100%);
+}
+
+/* ================================
+   Revenue Bar
+================================ */
+
+.revenue-bar {
+  width: 70%;
+  max-width: 42px;
+  min-height: 4px;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  border-radius: 6px 6px 0 0;
+  transition:
+    height 0.4s ease,
+    background-color 0.2s ease;
+}
+
+.revenue-bar:hover {
+  background: linear-gradient(180deg, #34d399 0%, #047857 100%);
+}
+
+/* ================================
+   Month Labels
+================================ */
+
+.revenue-bar-column > span {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+}
+
+/* ================================
+   Tablet
+================================ */
+
+@media (max-width: 1024px) {
+  .admin-chart-card {
+    padding: 20px;
+  }
+
+  .admin-chart-header h2 {
+    font-size: 18px;
+  }
+
+  .revenue-chart {
+    height: 220px;
+    gap: 10px;
+  }
+
+  .revenue-y-axis {
+    height: 180px;
+  }
+
+  .revenue-bar-wrapper {
+    height: 180px;
+  }
+
+  .revenue-bars {
+    gap: 8px;
+  }
+
+  .revenue-bar {
+    width: 75%;
+  }
+}
+
+/* ================================
+   Mobile
+================================ */
+
+@media (max-width: 600px) {
+  .admin-chart-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .admin-chart-header {
+    margin-bottom: 22px;
+  }
+
+  .admin-chart-header h2 {
+    font-size: 16px;
+  }
+
+  .chart-period-select {
+    font-size: 11px;
+    padding: 8px 28px 8px 9px;
+    background-position: right 8px center;
+  }
+
+  .revenue-chart {
+    height: 200px;
+    gap: 8px;
+  }
+
+  .revenue-y-axis {
+    min-width: 26px;
+    height: 160px;
+    padding-bottom: 28px;
+  }
+
+  .revenue-y-axis span {
+    font-size: 9px;
+  }
+
+  .revenue-bars {
+    gap: 5px;
+  }
+
+  .revenue-bar-wrapper {
+    height: 160px;
+  }
+
+  .revenue-bar {
+    width: 80%;
+    max-width: 28px;
+  }
+
+  .revenue-bar-column {
+    gap: 8px;
+  }
+
+  .revenue-bar-column > span {
+    font-size: 9px;
+  }
+}
+
+/* ================================
+   Small Mobile
+================================ */
+
+@media (max-width: 380px) {
+  .admin-chart-card {
+    padding: 12px;
+  }
+
+  .revenue-chart {
+    gap: 5px;
+  }
+
+  .revenue-bars {
+    gap: 3px;
+  }
+
+  .revenue-y-axis {
+    min-width: 23px;
+  }
+
+  .revenue-y-axis span {
+    font-size: 8px;
+  }
+
+  .revenue-bar-column > span {
+    font-size: 8px;
+  }
+}

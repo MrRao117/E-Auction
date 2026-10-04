@@ -1,0 +1,186 @@
+/* =========================================   
+   HOME PAGE   
+========================================= */
+
+/* =========================================   
+   FULL WIDTH HEADER   
+========================================= */
+
+.header {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  width: 100vw;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+
+  z-index: 1000;
+}
+
+.home {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* =========================================   
+   MAIN CONTENT   
+========================================= */
+
+main {
+  width: 100%;
+}
+
+/* =========================================   
+   COMMON CONTENT WIDTH   
+   AUCTION SECTION   
+========================================= */
+
+.auction-content {
+  width: calc(100% - 60px);
+
+  max-width: 1455px;
+
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+
+  box-sizing: border-box;
+}
+
+.auction-content-explore {
+  width: calc(100% - 60px);
+
+  max-width: 1455px;
+
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25px;
+
+  box-sizing: border-box;
+}
+
+/* =========================================   
+   LAPTOP   
+========================================= */
+
+@media (max-width: 1200px) {
+  .auction-content {
+    width: calc(100% - 60px);
+
+    max-width: 1455px;
+
+    padding-left: 20px;
+    padding-right: 20px;
+
+    margin-top: 100px;
+  }
+
+  .auction-content-explore {
+    width: calc(100% - 60px);
+
+    max-width: 1455px;
+
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* =========================================   
+   TABLET   
+========================================= */
+
+@media (max-width: 900px) {
+  .auction-content {
+    width: calc(100% - 40px);
+
+    max-width: none;
+
+    margin-top: 100px;
+  }
+
+  .auction-content-explore {
+    width: calc(100% - 40px);
+
+    max-width: none;
+
+    margin-top: 10px;
+  }
+}
+
+/* =========================================   
+   MOBILE   
+========================================= */
+
+@media (max-width: 600px) {
+  .header.dashboard-header-fixed {
+    left: 0;
+    right: 0;
+    width: 100vw;
+  }
+
+  .auction-content {
+    width: calc(100% - 30px);
+
+    max-width: none;
+
+    padding: 16px 20px 40px;
+
+    margin-top: 100px;
+  }
+
+  .auction-content-explore {
+    width: calc(100% - 30px);
+
+    max-width: none;
+
+    padding: 16px 20px 40px;
+
+    margin-top: 10px;
+  }
+}
+
+/* =========================================   
+   SMALL MOBILE   
+========================================= */
+
+@media (max-width: 420px) {
+  .header.dashboard-header-fixed {
+    left: 0;
+    right: 0;
+    width: 100vw;
+  }
+
+  .auction-content {
+    width: calc(100% - 20px);
+
+    max-width: none;
+
+    padding: 12px 14px 30px;
+
+    margin-top: 100px;
+  }
+
+  .auction-content-explore {
+    width: calc(100% - 20px);
+
+    max-width: none;
+
+    padding: 12px 14px 30px;
+
+    margin-top: 10px;
+  }
+}
+
+/* =========================================   
+   AUCTION LEFT   
+========================================= */
+
+.auction-left {
+  width: 100%;
+}

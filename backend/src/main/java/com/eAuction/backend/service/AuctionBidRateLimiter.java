@@ -24,7 +24,7 @@ public class AuctionBidRateLimiter {
         byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
 
         BucketConfiguration configuration = BucketConfiguration.builder()
-                .addLimit(Bandwidth.classic(2, Refill.greedy(1, Duration.ofSeconds(3))))
+                .addLimit(limit -> limit.capacity(1).refillIntervally(1, Duration.ofSeconds(3)))
                 .build();
 
         Bucket bucket = proxyManager.builder().build(keyBytes, configuration);
