@@ -1,117 +1,133 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+// ===============================
 // CATEGORY APIs
-// ==========================================
+// ===============================
 
-// 1. Get all product categories
-// GET /api/v1/products/categories/all
-export const getProductCategories = async () => {
-  const response = await axiosClient.get("/products/categories/all");
+export const getCategories = async () => {
+  const response = await axiosClient.get("/categories");
   return response.data;
 };
 
-// 2. Create a new category
-// POST /api/v1/products/categories/create
+export const getCategoryById = async (categoryId) => {
+  const response = await axiosClient.get(`/categories/${categoryId}`);
+  return response.data;
+};
+
 export const createCategory = async (categoryData) => {
-  const response = await axiosClient.post(
-    "/products/categories/create",
-    categoryData,
+  const response = await axiosClient.post("/categories", categoryData);
+  return response.data;
+};
+
+export const updateCategory = async (categoryId, categoryData) => {
+  const response = await axiosClient.put(
+    `/categories/${categoryId}`,
+    categoryData
   );
   return response.data;
 };
 
-// 3. Get category by ID
-// GET /api/v1/products/categories/{categoryId}
-export const getCategoryById = async (categoryId) => {
-  const response = await axiosClient.get(`/products/categories/${categoryId}`);
+export const deleteCategory = async (categoryId) => {
+  const response = await axiosClient.delete(
+    `/categories/${categoryId}`
+  );
   return response.data;
 };
 
-// ==========================================
-// PRODUCT GET APIs
-// ==========================================
+// ===============================
+// PRODUCT APIs
+// ===============================
 
-// 4. Get all products
-// GET /api/v1/products
-export const getAllProducts = async () => {
+export const getProducts = async () => {
   const response = await axiosClient.get("/products");
   return response.data;
 };
 
-// 5. Get all verified products
-// GET /api/v1/products/verified
-export const getVerifiedProducts = async () => {
-  const response = await axiosClient.get("/products/verified");
-  return response.data;
-};
-
-// 6. Get all unverified products (Admin only)
-// GET /api/v1/products/unverified
-export const getUnverifiedProducts = async () => {
-  const response = await axiosClient.get("/products/unverified");
-  return response.data;
-};
-
-// 7. Get products belonging to the logged-in seller
-// GET /api/v1/products/my-products
-export const getMyProducts = async () => {
-  const response = await axiosClient.get("/products/my-products");
-  return response.data;
-};
-
-// 8. Get products by category ID
-// GET /api/v1/products/category/{categoryId}/products
-export const getProductsByCategory = async (categoryId) => {
-  const response = await axiosClient.get(
-    `/products/category/${categoryId}/products`,
-  );
-  return response.data;
-};
-
-// 9. Get product by ID
-// GET /api/v1/products/{productId}
 export const getProductById = async (productId) => {
-  const response = await axiosClient.get(`/products/${productId}`);
+  const response = await axiosClient.get(
+    `/products/${productId}`
+  );
   return response.data;
 };
 
-// ==========================================
-// PRODUCT CREATE / UPDATE / DELETE APIs
-// ==========================================
+export const getMyProducts = async () => {
+  const response = await axiosClient.get("/products/my");
+  return response.data;
+};
 
-// 10. Create a new product (Seller only)
-// POST /api/v1/products/add
+/*
+ * CREATE PRODUCT
+ *
+ * productData MUST be FormData.
+ *
+ * The FormData contains:
+ *
+ * product -> JSON Blob
+ * image   -> File
+ *
+ * We intentionally DO NOT set Content-Type here.
+ * The browser/Axios will automatically create:
+ *
+ * multipart/form-data; boundary=----------------...
+ */
 export const createProduct = async (productData) => {
-  // Pass formData directly. Do NOT manually override Content-Type headers,
-  // as Axios will automatically handle the multipart boundary.
-  const response = await axiosClient.post("/products/add", productData);
-  return response.data;
-};
+  console.log("========== CREATE PRODUCT ==========");
+  console.log("Is FormData:", productData instanceof FormData);
 
-// 11. Verify a product (Admin only)
-// PUT /api/v1/products/{productId}/verify
-export const verifyProduct = async (productId, verificationData) => {
-  const response = await axiosClient.put(
-    `/products/${productId}/verify`,
-    verificationData,
+  if (!(productData instanceof FormData)) {
+    throw new Error(
+      "createProduct expects FormData, but received something else."
+    );
+  }
+
+  for (const [key, value] of productData.entries()) {
+    console.log(
+      "FORM DATA:",
+      key,
+      value instanceof File
+        ? `File: ${value.name}`
+        : value instanceof Blob
+        ? `Blob: ${value.type}`
+        : value
+    );
+  }
+
+  const response = await axiosClient.post(
+    "/products/add",
+    productData
   );
+
   return response.data;
 };
 
-// 12. Update a product (Seller only)
-// PUT /api/v1/products/{productId}/update
+/*
+ * UPDATE PRODUCT
+ *
+ * Also uses FormData because an image may be uploaded.
+ */
 export const updateProduct = async (productId, productData) => {
+  console.log("========== UPDATE PRODUCT ==========");
+  console.log("Product ID:", productId);
+  console.log("Is FormData:", productData instanceof FormData);
+
+  if (!(productData instanceof FormData)) {
+    throw new Error(
+      "updateProduct expects FormData, but received something else."
+    );
+  }
+
   const response = await axiosClient.put(
-    `/products/${productId}/update`,
-    productData,
+    `/products/${productId}`,
+    productData
   );
+
   return response.data;
 };
 
-// 13. Delete a product (Seller or Admin)
-// DELETE /api/v1/products/{productId}/delete
 export const deleteProduct = async (productId) => {
-  const response = await axiosClient.delete(`/products/${productId}/delete`);
+  const response = await axiosClient.delete(
+    `/products/${productId}`
+  );
+
   return response.data;
 };
