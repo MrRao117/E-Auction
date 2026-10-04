@@ -41,7 +41,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // 1. PUBLIC AUTH, SWAGGER DOCS, TEST ROUTE & PAYMENT CALLBACK/WEBHOOK
+                        // 1. PUBLIC AUTH, SWAGGER DOCS, TEST ROUTE, WEBSOCKETS & PAYMENT CALLBACK/WEBHOOK
                         .requestMatchers(
                                 "/api/v1",                   // <--- Keeps your test/root endpoint accessible
                                 "/api/v1/",                  // <--- Keeps trailing slash test path accessible
@@ -53,6 +53,7 @@ public class WebSecurityConfig {
                                 "/api/v1/admin/login",
                                 "/api/v1/payments/callback",
                                 "/api/v1/payments/webhook",
+                                "/ws-auction/**",            // <--- Allows WebSocket & SockJS handshakes
                                 "/actuator/health",
                                 "/actuator/prometheus"
                         ).permitAll()
@@ -81,7 +82,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/v1/addresses/user").hasRole("ADMIN")
                         .requestMatchers("/api/v1/addresses/**").hasAnyRole("BUYER", "SELLER", "ADMIN")
 
-                        // 7. GENERAL ROLE-BASED MATCHERS (Both singular & plural support kept intact)
+                        // 7. GENERAL ROLE-BASED MATCHERS
                         .requestMatchers(HttpMethod.GET, "/api/v1/auction-registrations/public/count/**", "/api/v1/auction-registration/public/count/**").permitAll()
                         .requestMatchers("/api/v1/auction-registrations/admin/**", "/api/v1/auction-registration/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/auction-registrations/**", "/api/v1/auction-registration/**").hasAnyRole("BUYER", "SELLER")
