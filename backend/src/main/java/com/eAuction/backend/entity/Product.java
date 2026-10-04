@@ -33,10 +33,10 @@ public class Product {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal basePrice;
 
+    @Lob
+    @Column(name = "imageURL", columnDefinition = "LONGTEXT")
     private String imageURL;
 
-    @Lob
-    @Column(name = "image_public_id", columnDefinition = "LONGTEXT")
     private String imagePublicId;
 
     private boolean isVerified = false;
