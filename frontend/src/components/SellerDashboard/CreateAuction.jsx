@@ -1,10 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
-import {
-  createAuction,
-  getMyAuctions,
-} from "../../api/auction/auctionApi";
-
+import { createAuction, getMyAuctions } from "../../api/auction/auctionApi";
 import {
   createCategory,
   createProduct,
@@ -15,1229 +10,473 @@ import {
 import "./CreateAuction.css";
 
 export default function CreateAuction() {
-
-  // =========================================================
-  // CATEGORY STATE
-  // =========================================================
-
   const [useCustomCategory, setUseCustomCategory] = useState(false);
   const [category, setCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
-
-  // =========================================================
-  // PRODUCT STATE
-  // =========================================================
-
   const [productImages, setProductImages] = useState([]);
   const [products, setProducts] = useState([]);
-
-  const [assignedProductIds, setAssignedProductIds] =
-    useState(() => new Set());
-
+  const [assignedProductIds, setAssignedProductIds] = useState(() => new Set());
   const [selectedProductId, setSelectedProductId] = useState("");
-
-  // =========================================================
-  // PRODUCT / AUCTION FLOW STATE
-  // =========================================================
-
   const [flowProductId, setFlowProductId] = useState(null);
   const [flowHasProduct, setFlowHasProduct] = useState(false);
   const [flowAuctionCreated, setFlowAuctionCreated] = useState(false);
-
-  // =========================================================
-  // LOADING STATES
-  // =========================================================
-
   const [isCreatingAuction, setIsCreatingAuction] = useState(false);
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
 
-  // =========================================================
-  // NORMALIZE PRODUCT RESPONSE
-  // =========================================================
-
   const normalizeProduct = (item) => {
+    const rawImages = item.imageUrl ?? item.images ?? item.productImages ?? [];
+    const images = Array.isArray(rawImages)
+      ? rawImages
+      : typeof rawImages === "string" && rawImages.trim()
+        ? (() => {
+            const value = rawImages.trim();
 
-    const rawImages =
-      item.imageUrl ??
-      item.images ??
-      item.productImages ??
-      [];
-
-    const images =
-      Array.isArray(rawImages)
-        ? rawImages
-        : typeof rawImages === "string" && rawImages.trim()
-          ? (() => {
-
-              const value = rawImages.trim();
-
-              // ---------------------------------------------
-              // New format:
-              // JSON serialized array of image URLs
-              // ---------------------------------------------
-
-              try {
-
-                const parsed = JSON.parse(value);
-
-                if (Array.isArray(parsed)) {
-
-                  return parsed.filter(
-                    (image) =>
-                      typeof image === "string" &&
-                      image.trim()
-                  );
-
-                }
-
-              } catch {
-                // Continue with legacy formats.
+            // New format: a JSON-serialized array of image URLs.
+            try {
+              const parsed = JSON.parse(value);
+              if (Array.isArray(parsed)) {
+                return parsed.filter(
+                  (image) => typeof image === "string" && image.trim(),
+                );
               }
+            } catch {
+              // Continue with legacy formats below.
+            }
 
-              // ---------------------------------------------
-              // Base64 image
-              // ---------------------------------------------
+            // A data URL contains a comma after "base64"; keep it intact.
+            if (/^data:image\//i.test(value)) {
+              return [value];
+            }
 
-              if (/^data:image\//i.test(value)) {
-                return [value];
-              }
-
-              // ---------------------------------------------
-              // Legacy comma-separated image URLs
-              // ---------------------------------------------
-
-              return value
-                .split(",")
-                .map((image) => image.trim())
-                .filter(Boolean);
-
-            })()
-          : [];
+            // Legacy format for ordinary URLs (not Base64 data URLs).
+            return value
+              .split(",")
+              .map((image) => image.trim())
+              .filter(Boolean);
+          })()
+        : [];
 
     return {
       ...item,
-
-      productId:
-        item.productId ??
-        item.id ??
-        null,
-
+      productId: item.productId ?? item.id ?? null,
       productName:
-        item.pname ??
-        item.productName ??
-        item.name ??
-        "Unnamed Product",
-
+        item.pname ?? item.productName ?? item.name ?? "Unnamed Product",
       category:
         item.categoryName ??
         item.category?.categoryName ??
         item.category ??
         "—",
-
-      basePrice:
-        item.basePrice ??
-        0,
-
-      description:
-        item.description ??
-        "",
-
+      basePrice: item.basePrice ?? 0,
+      description: item.description ?? "",
       images,
-
       verificationStatus:
         item.verificationStatus ??
         item.status ??
-        (
-          item.isVerified === true
-            ? "Verified"
-            : "Pending"
-        ),
-
-      verifiedBy:
-        item.verifiedBy ??
-        null,
-
-      verifiedAt:
-        item.verifiedAt ??
-        null,
-
-      remarks:
-        item.remarks ??
-        "Product is waiting for admin verification.",
+        (item.isVerified === true ? "Verified" : "Pending"),
+      verifiedBy: item.verifiedBy ?? null,
+      verifiedAt: item.verifiedAt ?? null,
+      remarks: item.remarks ?? "Product is waiting for admin verification.",
     };
   };
 
-  // =========================================================
-  // GET IMAGE SOURCE
-  // =========================================================
-
   const getImageSource = (image) => {
-
-    if (typeof image === "string") {
-      return image;
-    }
-
-    if (image instanceof File) {
-      return URL.createObjectURL(image);
-    }
-
+    if (typeof image === "string") return image;
+    if (image instanceof File) return URL.createObjectURL(image);
     return "";
   };
 
-  // =========================================================
-  // LOAD CATEGORIES
-  // =========================================================
-
   useEffect(() => {
-
     const loadCategories = async () => {
-
       try {
-
         setIsLoadingCategories(true);
-
-        const response =
-          await getProductCategories();
-
-        const payload =
-          response?.data ??
-          response;
-
-        const categoryList =
-          Array.isArray(payload)
-            ? payload
-            : (
-                payload?.categories ??
-                payload?.content ??
-                payload?.data ??
-                []
-              );
-
+        const response = await getProductCategories();
+        const payload = response?.data ?? response;
+        const categoryList = Array.isArray(payload)
+          ? payload
+          : (payload?.categories ?? payload?.content ?? payload?.data ?? []);
         setCategories(
-          (
-            Array.isArray(categoryList)
-              ? categoryList
-              : []
-          ).map((item) => ({
+          (Array.isArray(categoryList) ? categoryList : []).map((item) => ({
             ...item,
-
-            categoryId:
-              item.categoryId ??
-              item.id,
-
-            categoryName:
-              item.categoryName ??
-              item.name ??
-              "",
-          }))
+            categoryId: item.categoryId ?? item.id,
+            categoryName: item.categoryName ?? item.name ?? "",
+          })),
         );
-
       } catch (error) {
-
-        console.error(
-          "Failed to load product categories:",
-          error
-        );
-
+        console.error("Failed to load product categories:", error);
         setCategories([]);
-
       } finally {
-
         setIsLoadingCategories(false);
-
       }
     };
 
     loadCategories();
-
   }, []);
 
-  // =========================================================
-  // GET LIST FROM API RESPONSE
-  // =========================================================
-
-  const getListFromResponse = (
-    response,
-    keys = []
-  ) => {
-
-    const payload =
-      response?.data ??
-      response;
-
-    if (Array.isArray(payload)) {
-      return payload;
-    }
-
+  const getListFromResponse = (response, keys = []) => {
+    const payload = response?.data ?? response;
+    if (Array.isArray(payload)) return payload;
     for (const key of keys) {
-
-      if (Array.isArray(payload?.[key])) {
-        return payload[key];
-      }
-
+      if (Array.isArray(payload?.[key])) return payload[key];
     }
-
-    if (Array.isArray(payload?.data)) {
-      return payload.data;
-    }
-
+    if (Array.isArray(payload?.data)) return payload.data;
     return [];
   };
 
-  // =========================================================
-  // GET PRODUCT ID FROM AUCTION
-  // =========================================================
+  const getAuctionProductId = (auctionItem) =>
+    auctionItem?.productId ??
+    auctionItem?.product?.productId ??
+    auctionItem?.product?.id ??
+    auctionItem?.product_id ??
+    auctionItem?.product?.product_id ??
+    null;
 
-  const getAuctionProductId = (auctionItem) => {
-
-    return (
-      auctionItem?.productId ??
-      auctionItem?.product?.productId ??
-      auctionItem?.product?.id ??
-      auctionItem?.product_id ??
-      auctionItem?.product?.product_id ??
-      null
-    );
-  };
-
-  // =========================================================
-  // CHECK WHETHER PRODUCT IS ALREADY ASSIGNED
-  // =========================================================
-
-  const productAlreadyAssigned = (item) => {
-
-    return (
-      item?.isAssignedToAuction === true ||
-      item?.assignedToAuction === true ||
-      item?.auctionId != null ||
-      item?.auction?.auctionId != null ||
-      item?.auction?.id != null ||
-      item?.auctionOrder?.auctionId != null
-    );
-  };
-
-  // =========================================================
-  // LOAD SELLER PRODUCTS AND AUCTIONS
-  // =========================================================
+  const productAlreadyAssigned = (item) =>
+    item?.isAssignedToAuction === true ||
+    item?.assignedToAuction === true ||
+    item?.auctionId != null ||
+    item?.auction?.auctionId != null ||
+    item?.auction?.id != null ||
+    item?.auctionOrder?.auctionId != null;
 
   useEffect(() => {
-
     const loadMyProducts = async () => {
-
       try {
-
         setIsLoadingProducts(true);
-
-        const [
-          productsResponse,
-          auctionsResponse,
-        ] = await Promise.all([
+        const [productsResponse, auctionsResponse] = await Promise.all([
           getMyProducts(),
           getMyAuctions(),
         ]);
 
-        const productList =
-          getListFromResponse(
-            productsResponse,
-            [
-              "products",
-              "content",
-              "items",
-            ]
-          );
+        const productList = getListFromResponse(productsResponse, [
+          "products",
+          "content",
+          "items",
+        ]);
+        const auctionList = getListFromResponse(auctionsResponse, [
+          "auctions",
+          "content",
+          "items",
+          "myAuctions",
+        ]);
 
-        const auctionList =
-          getListFromResponse(
-            auctionsResponse,
-            [
-              "auctions",
-              "content",
-              "items",
-              "myAuctions",
-            ]
-          );
-
-        const assignedIds =
-          new Set(
-            auctionList
-              .map(getAuctionProductId)
-              .filter((id) => id != null)
-              .map(String)
-          );
+        const assignedIds = new Set(
+          auctionList
+            .map(getAuctionProductId)
+            .filter((id) => id != null)
+            .map(String),
+        );
 
         productList.forEach((item) => {
-
-          if (
-            productAlreadyAssigned(item) &&
-            item.productId != null
-          ) {
-
-            assignedIds.add(
-              String(item.productId)
-            );
-
+          if (productAlreadyAssigned(item) && item.productId != null) {
+            assignedIds.add(String(item.productId));
           }
-
         });
 
-        setProducts(
-          productList.map(normalizeProduct)
-        );
-
-        setAssignedProductIds(
-          assignedIds
-        );
-
+        setProducts(productList.map(normalizeProduct));
+        setAssignedProductIds(assignedIds);
       } catch (error) {
-
-        console.error(
-          "Failed to load seller products or auctions:",
-          error
-        );
-
+        console.error("Failed to load seller products or auctions:", error);
         setProducts([]);
-        setAssignedProductIds(
-          new Set()
-        );
-
+        setAssignedProductIds(new Set());
       } finally {
-
         setIsLoadingProducts(false);
-
       }
     };
-
     loadMyProducts();
-
   }, []);
 
-  // =========================================================
-  // REFRESH PRODUCT VERIFICATION STATUS
-  // =========================================================
-
+  // Refresh the current-session product's verification status periodically
+  // so the flow can move from Step 2 to Step 3 after admin verification.
   useEffect(() => {
-
-    if (
-      !flowHasProduct ||
-      flowProductId == null ||
-      flowAuctionCreated
-    ) {
-      return;
-    }
+    if (!flowHasProduct || flowProductId == null || flowAuctionCreated) return;
 
     let isMounted = true;
-
     const refreshProductStatus = async () => {
-
       try {
+        const response = await getMyProducts();
+        const productList = getListFromResponse(response, [
+          "products",
+          "content",
+          "items",
+        ]);
+        const updatedProduct = productList
+          .map(normalizeProduct)
+          .find((item) => String(item.productId) === String(flowProductId));
 
-        const response =
-          await getMyProducts();
-
-        const productList =
-          getListFromResponse(
-            response,
-            [
-              "products",
-              "content",
-              "items",
-            ]
-          );
-
-        const updatedProduct =
-          productList
-            .map(normalizeProduct)
-            .find(
-              (item) =>
-                String(item.productId) ===
-                String(flowProductId)
-            );
-
-        if (
-          isMounted &&
-          updatedProduct
-        ) {
-
+        if (isMounted && updatedProduct) {
           setProducts((previous) =>
             previous.map((item) =>
-              String(item.productId) ===
-              String(flowProductId)
-                ? {
-                    ...item,
-                    ...updatedProduct,
-                  }
-                : item
-            )
+              String(item.productId) === String(flowProductId)
+                ? { ...item, ...updatedProduct }
+                : item,
+            ),
           );
-
         }
-
       } catch (error) {
-
-        console.error(
-          "Failed to refresh product verification status:",
-          error
-        );
-
+        console.error("Failed to refresh product verification status:", error);
       }
     };
 
-    const intervalId =
-      window.setInterval(
-        refreshProductStatus,
-        10000
-      );
-
+    const intervalId = window.setInterval(refreshProductStatus, 10000);
     return () => {
-
       isMounted = false;
-
-      window.clearInterval(
-        intervalId
-      );
-
+      window.clearInterval(intervalId);
     };
+  }, [flowHasProduct, flowProductId, flowAuctionCreated]);
 
-  }, [
-    flowHasProduct,
-    flowProductId,
-    flowAuctionCreated,
-  ]);
+  const auctionStartTimeRef = useRef(null);
+  const auctionEndTimeRef = useRef(null);
 
-  // =========================================================
-  // DATE/TIME REFS
-  // =========================================================
+  const [product, setProduct] = useState({
+    productId: null,
+    productName: "",
+    category: "",
+    basePrice: "",
+    description: "",
+  });
 
-  const auctionStartTimeRef =
-    useRef(null);
-
-  const auctionEndTimeRef =
-    useRef(null);
-
-  // =========================================================
-  // PRODUCT FORM STATE
-  // =========================================================
-
-  const [product, setProduct] =
-    useState({
-      productId: null,
-      productName: "",
-      category: "",
-      basePrice: "",
-      description: "",
-    });
-
-  // =========================================================
-  // AUCTION FORM STATE
-  // =========================================================
-
-  const [auction, setAuction] =
-    useState({
-      title: "",
-      startTime: "",
-      endTime: "",
-    });
-
-  // =========================================================
-  // CATEGORY TOGGLE
-  // =========================================================
+  const [auction, setAuction] = useState({
+    title: "",
+    startTime: "",
+    endTime: "",
+  });
 
   const handleCategoryToggle = () => {
-
-    setUseCustomCategory(
-      (previous) => !previous
-    );
-
+    setUseCustomCategory((previous) => !previous);
     setCategory("");
-
   };
-
-  // =========================================================
-  // IMAGE CHANGE
-  // =========================================================
 
   const handleImageChange = (event) => {
+    const files = Array.from(event.target.files || []);
 
-    const file =
-      event.target.files?.[0];
-
-    if (!file) {
-
-      alert(
-        "Please select a product photo."
-      );
-
+    if (files.length < 1) {
+      alert("Please select at least 1 product photo.");
       setProductImages([]);
-
       return;
     }
 
-    // ---------------------------------------------
-    // Allowed image types
-    // ---------------------------------------------
-
-    const validType = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-    ].includes(file.type);
-
-    // ---------------------------------------------
-    // Maximum 5 MB
-    // ---------------------------------------------
-
-    const validSize =
-      file.size <=
-      5 * 1024 * 1024;
-
-    if (
-      !validType ||
-      !validSize
-    ) {
-
-      alert(
-        "Please select a valid JPG, JPEG, or PNG photo. The photo must be below 5MB."
+    const validFiles = files.filter((file) => {
+      const validType = ["image/jpeg", "image/jpg", "image/png"].includes(
+        file.type,
       );
+      const validSize = file.size <= 5 * 1024 * 1024;
+      return validType && validSize;
+    });
 
+    if (validFiles.length < 1) {
+      alert(
+        "Please select at least 1 valid JPG, JPEG, or PNG photo. Each photo must be below 5MB.",
+      );
       setProductImages([]);
-
       return;
     }
 
-    // ---------------------------------------------
-    // Backend accepts ONE MultipartFile
-    // named "image"
-    // ---------------------------------------------
-
-    setProductImages([
-      file,
-    ]);
-
+    setProductImages(validFiles);
   };
 
-  // =========================================================
-  // ADD PRODUCT
-  // =========================================================
-
   const handleAddProduct = async () => {
-
-    // ---------------------------------------------
-    // Validate product name
-    // ---------------------------------------------
-
-    if (
-      !product.productName.trim()
-    ) {
-
-      alert(
-        "Please enter product name."
-      );
-
+    if (!product.productName.trim()) {
+      alert("Please enter product name.");
       return;
     }
-
-    // ---------------------------------------------
-    // Validate category
-    // ---------------------------------------------
 
     if (!category.trim()) {
-
-      alert(
-        "Please select or create a category."
-      );
-
+      alert("Please select or create a category.");
       return;
     }
 
-    // ---------------------------------------------
-    // Validate base price
-    // ---------------------------------------------
-
-    if (
-      !product.basePrice ||
-      Number(product.basePrice) <= 0
-    ) {
-
-      alert(
-        "Please enter a valid base price."
-      );
-
+    if (!product.basePrice || Number(product.basePrice) <= 0) {
+      alert("Please enter a valid base price.");
       return;
     }
 
-    // ---------------------------------------------
-    // Validate description
-    // ---------------------------------------------
-
-    if (
-      !product.description.trim()
-    ) {
-
-      alert(
-        "Please enter product description."
-      );
-
+    if (!product.description.trim()) {
+      alert("Please enter product description.");
       return;
     }
 
-    // ---------------------------------------------
-    // Validate image
-    // ---------------------------------------------
-
-    if (
-      productImages.length < 1
-    ) {
-
-      alert(
-        "At least 1 product photo is required."
-      );
-
+    if (productImages.length < 1) {
+      alert("At least 1 product photo is required.");
       return;
     }
+
 
     try {
-
       setIsAddingProduct(true);
-
-      // =================================================
-      // RESOLVE CATEGORY ID
-      // =================================================
 
       let categoryId;
       let resolvedCategoryName = "";
 
-      // =================================================
-      // CUSTOM CATEGORY
-      // =================================================
-
       if (useCustomCategory) {
+        const requestedCategoryName = category.trim();
 
-        const requestedCategoryName =
-          category.trim();
+        // Reuse a category already loaded from the backend (case-insensitive).
+        let existingCategory = categories.find(
+          (item) =>
+            String(item.categoryName ?? "")
+              .trim()
+              .toLowerCase() === requestedCategoryName.toLowerCase(),
+        );
 
-        let existingCategory =
-          categories.find(
-            (item) =>
-              String(
-                item.categoryName ?? ""
-              )
-                .trim()
-                .toLowerCase() ===
-              requestedCategoryName
-                .toLowerCase()
-          );
-
-        // ---------------------------------------------
-        // Existing category
-        // ---------------------------------------------
-
-        if (
-          existingCategory?.categoryId != null
-        ) {
-
-          categoryId =
-            Number(
-              existingCategory.categoryId
-            );
-
-          resolvedCategoryName =
-            existingCategory.categoryName;
-
+        if (existingCategory?.categoryId != null) {
+          categoryId = Number(existingCategory.categoryId);
+          resolvedCategoryName = existingCategory.categoryName;
         } else {
-
-          // ---------------------------------------------
-          // Create new category
-          // ---------------------------------------------
-
           try {
-
-            const createdCategoryResponse =
-              await createCategory({
-                categoryName:
-                  requestedCategoryName,
-              });
-
+            const createdCategoryResponse = await createCategory({
+              categoryName: requestedCategoryName,
+            });
             const createdPayload =
-              createdCategoryResponse?.data ??
-              createdCategoryResponse;
-
+              createdCategoryResponse?.data ?? createdCategoryResponse;
             const createdCategory =
               createdPayload?.category ??
               createdPayload?.data ??
               createdPayload;
-
             categoryId =
               createdCategory?.categoryId ??
               createdCategory?.id ??
-              createdCategory
-                ?.category
-                ?.categoryId;
-
+              createdCategory?.category?.categoryId;
             resolvedCategoryName =
-              createdCategory?.categoryName ??
-              requestedCategoryName;
+              createdCategory?.categoryName ?? requestedCategoryName;
 
             if (!categoryId) {
-
               throw new Error(
-                "Category was created, but its category ID was not returned by the server."
+                "Category was created, but its category ID was not returned by the server.",
               );
-
             }
 
-            const normalizedCreatedCategory =
-              {
-                ...createdCategory,
+            const normalizedCreatedCategory = {
+              ...createdCategory,
+              categoryId: Number(categoryId),
+              categoryName: resolvedCategoryName,
+            };
 
-                categoryId:
-                  Number(categoryId),
-
-                categoryName:
-                  resolvedCategoryName,
-              };
-
-            setCategories(
-              (previous) => {
-
-                const alreadyAdded =
-                  previous.some(
-                    (item) =>
-                      String(
-                        item.categoryId
-                      ) ===
-                      String(categoryId)
-                  );
-
-                return alreadyAdded
-                  ? previous
-                  : [
-                      ...previous,
-                      normalizedCreatedCategory,
-                    ];
-              }
-            );
-
+            setCategories((previous) => {
+              const alreadyAdded = previous.some(
+                (item) => String(item.categoryId) === String(categoryId),
+              );
+              return alreadyAdded
+                ? previous
+                : [...previous, normalizedCreatedCategory];
+            });
           } catch (createError) {
-
-            // -----------------------------------------
-            // Category already exists
-            // -----------------------------------------
-
-            if (
-              createError?.response?.status !==
-              409
-            ) {
-
+            // A 409 means the name already exists. Refresh categories and reuse its ID.
+            if (createError?.response?.status !== 409) {
               throw createError;
-
             }
 
             try {
-
-              const refreshedResponse =
-                await getProductCategories();
-
+              const refreshedResponse = await getProductCategories();
               const refreshedPayload =
-                refreshedResponse?.data ??
-                refreshedResponse;
+                refreshedResponse?.data ?? refreshedResponse;
+              const refreshedList = Array.isArray(refreshedPayload)
+                ? refreshedPayload
+                : (refreshedPayload?.categories ??
+                  refreshedPayload?.content ??
+                  refreshedPayload?.data ??
+                  []);
 
-              const refreshedList =
-                Array.isArray(
-                  refreshedPayload
-                )
-                  ? refreshedPayload
-                  : (
-                      refreshedPayload?.categories ??
-                      refreshedPayload?.content ??
-                      refreshedPayload?.data ??
-                      []
-                    );
+              const normalizedCategories = (
+                Array.isArray(refreshedList) ? refreshedList : []
+              ).map((item) => ({
+                ...item,
+                categoryId: item.categoryId ?? item.id,
+                categoryName: item.categoryName ?? item.name ?? "",
+              }));
 
-              const normalizedCategories =
-                (
-                  Array.isArray(
-                    refreshedList
-                  )
-                    ? refreshedList
-                    : []
-                ).map((item) => ({
-                  ...item,
-
-                  categoryId:
-                    item.categoryId ??
-                    item.id,
-
-                  categoryName:
-                    item.categoryName ??
-                    item.name ??
-                    "",
-                }));
-
-              existingCategory =
-                normalizedCategories.find(
-                  (item) =>
-                    String(
-                      item.categoryName ?? ""
-                    )
-                      .trim()
-                      .toLowerCase() ===
-                    requestedCategoryName
-                      .toLowerCase()
-                );
-
-              if (
-                existingCategory?.categoryId ==
-                null
-              ) {
-
-                throw new Error(
-                  `The category "${requestedCategoryName}" already exists, but its ID could not be retrieved.`
-                );
-
-              }
-
-              categoryId =
-                Number(
-                  existingCategory.categoryId
-                );
-
-              resolvedCategoryName =
-                existingCategory.categoryName;
-
-              setCategories(
-                normalizedCategories
+              existingCategory = normalizedCategories.find(
+                (item) =>
+                  String(item.categoryName ?? "")
+                    .trim()
+                    .toLowerCase() === requestedCategoryName.toLowerCase(),
               );
 
-            } catch (refreshError) {
+              if (existingCategory?.categoryId == null) {
+                throw new Error(
+                  `The category "${requestedCategoryName}" already exists, but its ID could not be retrieved. Check the categories API and database connection.`,
+                );
+              }
 
+              categoryId = Number(existingCategory.categoryId);
+              resolvedCategoryName = existingCategory.categoryName;
+              setCategories(normalizedCategories);
+            } catch (refreshError) {
               if (
                 refreshError?.message?.includes(
-                  "already exists, but its ID could not be retrieved"
+                  "already exists, but its ID could not be retrieved",
                 )
               ) {
-
                 throw refreshError;
-
               }
-
               throw new Error(
-                `The category "${requestedCategoryName}" already exists, but categories could not be loaded.`
+                `The category "${requestedCategoryName}" already exists (HTTP 409), but the categories list could not be loaded. Please fix GET /products/categories/all first.`,
               );
-
             }
-
           }
-
         }
-
       } else {
-
-        // =================================================
-        // EXISTING CATEGORY
-        // =================================================
-
-        categoryId =
-          Number(category);
-
+        categoryId = Number(category);
         resolvedCategoryName =
           categories.find(
-            (item) =>
-              String(
-                item.categoryId
-              ) ===
-              String(category)
+            (item) => String(item.categoryId) === String(category),
           )?.categoryName ?? "";
-
       }
 
-      // =================================================
-      // VALIDATE CATEGORY ID
-      // =================================================
-
-      if (
-        !Number.isFinite(
-          Number(categoryId)
-        ) ||
-        Number(categoryId) <= 0
-      ) {
-
-        throw new Error(
-          "A valid category ID could not be resolved."
-        );
-
+      if (!Number.isFinite(Number(categoryId)) || Number(categoryId) <= 0) {
+        throw new Error("A valid category ID could not be resolved.");
       }
 
-      // =================================================
-      // BUILD MULTIPART FORM DATA
-      // =================================================
-
-      const formData =
-        new FormData();
-
-      // ---------------------------------------------
-      // Product JSON
-      // ---------------------------------------------
-
+      const formData = new FormData();
       const productData = {
-        pname:
-          product.productName.trim(),
-
-        description:
-          product.description.trim(),
-
-        basePrice:
-          Number(product.basePrice),
-
-        categoryId:
-          Number(categoryId),
+        categoryId: Number(categoryId),
+        pname: product.productName.trim(),
+        basePrice: Number(product.basePrice),
+        description: product.description.trim(),
+        imageUrl: null,
       };
-
-      // ---------------------------------------------
-      // Convert product JSON to Blob
-      //
-      // Backend:
-      //
-      // @RequestPart("product")
-      // CreateProductRequest request
-      // ---------------------------------------------
-
-      const productBlob =
-        new Blob(
-          [
-            JSON.stringify(
-              productData
-            ),
-          ],
-          {
-            type: "application/json",
-          }
-        );
-
       formData.append(
         "product",
-        productBlob
+        new Blob([JSON.stringify(productData)], {
+          type: "application/json",
+        }),
       );
+      formData.append("image", productImages[0], productImages[0].name);
 
-      // ---------------------------------------------
-      // Actual image File
-      //
-      // Backend:
-      //
-      // @RequestPart("image")
-      // MultipartFile image
-      // ---------------------------------------------
-
-      const imageFile =
-        productImages[0];
-
-      if (
-        !(imageFile instanceof File)
-      ) {
-
-        throw new Error(
-          "Selected product image is not a valid File."
-        );
-
-      }
-
-      formData.append(
-        "image",
-        imageFile,
-        imageFile.name
-      );
-
-      // =================================================
-      // DEBUG REQUEST
-      // =================================================
-
-      console.log(
-        "========================================"
-      );
-
-      console.log(
-        "CREATE PRODUCT REQUEST"
-      );
-
-      console.log(
-        "========================================"
-      );
-
-      console.log(
-        "Is FormData:",
-        formData instanceof FormData
-      );
-
-      console.log(
-        "Product JSON:",
-        productData
-      );
-
-      console.log(
-        "Image:",
-        {
-          name: imageFile.name,
-          type: imageFile.type,
-          size: imageFile.size,
-        }
-      );
-
-      for (
-        const [
-          key,
-          value
-        ] of formData.entries()
-      ) {
-
-        if (
-          value instanceof File
-        ) {
-
-          console.log(
-            `${key} -> FILE`,
-            {
-              name:
-                value.name,
-
-              type:
-                value.type,
-
-              size:
-                value.size,
-            }
-          );
-
-        } else if (
-          value instanceof Blob
-        ) {
-
-          console.log(
-            `${key} -> BLOB`,
-            {
-              type:
-                value.type,
-
-              size:
-                value.size,
-            }
-          );
-
-        } else {
-
-          console.log(
-            `${key} ->`,
-            value
-          );
-
-        }
-
-      }
-
-      // =================================================
-      // SEND PRODUCT
-      // =================================================
-
-      const savedProduct =
-        await createProduct(
-          formData
-        );
-
-      // =================================================
-      // PRODUCT CATEGORY NAME
-      // =================================================
+      const savedProduct = await createProduct(formData);
 
       const categoryNameForProduct =
         resolvedCategoryName ||
-        (
-          useCustomCategory
-            ? category.trim()
-            : (
-                categories.find(
-                  (item) =>
-                    String(
-                      item.categoryId
-                    ) ===
-                    String(category)
-                )?.categoryName ??
-                category
-              )
-        );
+        (useCustomCategory
+          ? category.trim()
+          : (categories.find(
+              (item) => String(item.categoryId) === String(category),
+            )?.categoryName ?? category));
 
-      // =================================================
-      // NORMALIZE SAVED PRODUCT
-      // =================================================
+      const newProduct = normalizeProduct({
+        ...savedProduct,
+        productId: savedProduct.productId ?? savedProduct.id ?? null,
+        pname:
+          savedProduct.pname ??
+          savedProduct.productName ??
+          product.productName.trim(),
+        categoryName:
+          savedProduct.categoryName ??
+          savedProduct.category?.categoryName ??
+          categoryNameForProduct,
+        basePrice: savedProduct.basePrice ?? Number(product.basePrice),
+        description: savedProduct.description ?? product.description.trim(),
+        images: [...productImages],
+        isVerified: savedProduct.isVerified ?? false,
+        remarks:
+          savedProduct.remarks ?? "Product is waiting for admin verification.",
+      });
 
-      const newProduct =
-        normalizeProduct({
-          ...savedProduct,
-
-          productId:
-            savedProduct.productId ??
-            savedProduct.id ??
-            null,
-
-          pname:
-            savedProduct.pname ??
-            savedProduct.productName ??
-            product.productName.trim(),
-
-          categoryName:
-            savedProduct.categoryName ??
-            savedProduct.category
-              ?.categoryName ??
-            categoryNameForProduct,
-
-          basePrice:
-            savedProduct.basePrice ??
-            Number(product.basePrice),
-
-          description:
-            savedProduct.description ??
-            product.description.trim(),
-
-          // Keep the selected File locally
-          // for immediate display.
-          images: [
-            ...productImages,
-          ],
-
-          isVerified:
-            savedProduct.isVerified ??
-            false,
-
-          remarks:
-            savedProduct.remarks ??
-            "Product is waiting for admin verification.",
-        });
-
-      // =================================================
-      // UPDATE LOCAL PRODUCTS
-      // =================================================
-
-      setProducts(
-        (previous) => [
-          ...previous,
-          newProduct,
-        ]
-      );
-
-      // =================================================
-      // UPDATE FLOW
-      // =================================================
-
-      setFlowProductId(
-        newProduct.productId
-      );
-
+      setProducts((previous) => [...previous, newProduct]);
+      setFlowProductId(newProduct.productId);
       setFlowHasProduct(true);
-
       setFlowAuctionCreated(false);
-
-      // =================================================
-      // RESET PRODUCT FORM
-      // =================================================
-
       setProduct({
         productId: null,
         productName: "",
@@ -1245,1744 +484,721 @@ export default function CreateAuction() {
         basePrice: "",
         description: "",
       });
-
       setCategory("");
-
       setUseCustomCategory(false);
-
       setProductImages([]);
-
-      alert(
-        "Product saved successfully and submitted for verification."
-      );
-
+      alert("Product saved successfully and submitted for verification.");
     } catch (error) {
-
-      console.error(
-        "Failed to add product:",
-        error
-      );
-
-      console.error(
-        "Status:",
-        error?.response?.status
-      );
-
-      console.error(
-        "Response:",
-        error?.response?.data
-      );
-
+      console.error("Failed to add product:", error);
       alert(
         error?.response?.data?.message ||
-        error?.message ||
-        "Failed to save product. Please try again."
+          error?.message ||
+          "Failed to save product. Please try again.",
       );
-
     } finally {
-
       setIsAddingProduct(false);
-
     }
-
   };
 
-  // =========================================================
-  // SELECTED PRODUCT
-  // =========================================================
-
-  const selectedProduct =
-    products.find(
-      (item) =>
-        String(item.productId) ===
-        String(selectedProductId)
-    );
-
-  // =========================================================
-  // CREATE AUCTION
-  // =========================================================
-
   const handleCreateAuction = async () => {
-
     if (!selectedProduct) {
-
-      alert(
-        "Please select a verified product."
-      );
-
+      alert("Please select a verified product.");
       return;
     }
 
-    if (
-      !auction.startTime ||
-      !auction.endTime
-    ) {
-
-      alert(
-        "Please select auction start and end times."
-      );
-
+    if (!auction.startTime || !auction.endTime) {
+      alert("Please select auction start and end times.");
       return;
     }
 
-    if (
-      new Date(auction.endTime) <=
-      new Date(auction.startTime)
-    ) {
-
-      alert(
-        "Auction end time must be after the start time."
-      );
-
+    if (new Date(auction.endTime) <= new Date(auction.startTime)) {
+      alert("Auction end time must be after the start time.");
       return;
     }
 
-    // =================================================
-    // FORMAT DATE/TIME
-    // =================================================
+    const formatDateTime = (dateTime) => {
+      if (!dateTime) return null;
 
-    const formatDateTime = (
-      dateTime
-    ) => {
-
-      if (!dateTime) {
-        return null;
-      }
-
-      // Add seconds to datetime-local
-      // if omitted.
-
+      // Add seconds to datetime-local values when they are omitted.
       const dateTimeWithSeconds =
-        dateTime.length === 16
-          ? `${dateTime}:00`
-          : dateTime;
+        dateTime.length === 16 ? `${dateTime}:00` : dateTime;
 
-      // Backend expects space instead of T.
-
-      return dateTimeWithSeconds.replace(
-        "T",
-        " "
-      );
-
+      // The backend expects a space between the date and time.
+      return dateTimeWithSeconds.replace("T", " ");
     };
 
-    // =================================================
-    // AUCTION DATA
-    // =================================================
-
     const auctionData = {
-
-      productId:
-        selectedProduct.productId,
-
-      title:
-        auction.title.trim() ||
-        selectedProduct.productName,
-
-      startTime:
-        formatDateTime(
-          auction.startTime
-        ),
-
-      endTime:
-        formatDateTime(
-          auction.endTime
-        ),
-
-      bidIncrementedBy:
-        Number(
-          selectedProduct.basePrice
-        ),
+      productId: selectedProduct.productId,
+      title: auction.title.trim() || selectedProduct.productName,
+      startTime: formatDateTime(auction.startTime),
+      endTime: formatDateTime(auction.endTime),
+      bidIncrementedBy: Number(selectedProduct.basePrice),
     };
 
     try {
-
       setIsCreatingAuction(true);
+      await createAuction(auctionData);
 
-      await createAuction(
-        auctionData
-      );
-
-      // =================================================
-      // MARK PRODUCT AS ASSIGNED
-      // =================================================
-
-      setAssignedProductIds(
-        (previous) => {
-
-          const next =
-            new Set(previous);
-
-          next.add(
-            String(
-              selectedProduct.productId
-            )
-          );
-
-          return next;
-
-        }
-      );
-
-      // =================================================
-      // UPDATE FLOW
-      // =================================================
-
-      if (
-        String(flowProductId) ===
-        String(selectedProduct.productId)
-      ) {
-
-        setFlowAuctionCreated(
-          true
-        );
-
+      // Keep the product record, but remove it from the auction selector.
+      setAssignedProductIds((previous) => {
+        const next = new Set(previous);
+        next.add(String(selectedProduct.productId));
+        return next;
+      });
+      if (String(flowProductId) === String(selectedProduct.productId)) {
+        setFlowAuctionCreated(true);
       }
-
-      // =================================================
-      // RESET AUCTION FORM
-      // =================================================
-
       setSelectedProductId("");
-
       setAuction({
         title: "",
         startTime: "",
         endTime: "",
       });
 
-      alert(
-        "Auction created successfully."
-      );
-
+      alert("Auction created successfully.");
     } catch (error) {
-
-      console.error(
-        "Failed to create auction:",
-        error
-      );
-
-      console.error(
-        "Status:",
-        error?.response?.status
-      );
-
-      console.error(
-        "Response:",
-        error?.response?.data
-      );
-
+      console.error("Failed to create auction:", error);
       alert(
         error?.response?.data?.message ||
-        "Failed to create auction. Please try again."
+          "Failed to create auction. Please try again.",
       );
-
     } finally {
-
       setIsCreatingAuction(false);
-
     }
-
   };
 
-  // =========================================================
-  // VERIFIED PRODUCTS
-  // =========================================================
+  const verifiedProducts = products.filter(
+    (item) =>
+      String(item.verificationStatus).trim().toLowerCase() === "verified" &&
+      item.productId != null &&
+      !assignedProductIds.has(String(item.productId)) &&
+      !productAlreadyAssigned(item),
+  );
 
-  const verifiedProducts =
-    products.filter(
-      (item) =>
-        String(
-          item.verificationStatus
-        )
-          .trim()
-          .toLowerCase() ===
-          "verified" &&
+  const selectedProduct = products.find(
+    (item) => String(item.productId) === String(selectedProductId),
+  );
 
-        item.productId != null &&
+  const auctionEnabled = Boolean(selectedProduct);
 
-        !assignedProductIds.has(
-          String(item.productId)
-        ) &&
-
-        !productAlreadyAssigned(item)
-    );
-
-  // =========================================================
-  // AUCTION ENABLED
-  // =========================================================
-
-  const auctionEnabled =
-    Boolean(selectedProduct);
-
-  // =========================================================
-  // CURRENT FLOW PRODUCT
-  // =========================================================
-
-  const flowProduct =
-    products.find(
-      (item) =>
-        String(item.productId) ===
-        String(flowProductId)
-    );
-
-  // =========================================================
-  // FLOW PRODUCT VERIFIED?
-  // =========================================================
-
+  // Flow progress is based only on the product added in this session,
+  // not on older products loaded from the database.
+  const flowProduct = products.find(
+    (item) => String(item.productId) === String(flowProductId),
+  );
   const flowProductIsVerified =
-    String(
-      flowProduct?.verificationStatus ??
-      ""
-    )
+    String(flowProduct?.verificationStatus ?? "")
       .trim()
-      .toLowerCase() ===
-    "verified";
+      .toLowerCase() === "verified";
 
-  // =========================================================
-  // CURRENT FLOW STEP
-  // =========================================================
+  const currentFlowStep = !flowHasProduct
+    ? 1
+    : flowAuctionCreated
+      ? 4
+      : flowProductIsVerified
+        ? 3
+        : 2;
 
-  const currentFlowStep =
-    !flowHasProduct
-      ? 1
-      : flowAuctionCreated
-        ? 4
-        : flowProductIsVerified
-          ? 3
-          : 2;
-
-  // =========================================================
-  // FORMAT PRICE
-  // =========================================================
-
-  const formatPrice = (
-    price
-  ) => {
-
-    if (!price) {
-      return "₹0";
-    }
-
-    return `₹${Number(
-      price
-    ).toLocaleString(
-      "en-IN"
-    )}`;
-
+  const formatPrice = (price) => {
+    if (!price) return "₹0";
+    return `₹${Number(price).toLocaleString("en-IN")}`;
   };
-
-  // =========================================================
-  // RENDER
-  // =========================================================
 
   return (
-
     <div className="create-auction-page">
-
-      {/* ===================================================
-          PAGE HEADING
-      ==================================================== */}
-
+      {/* PAGE HEADING */}
       <div className="create-auction-heading">
-
         <div>
-
-          <h1>
-            Create New Auction
-          </h1>
-
+          <h1>Create New Auction</h1>
           <p>
-            Add your product details first.
-            After admin verification, you can
+            Add your product details first. After admin verification, you can
             create the auction.
           </p>
-
         </div>
-
       </div>
 
-      {/* ===================================================
-          MAIN TWO-COLUMN CONTENT
-      ==================================================== */}
-
+      {/* ONLY THE TWO FORMS USE THIS GRID */}
       <div className="create-auction-content">
-
-        {/* =================================================
-            LEFT SIDE - PRODUCT
-        ================================================== */}
-
+        {/* =====================================================
+            LEFT FORM - ADD PRODUCT
+        ====================================================== */}
         <section className="create-product-card">
-
           <div className="create-section-header">
-
-            <div className="create-section-number product-step-number">
-              1
-            </div>
-
+            <div className="create-section-number product-step-number">1</div>
             <div>
-
-              <h2>
-                Add Product Details
-              </h2>
-
-              <p>
-                Provide accurate information
-                about your product.
-              </p>
-
+              <h2>Add Product Details</h2>
+              <p>Provide accurate information about your product.</p>
             </div>
-
           </div>
 
           <div className="create-product-form">
-
-            {/* =============================================
-                PRODUCT NAME
-            ============================================== */}
-
+            {/* PRODUCT NAME */}
             <div className="create-form-group">
-
               <label htmlFor="productName">
-
-                Product Name{" "}
-
-                <span>
-                  *
-                </span>
-
+                Product Name <span>*</span>
               </label>
-
               <input
                 id="productName"
                 type="text"
                 placeholder="Enter product name"
-                value={
-                  product.productName
-                }
+                value={product.productName}
                 onChange={(event) =>
                   setProduct({
                     ...product,
-                    productName:
-                      event.target.value,
+                    productName: event.target.value,
                   })
                 }
               />
-
             </div>
 
-            {/* =============================================
-                CATEGORY
-            ============================================== */}
-
+            {/* CATEGORY */}
             <div className="create-form-group">
-
               <label htmlFor="productCategory">
-
-                Category{" "}
-
-                <span>
-                  *
-                </span>
-
+                Category <span>*</span>
               </label>
 
               <div className="category-input-row">
-
                 {useCustomCategory ? (
-
                   <input
                     id="productCategory"
                     type="text"
                     placeholder="Write category here"
                     value={category}
-                    onChange={(event) =>
-                      setCategory(
-                        event.target.value
-                      )
-                    }
+                    onChange={(event) => setCategory(event.target.value)}
                   />
-
                 ) : (
-
                   <select
                     id="productCategory"
                     value={category}
-                    onChange={(event) =>
-                      setCategory(
-                        event.target.value
-                      )
-                    }
+                    onChange={(event) => setCategory(event.target.value)}
                   >
-
-                    <option
-                      value=""
-                      disabled
-                    >
-                      {
-                        isLoadingCategories
-                          ? "Loading categories..."
-                          : "Select a category"
-                      }
+                    <option value="" disabled>
+                      {isLoadingCategories
+                        ? "Loading categories..."
+                        : "Select a category"}
                     </option>
-
-                    {categories.map(
-                      (item) => (
-
-                        <option
-                          key={
-                            item.categoryId
-                          }
-                          value={
-                            String(
-                              item.categoryId
-                            )
-                          }
-                        >
-                          {
-                            item.categoryName
-                          }
-                        </option>
-
-                      )
-                    )}
-
+                    {categories.map((item) => (
+                      <option
+                        key={item.categoryId}
+                        value={String(item.categoryId)}
+                      >
+                        {item.categoryName}
+                      </option>
+                    ))}
                   </select>
-
                 )}
 
                 <button
                   type="button"
                   className="create-category-button"
-                  onClick={
-                    handleCategoryToggle
-                  }
+                  onClick={handleCategoryToggle}
                 >
-
-                  <span>
-                    +
-                  </span>
-
-                  {
-                    useCustomCategory
-                      ? "Select Category"
-                      : "Create Category"
-                  }
-
+                  <span>+</span>
+                  {useCustomCategory ? "Select Category" : "Create Category"}
                 </button>
-
               </div>
-
             </div>
 
-            {/* =============================================
-                BASE PRICE
-            ============================================== */}
-
+            {/* BASE PRICE */}
             <div className="create-form-group">
-
               <label htmlFor="basePrice">
-
-                Base Price{" "}
-
-                <span>
-                  *
-                </span>
-
+                Base Price <span>*</span>
               </label>
-
               <div className="price-input-wrapper">
-
-                <span className="currency-symbol">
-                  ₹
-                </span>
-
+                <span className="currency-symbol">₹</span>
                 <input
                   id="basePrice"
                   type="number"
                   min="0"
                   placeholder="Enter base price"
-                  value={
-                    product.basePrice
-                  }
+                  value={product.basePrice}
                   onChange={(event) =>
                     setProduct({
                       ...product,
-                      basePrice:
-                        event.target.value,
+                      basePrice: event.target.value,
                     })
                   }
                 />
-
               </div>
-
             </div>
 
-            {/* =============================================
-                DESCRIPTION
-            ============================================== */}
-
+            {/* DESCRIPTION */}
             <div className="create-form-group">
-
               <label htmlFor="productDescription">
-
-                Description{" "}
-
-                <span>
-                  *
-                </span>
-
+                Description <span>*</span>
               </label>
-
               <textarea
                 id="productDescription"
                 rows="5"
                 placeholder="Provide a detailed description of your product..."
-                value={
-                  product.description
-                }
+                value={product.description}
                 onChange={(event) =>
                   setProduct({
                     ...product,
-                    description:
-                      event.target.value,
+                    description: event.target.value,
                   })
                 }
               />
-
             </div>
 
-            {/* =============================================
-                PRODUCT PHOTOS
-            ============================================== */}
-
+            {/* PRODUCT PHOTOS */}
             <div className="create-form-group">
-
               <label htmlFor="productImages">
-
-                Product Photos{" "}
-
-                <span>
-                  *
-                </span>
-
+                Product Photos <span>*</span>
               </label>
 
               <div className="product-image-upload">
-
-                <label
-                  htmlFor="productImages"
-                  className="upload-placeholder"
-                >
-
-                  <div className="upload-icon">
-                    ↥
-                  </div>
-
-                  <strong>
-                    Click to upload product photo
-                  </strong>
-
-                  <span>
-                    Select 1 photo
-                  </span>
-
-                  <small>
-                    JPG, PNG, JPEG • Maximum 5MB
-                  </small>
-
+                <label htmlFor="productImages" className="upload-placeholder">
+                  <div className="upload-icon">↥</div>
+                  <strong>Click to upload product photos</strong>
+                  <span>Select at least 1 photo</span>
+                  <small>JPG, PNG, JPEG • Maximum 5MB per image</small>
                 </label>
 
                 <input
                   id="productImages"
                   type="file"
                   accept="image/png,image/jpeg,image/jpg"
+                  multiple
                   hidden
-                  onChange={
-                    handleImageChange
-                  }
+                  onChange={handleImageChange}
                 />
-
               </div>
 
               {productImages.length > 0 && (
-
                 <div
                   className={`photo-count ${
-                    productImages.length >= 1
-                      ? "photo-count-valid"
-                      : ""
+                    productImages.length >= 1 ? "photo-count-valid" : ""
                   }`}
                 >
-
-                  {productImages.length}
-                  {" "}
-                  photo selected
-
-                  {
-                    productImages.length >= 1
-                      ? " ✓ Photo selected"
-                      : " — 1 required"
-                  }
-
+                  {productImages.length} photos selected
+                  {productImages.length >= 1
+                    ? " ✓ Minimum requirement satisfied"
+                    : " — At least 1 required"}
                 </div>
-
               )}
 
               {productImages.length > 0 && (
-
                 <div className="product-upload-previews">
-
-                  {productImages.map(
-                    (
-                      file,
-                      index
-                    ) => (
-
-                      <div
-                        className="product-upload-preview"
-                        key={`${file.name}-${index}`}
-                      >
-
-                        <img
-                          src={
-                            getImageSource(
-                              file
-                            )
-                          }
-                          alt={`Product ${
-                            index + 1
-                          }`}
-                        />
-
-                        <span>
-                          {index + 1}
-                        </span>
-
-                      </div>
-
-                    )
-                  )}
-
+                  {productImages.map((file, index) => (
+                    <div
+                      className="product-upload-preview"
+                      key={`${file.name}-${index}`}
+                    >
+                      <img
+                        src={getImageSource(file)}
+                        alt={`Product ${index + 1}`}
+                      />
+                      <span>{index + 1}</span>
+                    </div>
+                  ))}
                 </div>
-
               )}
-
             </div>
-
-            {/* =============================================
-                ADD PRODUCT BUTTON
-            ============================================== */}
 
             <button
               type="button"
               className="add-product-button"
-              onClick={
-                handleAddProduct
-              }
-              disabled={
-                isAddingProduct
-              }
+              onClick={handleAddProduct}
+              disabled={isAddingProduct}
             >
-
-              <span>
-                +
-              </span>
-
-              {
-                isAddingProduct
-                  ? "Saving Product..."
-                  : "Add Product"
-              }
-
+              <span>+</span>
+              {isAddingProduct ? "Saving Product..." : "Add Product"}
             </button>
-
           </div>
-
-          {/* =============================================
-              VERIFICATION NOTICE
-          ============================================== */}
 
           <div className="product-verification-notice">
-
-            <div className="verification-notice-icon">
-              ◷
-            </div>
-
+            <div className="verification-notice-icon">◷</div>
             <div>
-
-              <strong>
-                Product will be reviewed by admin
-              </strong>
-
+              <strong>Product will be reviewed by admin</strong>
               <p>
-                After adding the product,
-                it will go through admin
-                verification. You will be
-                notified once it is verified,
-                and then you can create
-                the auction.
+                After adding the product, it will go through admin verification.
+                You will be notified once it is verified, and then you can
+                create the auction.
               </p>
-
             </div>
-
           </div>
-
         </section>
 
-        {/* =================================================
-            RIGHT SIDE - AUCTION
-        ================================================== */}
-
+        {/* =====================================================
+            RIGHT FORM - AUCTION
+        ====================================================== */}
         <section className="create-auction-card">
-
-          {/* =============================================
-              PRODUCT TO AUCTION FLOW
-          ============================================== */}
-
           <div className="flow-card">
-
-            <h2>
-              Product to Auction Flow
-            </h2>
+            <h2>Product to Auction Flow</h2>
 
             <div className="product-auction-flow">
-
               <div className="flow-line" />
 
-              {/* STEP 1 */}
+              <div
+                className={`flow-step ${
+                  currentFlowStep >= 1 ? "completed" : ""
+                } ${currentFlowStep === 1 ? "current" : ""}`}
+              >
+                <div className="flow-step-number">1</div>
+                <strong>Add Product</strong>
+                <span>(by Seller)</span>
+              </div>
 
               <div
                 className={`flow-step ${
-                  currentFlowStep >= 1
-                    ? "completed"
-                    : ""
-                } ${
-                  currentFlowStep === 1
-                    ? "current"
-                    : ""
-                }`}
+                  currentFlowStep >= 2 ? "completed" : ""
+                } ${currentFlowStep === 2 ? "current" : ""}`}
               >
-
-                <div className="flow-step-number">
-                  1
-                </div>
-
-                <strong>
-                  Add Product
-                </strong>
-
-                <span>
-                  (by Seller)
-                </span>
-
+                <div className="flow-step-number">2</div>
+                <strong>Under Verification</strong>
+                <span>(by Admin)</span>
               </div>
-
-              {/* STEP 2 */}
 
               <div
                 className={`flow-step ${
-                  currentFlowStep >= 2
-                    ? "completed"
-                    : ""
-                } ${
-                  currentFlowStep === 2
-                    ? "current"
-                    : ""
-                }`}
+                  currentFlowStep >= 3 ? "completed" : ""
+                } ${currentFlowStep === 3 ? "current" : ""}`}
               >
-
-                <div className="flow-step-number">
-                  2
-                </div>
-
-                <strong>
-                  Under Verification
-                </strong>
-
-                <span>
-                  (by Admin)
-                </span>
-
+                <div className="flow-step-number">3</div>
+                <strong>Get Notified</strong>
+                <span>(when Verified)</span>
               </div>
-
-              {/* STEP 3 */}
 
               <div
                 className={`flow-step ${
-                  currentFlowStep >= 3
-                    ? "completed"
-                    : ""
-                } ${
-                  currentFlowStep === 3
-                    ? "current"
-                    : ""
-                }`}
+                  currentFlowStep >= 4 ? "completed" : ""
+                } ${currentFlowStep === 4 ? "current" : ""}`}
               >
-
-                <div className="flow-step-number">
-                  3
-                </div>
-
-                <strong>
-                  Get Notified
-                </strong>
-
-                <span>
-                  (when Verified)
-                </span>
-
+                <div className="flow-step-number">4</div>
+                <strong>Create Auction</strong>
+                <span>(for Verified Product)</span>
               </div>
-
-              {/* STEP 4 */}
-
-              <div
-                className={`flow-step ${
-                  currentFlowStep >= 4
-                    ? "completed"
-                    : ""
-                } ${
-                  currentFlowStep === 4
-                    ? "current"
-                    : ""
-                }`}
-              >
-
-                <div className="flow-step-number">
-                  4
-                </div>
-
-                <strong>
-                  Create Auction
-                </strong>
-
-                <span>
-                  (for Verified Product)
-                </span>
-
-              </div>
-
             </div>
-
           </div>
 
-          {/* =============================================
-              AUCTION FORM PANEL
-          ============================================== */}
-
           <div className="auction-form-panel">
-
             <div className="create-section-header auction-section-header">
-
-              <div className="create-section-number auction-step-number">
-                2
-              </div>
-
+              <div className="create-section-number auction-step-number">2</div>
               <div>
-
-                <h2>
-                  Create Auction
-                  (After Product Verification)
-                </h2>
-
+                <h2>Create Auction (After Product Verification)</h2>
                 <p>
-                  Once your product is verified
-                  by admin, you can create the
+                  Once your product is verified by admin, you can create the
                   auction.
                 </p>
-
               </div>
-
             </div>
-
-            {/* =========================================
-                VERIFICATION MESSAGE
-            ========================================== */}
 
             <div className="auction-verification-message">
-
               <div className="auction-message-icon">
-
-                {
-                  auctionEnabled
-                    ? "✓"
-                    : "!"
-                }
-
+                {auctionEnabled ? "✓" : "!"}
               </div>
-
               <span>
-
-                {
-                  auctionEnabled
-                    ? "This product is verified and ready for auction!"
-                    : "Product verification is required before creating an auction."
-                }
-
+                {auctionEnabled
+                  ? "This product is verified and ready for auction!"
+                  : "Product verification is required before creating an auction."}
               </span>
-
             </div>
-
-            {/* =========================================
-                VERIFIED PRODUCT SELECTOR
-            ========================================== */}
 
             <div className="verified-product-selector">
-
               <label htmlFor="verifiedProduct">
-
-                Verified Product{" "}
-
-                <span>
-                  *
-                </span>
-
+                Verified Product <span>*</span>
               </label>
-
               <select
                 id="verifiedProduct"
-                value={
-                  selectedProductId
-                }
-                onChange={(event) =>
-                  setSelectedProductId(
-                    event.target.value
-                  )
-                }
-                disabled={
-                  verifiedProducts.length === 0
-                }
+                value={selectedProductId}
+                onChange={(event) => setSelectedProductId(event.target.value)}
+                disabled={verifiedProducts.length === 0}
               >
-
                 <option value="">
-
-                  {
-                    verifiedProducts.length === 0
-                      ? "No verified product available yet"
-                      : "Select a verified product"
-                  }
-
+                  {verifiedProducts.length === 0
+                    ? "No verified product available yet"
+                    : "Select a verified product"}
                 </option>
-
-                {verifiedProducts.map(
-                  (
-                    item,
-                    index
-                  ) => (
-
-                    <option
-                      key={`${item.productName}-${index}`}
-                      value={
-                        String(
-                          item.productId
-                        )
-                      }
-                    >
-
-                      {
-                        item.productName
-                      }
-
-                      {" — "}
-
-                      {
-                        item.category
-                      }
-
-                    </option>
-
-                  )
-                )}
-
+                {verifiedProducts.map((item, index) => (
+                  <option
+                    key={`${item.productName}-${index}`}
+                    value={String(item.productId)}
+                  >
+                    {item.productName} — {item.category}
+                  </option>
+                ))}
               </select>
-
             </div>
 
-            {/* =========================================
-                SELECTED PRODUCT CARD
-            ========================================== */}
-
             <div className="selected-product-card">
-
               <div className="selected-product-image">
-
                 {selectedProduct?.images?.[0] ? (
-
                   <img
-                    src={
-                      getImageSource(
-                        selectedProduct
-                          .images[0]
-                      )
-                    }
-                    alt={
-                      selectedProduct
-                        .productName
-                    }
+                    src={getImageSource(selectedProduct.images[0])}
+                    alt={selectedProduct.productName}
                   />
-
                 ) : (
-
-                  <span>
-                    Product Image
-                  </span>
-
+                  <span>Product Image</span>
                 )}
-
               </div>
 
               <div className="selected-product-details">
-
                 <h3>
-
-                  {
-                    selectedProduct?.productName ||
-                    "Product will appear here"
-                  }
-
+                  {selectedProduct?.productName || "Product will appear here"}
                 </h3>
-
                 <p>
-
-                  {
-                    selectedProduct
-                      ? `Category: ${selectedProduct.category}`
-                      : "Select a verified product to create an auction."
-                  }
-
+                  {selectedProduct
+                    ? `Category: ${selectedProduct.category}`
+                    : "Select a verified product to create an auction."}
                 </p>
-
               </div>
 
               <div className="selected-product-id">
-
-                <span>
-                  Product ID
-                </span>
-
+                <span>Product ID</span>
                 <strong>
-
-                  {
-                    selectedProduct?.productId ??
-                    "Auto Generated"
-                  }
-
+                  {selectedProduct?.productId ?? "Auto Generated"}
                 </strong>
-
               </div>
 
               <div
                 className={`product-status ${
-                  selectedProduct
-                    ? "product-status-verified"
-                    : ""
+                  selectedProduct ? "product-status-verified" : ""
                 }`}
               >
-
-                {
-                  selectedProduct
-                    ? "✓ Verified"
-                    : "Waiting"
-                }
-
+                {selectedProduct ? "✓ Verified" : "Waiting"}
               </div>
-
             </div>
 
-            {/* =========================================
-                AUCTION FORM
-            ========================================== */}
-
             <div className="auction-form">
-
-              {/* =======================================
-                  AUCTION TITLE
-              ======================================== */}
-
+              {/* TITLE */}
               <div className="create-form-group auction-title-group">
-
-                <label htmlFor="auctionTitle">
-                  Auction Title
-                </label>
-
+                <label htmlFor="auctionTitle">Auction Title</label>
                 <input
                   id="auctionTitle"
                   type="text"
                   placeholder="Enter auction title"
-                  value={
-                    auction.title
-                  }
-                  disabled={
-                    !auctionEnabled
-                  }
+                  value={auction.title}
+                  disabled={!auctionEnabled}
                   onChange={(event) =>
-                    setAuction({
-                      ...auction,
-                      title:
-                        event.target.value,
-                    })
+                    setAuction({ ...auction, title: event.target.value })
                   }
                 />
-
-                <small>
-                  If left empty, the product
-                  name will be used.
-                </small>
-
+                <small>If left empty, the product name will be used.</small>
               </div>
 
-              {/* =======================================
-                  BID INCREMENT
-              ======================================== */}
-
+              {/* BID INCREMENT - SAME AS SELECTED PRODUCT BASE PRICE */}
               <div className="create-form-group bid-increment-group">
-
                 <label htmlFor="bidIncrement">
-
-                  Bid Increment
-                  {" "}
-                  (Same as Base Price)
-
+                  Bid Increment (Same as Base Price)
                 </label>
-
                 <input
                   id="bidIncrement"
                   type="number"
-                  value={
-                    selectedProduct?.basePrice ??
-                    ""
-                  }
+                  value={selectedProduct?.basePrice ?? ""}
                   placeholder="Select a verified product"
-                  disabled={
-                    !auctionEnabled
-                  }
+                  disabled={!auctionEnabled}
                   readOnly
                 />
-
               </div>
 
-              {/* =======================================
-                  START TIME
-              ======================================== */}
-
+              {/* START TIME */}
               <div className="create-form-group auction-start-group">
-
                 <label htmlFor="auctionStartTime">
-
-                  Auction Start Time{" "}
-
-                  <span>
-                    *
-                  </span>
-
+                  Auction Start Time <span>*</span>
                 </label>
-
                 <div
                   className="datetime-input-wrapper"
-                  onClick={() =>
-                    auctionStartTimeRef.current
-                      ?.showPicker?.()
-                  }
+                  onClick={() => auctionStartTimeRef.current?.showPicker?.()}
                 >
-
-                  <span
-                    className="datetime-icon"
-                    aria-hidden="true"
-                  >
+                  <span className="datetime-icon" aria-hidden="true">
                     📅
                   </span>
-
                   <input
-                    ref={
-                      auctionStartTimeRef
-                    }
+                    ref={auctionStartTimeRef}
                     id="auctionStartTime"
                     type="datetime-local"
-                    value={
-                      auction.startTime
-                    }
-                    disabled={
-                      !auctionEnabled
-                    }
+                    value={auction.startTime}
+                    disabled={!auctionEnabled}
                     onChange={(event) =>
-                      setAuction({
-                        ...auction,
-                        startTime:
-                          event.target.value,
-                      })
+                      setAuction({ ...auction, startTime: event.target.value })
                     }
                   />
-
                 </div>
-
               </div>
 
-              {/* =======================================
-                  END TIME
-              ======================================== */}
-
+              {/* END TIME */}
               <div className="create-form-group auction-end-group">
-
                 <label htmlFor="auctionEndTime">
-
-                  Auction End Time{" "}
-
-                  <span>
-                    *
-                  </span>
-
+                  Auction End Time <span>*</span>
                 </label>
-
                 <div
                   className="datetime-input-wrapper"
-                  onClick={() =>
-                    auctionEndTimeRef.current
-                      ?.showPicker?.()
-                  }
+                  onClick={() => auctionEndTimeRef.current?.showPicker?.()}
                 >
-
-                  <span
-                    className="datetime-icon"
-                    aria-hidden="true"
-                  >
+                  <span className="datetime-icon" aria-hidden="true">
                     📅
                   </span>
-
                   <input
-                    ref={
-                      auctionEndTimeRef
-                    }
+                    ref={auctionEndTimeRef}
                     id="auctionEndTime"
                     type="datetime-local"
-                    value={
-                      auction.endTime
-                    }
-                    disabled={
-                      !auctionEnabled
-                    }
+                    value={auction.endTime}
+                    disabled={!auctionEnabled}
                     onChange={(event) =>
-                      setAuction({
-                        ...auction,
-                        endTime:
-                          event.target.value,
-                      })
+                      setAuction({ ...auction, endTime: event.target.value })
                     }
                   />
-
                 </div>
-
               </div>
-
             </div>
-
-            {/* =========================================
-                CREATE AUCTION BUTTON
-            ========================================== */}
 
             <button
               type="button"
               className="create-auction-button"
-              disabled={
-                !auctionEnabled ||
-                isCreatingAuction
-              }
-              onClick={
-                handleCreateAuction
-              }
+              disabled={!auctionEnabled || isCreatingAuction}
+              onClick={handleCreateAuction}
             >
-
-              <span>
-                ⚒
-              </span>
-
-              {
-                isCreatingAuction
-                  ? "Creating Auction..."
-                  : "Create Auction"
-              }
-
+              <span>⚒</span>
+              {isCreatingAuction ? "Creating Auction..." : "Create Auction"}
             </button>
-
           </div>
-
         </section>
-
       </div>
 
-      {/* =================================================
-          ADDED PRODUCTS
-      ================================================== */}
-
+      {/* =====================================================
+          ADDED PRODUCTS - FULL WIDTH, OUTSIDE THE GRID
+      ====================================================== */}
       {products.length > 0 && (
-
         <section className="added-products-section">
-
           <div className="added-products-heading">
-
             <div>
-
-              <h2>
-                Added Products
-              </h2>
-
-              <p>
-                Products submitted to the
-                system for admin verification.
-              </p>
-
+              <h2>Added Products</h2>
+              <p>Products submitted to the system for admin verification.</p>
             </div>
-
             <span>
-
-              {products.length}
-
-              {" "}
-
-              Product
-              {products.length !== 1
-                ? "s"
-                : ""}
-
+              {products.length} Product{products.length !== 1 ? "s" : ""}
             </span>
-
           </div>
 
           <div className="added-products-list">
-
-            {isLoadingProducts && (
-
-              <p>
-                Loading your products...
-              </p>
-
+            {isLoadingProducts && <p>Loading your products...</p>}
+            {!isLoadingProducts && products.length === 0 && (
+              <p>You have not added any products yet.</p>
             )}
-
-            {!isLoadingProducts &&
-              products.length === 0 && (
-
-                <p>
-                  You have not added any
-                  products yet.
-                </p>
-
-            )}
-
-            {products.map(
-              (
-                item,
-                index
-              ) => (
-
-                <article
-                  className="added-product-details"
-                  key={`${item.productId ?? item.productName}-${index}`}
-                >
-
-                  {/* ===================================
-                      PRODUCT HEADER
-                  ==================================== */}
-
-                  <div className="added-product-details-header">
-
-                    <div className="product-title-block">
-
-                      <div className="product-details-number">
-                        {index + 1}
-                      </div>
-
-                      <div>
-
-                        <h3>
-                          PRODUCT DETAILS
-                        </h3>
-
-                        <p>
-                          Your product has been
-                          submitted for admin
-                          verification.
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                    <span
-                      className={`product-verification-badge ${
-                        String(
-                          item.verificationStatus
-                        )
-                          .trim()
-                          .toLowerCase() ===
-                        "verified"
-                          ? "product-verification-badge-verified"
-                          : "product-verification-badge-pending"
-                      }`}
-                    >
-
-                      {
-                        String(
-                          item.verificationStatus
-                        )
-                          .trim()
-                          .toLowerCase() ===
-                        "verified"
-                          ? "✓ Verified"
-                          : "◷ Pending Verification"
-                      }
-
-                    </span>
-
-                  </div>
-
-                  {/* ===================================
-                      PRODUCT MAIN DETAILS
-                  ==================================== */}
-
-                  <div className="product-details-main">
-
-                    {/* =================================
-                        PHOTOS
-                    ================================== */}
-
-                    <div className="product-details-photo-grid">
-
-                      {item.images.map(
-                        (
-                          file,
-                          photoIndex
-                        ) => (
-
-                          <div
-                            className="product-detail-photo"
-                            key={`${photoIndex}-${typeof file === "string" ? file : file?.name}`}
-                          >
-
-                            <img
-                              src={
-                                getImageSource(
-                                  file
-                                )
-                              }
-                              alt={`${item.productName} ${
-                                photoIndex + 1
-                              }`}
-                            />
-
-                            <span>
-                              {photoIndex + 1}
-                            </span>
-
-                          </div>
-
-                        )
-                      )}
-
-                    </div>
-
-                    {/* =================================
-                        PRODUCT INFORMATION
-                    ================================== */}
-
-                    <div className="product-details-grid">
-
-                      {/* PRODUCT ID */}
-
-                      <div>
-
-                        <span className="product-detail-label">
-                          Product ID
-                        </span>
-
-                        <strong className="product-detail-value">
-
-                          {
-                            item.productId ??
-                            "Auto Generated"
-                          }
-
-                        </strong>
-
-                      </div>
-
-                      {/* PRODUCT NAME */}
-
-                      <div>
-
-                        <span className="product-detail-label">
-                          Product Name
-                        </span>
-
-                        <strong className="product-detail-value">
-
-                          {
-                            item.productName
-                          }
-
-                        </strong>
-
-                      </div>
-
-                      {/* CATEGORY */}
-
-                      <div>
-
-                        <span className="product-detail-label">
-                          Category
-                        </span>
-
-                        <strong className="product-detail-value">
-
-                          {
-                            item.category
-                          }
-
-                        </strong>
-
-                      </div>
-
-                      {/* BASE PRICE */}
-
-                      <div>
-
-                        <span className="product-detail-label">
-                          Base Price
-                        </span>
-
-                        <strong className="product-detail-value">
-
-                          {
-                            formatPrice(
-                              item.basePrice
-                            )
-                          }
-
-                        </strong>
-
-                      </div>
-
-                      {/* PHOTO COUNT */}
-
-                      <div>
-
-                        <span className="product-detail-label">
-                          Product Photos
-                        </span>
-
-                        <strong className="product-detail-value product-photo-count">
-
-                          {
-                            item.images.length
-                          }
-
-                          {" "}
-
-                          Photos
-
-                        </strong>
-
-                      </div>
-
-                      {/* VERIFICATION STATUS */}
-
-                      <div>
-
-                        <span className="product-detail-label">
-                          Verification Status
-                        </span>
-
-                        <strong
-                          className={`product-detail-value ${
-                            String(
-                              item.verificationStatus
-                            )
-                              .trim()
-                              .toLowerCase() ===
-                            "verified"
-                              ? "verified-text"
-                              : "pending-text"
-                          }`}
-                        >
-
-                          {
-                            item.verificationStatus
-                          }
-
-                        </strong>
-
-                      </div>
-
-                      {/* VERIFIED BY */}
-
-                      <div>
-
-                        <span className="product-detail-label">
-                          Verified By
-                        </span>
-
-                        <strong className="product-detail-value">
-
-                          {
-                            item.verifiedBy ??
-                            "Not Verified Yet"
-                          }
-
-                        </strong>
-
-                      </div>
-
-                      {/* REMARKS */}
-
-                      <div>
-
-                        <span className="product-detail-label">
-                          Remarks
-                        </span>
-
-                        <strong className="product-detail-value remarks-value">
-
-                          {
-                            item.remarks
-                          }
-
-                        </strong>
-
-                      </div>
-
-                    </div>
-
-                    {/* =================================
-                        DESCRIPTION
-                    ================================== */}
-
-                    <div className="product-description-details">
-
-                      <span className="product-detail-label">
-                        Description
-                      </span>
-
+            {products.map((item, index) => (
+              <article
+                className="added-product-details"
+                key={`${item.productName}-${index}`}
+              >
+                <div className="added-product-details-header">
+                  <div className="product-title-block">
+                    <div className="product-details-number">{index + 1}</div>
+                    <div>
+                      <h3>PRODUCT DETAILS</h3>
                       <p>
-                        {
-                          item.description
-                        }
+                        Your product has been submitted for admin verification.
                       </p>
-
                     </div>
-
                   </div>
 
-                </article>
+                  <span
+                    className={`product-verification-badge ${
+                      item.verificationStatus === "Verified"
+                        ? "product-verification-badge-verified"
+                        : "product-verification-badge-pending"
+                    }`}
+                  >
+                    {item.verificationStatus === "Verified"
+                      ? "✓ Verified"
+                      : "◷ Pending Verification"}
+                  </span>
+                </div>
 
-              )
-            )}
+                <div className="product-details-main">
+                  <div className="product-details-photo-grid">
+                    {item.images.map((file, photoIndex) => (
+                      <div
+                        className="product-detail-photo"
+                        key={`${file.name}-${photoIndex}`}
+                      >
+                        <img
+                          src={getImageSource(file)}
+                          alt={`${item.productName} ${photoIndex + 1}`}
+                        />
+                        <span>{photoIndex + 1}</span>
+                      </div>
+                    ))}
+                  </div>
 
+                  <div className="product-details-grid">
+                    <div>
+                      <span className="product-detail-label">Product ID</span>
+                      <strong className="product-detail-value">
+                        {item.productId ?? "Auto Generated"}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span className="product-detail-label">Product Name</span>
+                      <strong className="product-detail-value">
+                        {item.productName}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span className="product-detail-label">Category</span>
+                      <strong className="product-detail-value">
+                        {item.category}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span className="product-detail-label">Base Price</span>
+                      <strong className="product-detail-value">
+                        {formatPrice(item.basePrice)}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span className="product-detail-label">
+                        Product Photos
+                      </span>
+                      <strong className="product-detail-value product-photo-count">
+                        {item.images.length} Photos
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span className="product-detail-label">
+                        Verification Status
+                      </span>
+                      <strong
+                        className={`product-detail-value ${
+                          item.verificationStatus === "Verified"
+                            ? "verified-text"
+                            : "pending-text"
+                        }`}
+                      >
+                        {item.verificationStatus}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span className="product-detail-label">Verified By</span>
+                      <strong className="product-detail-value">
+                        {item.verifiedBy ?? "Not Verified Yet"}
+                      </strong>
+                    </div>
+
+                    <div>
+                      <span className="product-detail-label">Remarks</span>
+                      <strong className="product-detail-value remarks-value">
+                        {item.remarks}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="product-description-details">
+                    <span className="product-detail-label">Description</span>
+                    <p>{item.description}</p>
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
-
         </section>
-
       )}
-
     </div>
-
   );
-
 }
