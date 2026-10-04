@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductDTOs.ProductResponse createProduct(ProductDTOs.CreateProductRequest request, MultipartFile image, String sellerEmail) {
+    public ProductDTOs.ProductResponse createProduct(ProductDTOs.CreateProductRequest request, String sellerEmail) {
         log.info("Creating product '{}' for seller email: {}", request.getPname(), sellerEmail);
 
         User seller = userRepository.findByEmail(sellerEmail)
@@ -99,18 +99,19 @@ public class ProductServiceImpl implements ProductService {
         product.setPname(request.getPname());
         product.setDescription(request.getDescription());
         product.setBasePrice(request.getBasePrice());
+        product.setImageURL(request.getImageUrl());
         product.setVerified(false);
 
         // Upload image to Cloudinary if provided
-        if (image != null && !image.isEmpty()) {
-            try {
-                Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
-                product.setImageURL(uploadResult.get("imageUrl"));
-                product.setImagePublicId(uploadResult.get("publicId"));
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to upload image to Cloudinary", e);
-            }
-        }
+        // if (image != null && !image.isEmpty()) {
+        //     try {
+        //         Map<String, String> uploadResult = cloudinaryService.uploadImage(image);
+        //         product.setImageURL(uploadResult.get("imageUrl"));
+        //         product.setImagePublicId(uploadResult.get("publicId"));
+        //     } catch (IOException e) {
+        //         throw new RuntimeException("Failed to upload image to Cloudinary", e);
+        //     }
+        // }
 
         Product savedProduct = productRepository.save(product);
         return mapToProductResponse(savedProduct);
