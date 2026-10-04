@@ -1,42 +1,51 @@
 import axiosClient from "../axiosClient";
 
-// ===============================
+// ======================================================
 // CATEGORY APIs
-// ===============================
+// ======================================================
 
-export const getCategories = async () => {
-  const response = await axiosClient.get("/categories");
+export const getProductCategories = async () => {
+  const response = await axiosClient.get("/products/categories");
   return response.data;
 };
 
 export const getCategoryById = async (categoryId) => {
-  const response = await axiosClient.get(`/categories/${categoryId}`);
+  const response = await axiosClient.get(
+    `/products/categories/${categoryId}`
+  );
+
   return response.data;
 };
 
 export const createCategory = async (categoryData) => {
-  const response = await axiosClient.post("/categories", categoryData);
+  const response = await axiosClient.post(
+    "/products/categories",
+    categoryData
+  );
+
   return response.data;
 };
 
 export const updateCategory = async (categoryId, categoryData) => {
   const response = await axiosClient.put(
-    `/categories/${categoryId}`,
+    `/products/categories/${categoryId}`,
     categoryData
   );
+
   return response.data;
 };
 
 export const deleteCategory = async (categoryId) => {
   const response = await axiosClient.delete(
-    `/categories/${categoryId}`
+    `/products/categories/${categoryId}`
   );
+
   return response.data;
 };
 
-// ===============================
+// ======================================================
 // PRODUCT APIs
-// ===============================
+// ======================================================
 
 export const getProducts = async () => {
   const response = await axiosClient.get("/products");
@@ -47,6 +56,7 @@ export const getProductById = async (productId) => {
   const response = await axiosClient.get(
     `/products/${productId}`
   );
+
   return response.data;
 };
 
@@ -55,74 +65,92 @@ export const getMyProducts = async () => {
   return response.data;
 };
 
-/*
- * CREATE PRODUCT
- *
- * productData MUST be FormData.
- *
- * The FormData contains:
- *
- * product -> JSON Blob
- * image   -> File
- *
- * We intentionally DO NOT set Content-Type here.
- * The browser/Axios will automatically create:
- *
- * multipart/form-data; boundary=----------------...
- */
-export const createProduct = async (productData) => {
-  console.log("========== CREATE PRODUCT ==========");
-  console.log("Is FormData:", productData instanceof FormData);
+// ======================================================
+// CREATE PRODUCT
+// ======================================================
 
-  if (!(productData instanceof FormData)) {
+export const createProduct = async (formData) => {
+  console.log("=================================");
+  console.log("CREATE PRODUCT API");
+  console.log("=================================");
+
+  // --------------------------------
+  // Verify FormData
+  // --------------------------------
+  if (!(formData instanceof FormData)) {
     throw new Error(
-      "createProduct expects FormData, but received something else."
+      "createProduct() requires FormData."
     );
   }
 
-  for (const [key, value] of productData.entries()) {
-    console.log(
-      "FORM DATA:",
-      key,
-      value instanceof File
-        ? `File: ${value.name}`
-        : value instanceof Blob
-        ? `Blob: ${value.type}`
-        : value
-    );
+  // --------------------------------
+  // Debug FormData
+  // --------------------------------
+  for (const [key, value] of formData.entries()) {
+    if (value instanceof File) {
+      console.log(
+        `FormData -> ${key}: File`,
+        value.name,
+        value.type,
+        value.size
+      );
+    } else if (value instanceof Blob) {
+      console.log(
+        `FormData -> ${key}: Blob`,
+        value.type,
+        value.size
+      );
+    } else {
+      console.log(
+        `FormData -> ${key}:`,
+        value
+      );
+    }
   }
 
+  // --------------------------------
+  // IMPORTANT:
+  // DO NOT manually set Content-Type.
+  //
+  // Axios/browser will generate:
+  //
+  // multipart/form-data;
+  // boundary=----------------...
+  // --------------------------------
   const response = await axiosClient.post(
     "/products/add",
-    productData
+    formData
   );
 
   return response.data;
 };
 
-/*
- * UPDATE PRODUCT
- *
- * Also uses FormData because an image may be uploaded.
- */
-export const updateProduct = async (productId, productData) => {
-  console.log("========== UPDATE PRODUCT ==========");
-  console.log("Product ID:", productId);
-  console.log("Is FormData:", productData instanceof FormData);
+// ======================================================
+// UPDATE PRODUCT
+// ======================================================
 
-  if (!(productData instanceof FormData)) {
+export const updateProduct = async (
+  productId,
+  formData
+) => {
+
+  if (!(formData instanceof FormData)) {
     throw new Error(
-      "updateProduct expects FormData, but received something else."
+      "updateProduct() requires FormData."
     );
   }
 
   const response = await axiosClient.put(
     `/products/${productId}`,
-    productData
+    formData
   );
 
   return response.data;
 };
+
+// ======================================================
+// DELETE PRODUCT
+// ======================================================
 
 export const deleteProduct = async (productId) => {
   const response = await axiosClient.delete(
