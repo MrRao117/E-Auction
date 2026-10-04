@@ -15,24 +15,22 @@ import java.time.Duration;
 @Configuration
 public class RateLimitConfig {
 
-    @Value("${spring.data.redis.host:localhost}")
+    @Value("${REDIS_HOST:localhost}")
     private String redisHost;
 
-    @Value("${spring.data.redis.port:6379}")
+    @Value("${REDIS_PORT:6379}")
     private int redisPort;
 
-    @Value("${spring.data.redis.password:}")
+    @Value("${REDIS_PASSWORD:}")
     private String redisPassword;
 
     @Bean
     public ProxyManager<byte[]> proxyManager() {
-        // Construct a direct standalone Lettuce RedisClient using your configuration properties
         String uri = "redis://" + (redisPassword.isEmpty() ? "" : ":" + redisPassword + "@") + redisHost + ":" + redisPort;
         RedisClient redisClient = RedisClient.create(uri);
 
         StatefulRedisConnection<byte[], byte[]> connection = redisClient.connect(new ByteArrayCodec());
 
-        // Use Bucket4jLettuce.casBasedBuilder instead of LettuceBasedProxyManager.builderFor
         return Bucket4jLettuce.casBasedBuilder(connection)
                 .expirationAfterWrite(ExpirationAfterWriteStrategy.basedOnTimeForRefillingBucketUpToMax(Duration.ofMinutes(10)))
                 .build();
