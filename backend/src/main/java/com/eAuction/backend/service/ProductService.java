@@ -14,7 +14,7 @@ public interface ProductService {
     ProductDTOs.CategoryResponse getCategoryById(Long categoryId);
 
     // Product Operations
-    ProductDTOs.ProductResponse createProduct(ProductDTOs.CreateProductRequest request, MultipartFile image, String sellerEmail);
+    ProductDTOs.ProductResponse createProduct(ProductDTOs.CreateProductRequest request, String sellerEmail);
 
     ProductDTOs.ProductResponse getProductById(Long productId);
 
