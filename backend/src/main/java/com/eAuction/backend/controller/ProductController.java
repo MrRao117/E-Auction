@@ -93,7 +93,7 @@ public class ProductController {
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> createProduct(
             @RequestPart("product") @Valid ProductDTOs.CreateProductRequest request,
-            @RequestParam("image") MultipartFile image,
+            @RequestPart("image") MultipartFile image,
             Authentication authentication
     ) {
         String sellerEmail = authentication.getName();
