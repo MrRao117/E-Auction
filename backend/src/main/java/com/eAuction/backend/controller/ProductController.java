@@ -6,11 +6,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -89,7 +87,7 @@ public class ProductController {
     // PRODUCT POST/PUT/DELETE ENDPOINTS
     // ==========================================
 
-    @PostMapping(value = "/add")
+    @PostMapping("/add")
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> createProduct(
             @Valid @RequestBody ProductDTOs.CreateProductRequest request,
@@ -110,16 +108,15 @@ public class ProductController {
         return ResponseEntity.ok(productService.verifyProduct(productId, adminEmail, request));
     }
 
-    @PutMapping(value = "/{productId}/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping("/{productId}/update")
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> updateProduct(
             @PathVariable Long productId,
-            @RequestPart("product") @Valid ProductDTOs.CreateProductRequest request,
-            @RequestPart(value = "image", required = false) MultipartFile image,
+            @Valid @RequestBody ProductDTOs.CreateProductRequest request,
             Authentication authentication
     ) {
         String sellerEmail = authentication.getName();
-        return ResponseEntity.ok(productService.updateProduct(productId, request, image, sellerEmail));
+        return ResponseEntity.ok(productService.updateProduct(productId, request, sellerEmail));
     }
 
     @DeleteMapping("/{productId}/delete")
