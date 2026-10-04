@@ -50,7 +50,7 @@ public class ProductDTOs {
         @Positive(message = "Base price must be greater than 0")
         private BigDecimal basePrice;
 
-        private String imageUrl;
+        // private String imageUrl;
     }
 
     @Data
