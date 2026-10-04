@@ -59,7 +59,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "categories")
     public List<ProductDTOs.CategoryResponse> getAllCategories() {
         log.info("Fetching all product categories");
 
