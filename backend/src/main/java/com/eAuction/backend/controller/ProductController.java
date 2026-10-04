@@ -89,15 +89,14 @@ public class ProductController {
     // PRODUCT POST/PUT/DELETE ENDPOINTS
     // ==========================================
 
-    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/add")
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> createProduct(
-            @RequestPart("product") @Valid ProductDTOs.CreateProductRequest request,
-            @RequestPart("image") MultipartFile image,
+            @Valid @RequestBody ProductDTOs.CreateProductRequest request,
             Authentication authentication
     ) {
         String sellerEmail = authentication.getName();
-        return new ResponseEntity<>(productService.createProduct(request, image, sellerEmail), HttpStatus.CREATED);
+        return new ResponseEntity<>(productService.createProduct(request, sellerEmail), HttpStatus.CREATED);
     }
 
     @PutMapping("/{productId}/verify")
