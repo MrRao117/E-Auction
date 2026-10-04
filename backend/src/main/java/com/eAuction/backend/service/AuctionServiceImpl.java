@@ -115,8 +115,8 @@ public class AuctionServiceImpl implements AuctionService {
     @Scheduled(fixedRate = 5000)
     @SchedulerLock(
             name = "AuctionService_processScheduledToActiveAuctions",
-            lockAtMostFor = "4s",
-            lockAtLeastFor = "1s"
+            lockAtMostFor = "1m",
+            lockAtLeastFor = "0s"
     )
     public void processScheduledToActiveAuctions() {
         List<Auction> scheduledAuctions = auctionRepository
@@ -137,8 +137,8 @@ public class AuctionServiceImpl implements AuctionService {
     @Scheduled(fixedRate = 5000)
     @SchedulerLock(
             name = "AuctionService_processActiveToEndedAuctions",
-            lockAtMostFor = "4s",
-            lockAtLeastFor = "1s"
+            lockAtMostFor = "1m",
+            lockAtLeastFor = "0s"
     )
     public void processActiveToEndedAuctions() {
         List<Auction> activeAuctions = auctionRepository
