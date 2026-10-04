@@ -12,14 +12,6 @@ axiosClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // JSON for normal requests
-    // Let browser/Axios set multipart/form-data + boundary for FormData
-    if (config.data instanceof FormData) {
-      delete config.headers["Content-Type"];
-    } else {
-      config.headers["Content-Type"] = "application/json";
-    }
-
     return config;
   },
   (error) => Promise.reject(error)
