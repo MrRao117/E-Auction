@@ -26,9 +26,11 @@ public class RateLimitConfig {
 
     @Bean
     public ProxyManager<byte[]> proxyManager() {
-        String uri = "redis://" + (redisPassword.isEmpty() ? "" : ":" + redisPassword + "@") + redisHost + ":" + redisPort;
+        // Support both standard redis and secure rediss if your provider requires TLS
+        String scheme = (redisPort == 6380 || redisHost.contains("aivencloud") || redisHost.contains("upstash")) ? "rediss" : "redis";
+        String uri = scheme + "://" + (redisPassword.isEmpty() ? "" : ":" + redisPassword + "@") + redisHost + ":" + redisPort;
+        
         RedisClient redisClient = RedisClient.create(uri);
-
         StatefulRedisConnection<byte[], byte[]> connection = redisClient.connect(new ByteArrayCodec());
 
         return Bucket4jLettuce.casBasedBuilder(connection)
