@@ -1,6 +1,5 @@
 package com.eAuction.backend.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -11,33 +10,12 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Value("${activemq.relay.host:localhost}")
-    private String relayHost;
-
-    @Value("${activemq.client.login:admin}")
-    private String clientLogin;
-
-    @Value("${activemq.client.passcode:admin}")
-    private String clientPasscode;
-
-    @Value("${activemq.system.login:admin}")
-    private String systemLogin;
-
-    @Value("${activemq.system.passcode:admin}")
-    private String systemPasscode;
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        // Hooks STOMP broker relay to ActiveMQ using externalized properties
-        config.enableStompBrokerRelay("/topic", "/queue")
-                .setRelayHost(relayHost)
-                .setRelayPort(61613)
-                .setClientLogin(clientLogin)
-                .setClientPasscode(clientPasscode)
-                .setSystemLogin(systemLogin)
-                .setSystemPasscode(systemPasscode);
+        // Uses Spring's built-in simple broker (in-memory) instead of external ActiveMQ
+        config.enableSimpleBroker("/topic", "/queue");
 
-        // Designates the prefix for messages bound for methods annotated with @MessageMapping
+        // Prefix for client-to-server messages bound for @MessageMapping methods
         config.setApplicationDestinationPrefixes("/app");
     }
 
