@@ -93,11 +93,11 @@ public class ProductController {
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> createProduct(
             @RequestPart("product") @Valid ProductDTOs.CreateProductRequest request,
-            @RequestParam("image") List<MultipartFile> images,
+            @RequestParam("image") MultipartFile image,
             Authentication authentication
     ) {
         String sellerEmail = authentication.getName();
-        return new ResponseEntity<>(productService.createProduct(request, images, sellerEmail), HttpStatus.CREATED);
+        return new ResponseEntity<>(productService.createProduct(request, image, sellerEmail), HttpStatus.CREATED);
     }
 
     @PutMapping("/{productId}/verify")
