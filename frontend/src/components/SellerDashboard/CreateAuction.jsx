@@ -434,7 +434,6 @@ export default function CreateAuction() {
         pname: product.productName.trim(),
         basePrice: Number(product.basePrice),
         description: product.description.trim(),
-        imageUrl: null,
       };
       formData.append(
         "product",
