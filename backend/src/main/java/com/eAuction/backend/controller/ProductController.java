@@ -110,7 +110,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.verifyProduct(productId, adminEmail, request));
     }
 
-    @PutMapping(value = "/{productId}/update", consumes = {"multipart/form-data"})
+    @PutMapping(value = "/{productId}/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> updateProduct(
             @PathVariable Long productId,
