@@ -302,9 +302,21 @@ export default function CreateAuction() {
       return;
     }
 
+    // Convert the selected photos to data URLs for the JSON imageUrl field.
+    const readFileAsDataUrl = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error(`Could not read ${file.name}`));
+        reader.readAsDataURL(file);
+      });
 
     try {
       setIsAddingProduct(true);
+
+      const imageUrls = await Promise.all(
+        productImages.map((file) => readFileAsDataUrl(file)),
+      );
 
       let categoryId;
       let resolvedCategoryName = "";
@@ -428,22 +440,15 @@ export default function CreateAuction() {
         throw new Error("A valid category ID could not be resolved.");
       }
 
-      const formData = new FormData();
       const productData = {
         categoryId: Number(categoryId),
         pname: product.productName.trim(),
         basePrice: Number(product.basePrice),
         description: product.description.trim(),
+        imageUrl: JSON.stringify(imageUrls),
       };
-      formData.append(
-        "product",
-        new Blob([JSON.stringify(productData)], {
-          type: "application/json",
-        }),
-      );
-      formData.append("image", productImages[0], productImages[0].name);
 
-      const savedProduct = await createProduct(formData);
+      const savedProduct = await createProduct(productData);
 
       const categoryNameForProduct =
         resolvedCategoryName ||
