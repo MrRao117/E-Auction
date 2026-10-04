@@ -129,21 +129,6 @@ public class ProductServiceImpl implements ProductService {
         return mapToProductResponse(product);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public ProductDTOs.ProductResponse getProductById(Long productId) {
-        log.info("Fetching product details for ID: {}", productId);
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> {
-                    log.warn("Product not found with ID: {}", productId);
-                    return new ResourceNotFoundException("Product not found with id: " + productId);
-                });
-
-        return mapToProductResponse(product);
-    }
-
-
 
     @Override
     @Transactional(readOnly = true)
