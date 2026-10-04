@@ -249,34 +249,32 @@ export default function CreateAuction() {
   };
 
   const handleImageChange = (event) => {
-    const files = Array.from(event.target.files || []);
+    const file = event.target.files?.[0];
 
-    if (files.length < 1) {
-      alert("Please select at least 1 product photo.");
+    if (!file) {
+      alert("Please select a product photo.");
       setProductImages([]);
       return;
     }
 
-    const validFiles = files.filter((file) => {
-      const validType = ["image/jpeg", "image/jpg", "image/png"].includes(
-        file.type,
-      );
-      const validSize = file.size <= 5 * 1024 * 1024;
-      return validType && validSize;
-    });
+    const validType = ["image/jpeg", "image/jpg", "image/png"].includes(
+      file.type,
+    );
+    const validSize = file.size <= 5 * 1024 * 1024;
 
-    if (validFiles.length < 1) {
+    if (!validType || !validSize) {
       alert(
-        "Please select at least 1 valid JPG, JPEG, or PNG photo. Each photo must be below 5MB.",
+        "Please select a valid JPG, JPEG, or PNG photo. The photo must be below 5MB.",
       );
       setProductImages([]);
       return;
     }
 
-    setProductImages(validFiles);
+    // The current Spring Boot endpoint accepts one MultipartFile named `image`.
+    setProductImages([file]);
   };
 
-const handleAddProduct = async () => {
+  const handleAddProduct = async () => {
     if (!product.productName.trim()) {
       alert("Please enter product name.");
       return;
@@ -426,16 +424,28 @@ const handleAddProduct = async () => {
       }
 
       // ── BUILD MULTIPART FORM DATA ──────────────────────────
+      // Backend expects:
+      // @RequestPart("product") CreateProductRequest request
+      // @RequestPart("image") MultipartFile image
       const formData = new FormData();
-      formData.append("categoryId", Number(categoryId));
-      formData.append("pname", product.productName.trim());
-      formData.append("basePrice", Number(product.basePrice));
-      formData.append("description", product.description.trim());
 
-      // Append each raw file object to the form data
-      productImages.forEach((file) => {
-        formData.append("image", file); // Ensure this matches your backend @RequestParam / @RequestPart name (e.g., "image" or "files")
-      });
+      const productData = {
+        pname: product.productName.trim(),
+        description: product.description.trim(),
+        basePrice: Number(product.basePrice),
+        categoryId: Number(categoryId),
+      };
+
+      // Send product details as a JSON multipart part named `product`.
+      formData.append(
+        "product",
+        new Blob([JSON.stringify(productData)], {
+          type: "application/json",
+        }),
+      );
+
+      // Send the image as a separate multipart file part named `image`.
+      formData.append("image", productImages[0]);
 
       const savedProduct = await createProduct(formData);
       // ───────────────────────────────────────────────────────
@@ -744,16 +754,15 @@ const handleAddProduct = async () => {
               <div className="product-image-upload">
                 <label htmlFor="productImages" className="upload-placeholder">
                   <div className="upload-icon">↥</div>
-                  <strong>Click to upload product photos</strong>
-                  <span>Select at least 1 photo</span>
-                  <small>JPG, PNG, JPEG • Maximum 5MB per image</small>
+                  <strong>Click to upload product photo</strong>
+                  <span>Select 1 photo</span>
+                  <small>JPG, PNG, JPEG • Maximum 5MB</small>
                 </label>
 
                 <input
                   id="productImages"
                   type="file"
                   accept="image/png,image/jpeg,image/jpg"
-                  multiple
                   hidden
                   onChange={handleImageChange}
                 />
@@ -765,10 +774,10 @@ const handleAddProduct = async () => {
                     productImages.length >= 1 ? "photo-count-valid" : ""
                   }`}
                 >
-                  {productImages.length} photos selected
+                  {productImages.length} photo selected
                   {productImages.length >= 1
-                    ? " ✓ Minimum requirement satisfied"
-                    : " — At least 1 required"}
+                    ? " ✓ Photo selected"
+                    : " — 1 required"}
                 </div>
               )}
 
