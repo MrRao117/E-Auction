@@ -276,7 +276,7 @@ export default function CreateAuction() {
     setProductImages(validFiles);
   };
 
-  const handleAddProduct = async () => {
+const handleAddProduct = async () => {
     if (!product.productName.trim()) {
       alert("Please enter product name.");
       return;
@@ -302,21 +302,8 @@ export default function CreateAuction() {
       return;
     }
 
-    // Convert the selected photos to data URLs for the JSON imageUrl field.
-    const readFileAsDataUrl = (file) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = () => reject(new Error(`Could not read ${file.name}`));
-        reader.readAsDataURL(file);
-      });
-
     try {
       setIsAddingProduct(true);
-
-      const imageUrls = await Promise.all(
-        productImages.map((file) => readFileAsDataUrl(file)),
-      );
 
       let categoryId;
       let resolvedCategoryName = "";
@@ -324,7 +311,6 @@ export default function CreateAuction() {
       if (useCustomCategory) {
         const requestedCategoryName = category.trim();
 
-        // Reuse a category already loaded from the backend (case-insensitive).
         let existingCategory = categories.find(
           (item) =>
             String(item.categoryName ?? "")
@@ -374,7 +360,6 @@ export default function CreateAuction() {
                 : [...previous, normalizedCreatedCategory];
             });
           } catch (createError) {
-            // A 409 means the name already exists. Refresh categories and reuse its ID.
             if (createError?.response?.status !== 409) {
               throw createError;
             }
@@ -407,7 +392,7 @@ export default function CreateAuction() {
 
               if (existingCategory?.categoryId == null) {
                 throw new Error(
-                  `The category "${requestedCategoryName}" already exists, but its ID could not be retrieved. Check the categories API and database connection.`,
+                  `The category "${requestedCategoryName}" already exists, but its ID could not be retrieved.`,
                 );
               }
 
@@ -423,7 +408,7 @@ export default function CreateAuction() {
                 throw refreshError;
               }
               throw new Error(
-                `The category "${requestedCategoryName}" already exists (HTTP 409), but the categories list could not be loaded. Please fix GET /products/categories/all first.`,
+                `The category "${requestedCategoryName}" already exists, but categories could not be loaded.`,
               );
             }
           }
@@ -440,15 +425,20 @@ export default function CreateAuction() {
         throw new Error("A valid category ID could not be resolved.");
       }
 
-      const productData = {
-        categoryId: Number(categoryId),
-        pname: product.productName.trim(),
-        basePrice: Number(product.basePrice),
-        description: product.description.trim(),
-        imageUrl: JSON.stringify(imageUrls),
-      };
+      // ── BUILD MULTIPART FORM DATA ──────────────────────────
+      const formData = new FormData();
+      formData.append("categoryId", Number(categoryId));
+      formData.append("pname", product.productName.trim());
+      formData.append("basePrice", Number(product.basePrice));
+      formData.append("description", product.description.trim());
 
-      const savedProduct = await createProduct(productData);
+      // Append each raw file object to the form data
+      productImages.forEach((file) => {
+        formData.append("image", file); // Ensure this matches your backend @RequestParam / @RequestPart name (e.g., "image" or "files")
+      });
+
+      const savedProduct = await createProduct(formData);
+      // ───────────────────────────────────────────────────────
 
       const categoryNameForProduct =
         resolvedCategoryName ||
