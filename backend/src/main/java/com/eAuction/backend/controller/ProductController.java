@@ -89,7 +89,7 @@ public class ProductController {
     // PRODUCT POST/PUT/DELETE ENDPOINTS
     // ==========================================
 
-    @PostMapping(value = "/add", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTOs.ProductResponse> createProduct(
             @RequestPart("product") @Valid ProductDTOs.CreateProductRequest request,
