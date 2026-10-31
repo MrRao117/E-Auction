@@ -81,6 +81,28 @@ public class UserServiceImpl implements UserService {
         return mapToUserResponse(user);
     }
 
+    @Override
+    public void forgotPassword(AuthDTOs.ForgotPasswordRequest request) {
+        String normalizedEmail = request.getEmail().toLowerCase().trim();
+        User user = userRepository.findByEmail(normalizedEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + normalizedEmail));
+        
+        // Here you can integrate JavaMailSender to send an email with a reset token/link.
+        // For now, it validates that the user exists securely.
+        log.info("Password reset requested for verified user email: {}", normalizedEmail);
+    }
+
+    @Override
+    public void resetPassword(AuthDTOs.ResetPasswordRequest request) {
+        String normalizedEmail = request.Email().toLowerCase().trim();
+        User user = userRepository.findByEmail(normalizedEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + normalizedEmail));
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+        log.info("Password successfully reset for user email: {}", normalizedEmail);
+    }
+
     private AuthDTOs.UserResponse mapToUserResponse(User user) {
         return AuthDTOs.UserResponse.builder()
                 .name(user.getName())
