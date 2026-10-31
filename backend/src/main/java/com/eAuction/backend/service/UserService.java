@@ -9,4 +9,7 @@ public interface UserService {
     AuthDTOs.AuthResponse loginUser(AuthDTOs.LoginRequest request);
 
     AuthDTOs.UserResponse getUserByEmail(String name);
+
+    void forgotPassword(AuthDTOs.ForgotPasswordRequest request);
+    void resetPassword(AuthDTOs.ResetPasswordRequest request);
 }
