@@ -33,9 +33,12 @@ public class AuctionController {
 
     @GetMapping("/my-auctions")
     @PreAuthorize("hasRole('SELLER')")
-    public ResponseEntity<List<AuctionDTOs.AuctionResponse>> getMyAuctions(Authentication authentication) {
+    public ResponseEntity<List<AuctionDTOs.AuctionResponse>> getMyAuctions(
+            @RequestParam(required = false) AuctionStatus status,
+            Authentication authentication
+    ) {
         String sellerEmail = authentication.getName();
-        return ResponseEntity.ok(auctionService.getAuctionsForLoggedInSeller(sellerEmail));
+        return ResponseEntity.ok(auctionService.getAuctionsForLoggedInSeller(sellerEmail, status));
     }
 
     @PutMapping("/{auctionId}/cancel")
