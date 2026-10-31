@@ -69,6 +69,7 @@ public class ProductDTOs {
         private String sellerEmail;
         private String sellerName;
         private String remarks;
+        private LocalDateTime createdAt;
     }
 
     @Data
