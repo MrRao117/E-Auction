@@ -45,6 +45,11 @@ public class Product {
     @JoinColumn(name = "verified_by", referencedColumnName = "admin_id")
     private Admin verifiedBy;
 
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+    
+
     @Column(columnDefinition = "TEXT")
     private String remarks;
 }
