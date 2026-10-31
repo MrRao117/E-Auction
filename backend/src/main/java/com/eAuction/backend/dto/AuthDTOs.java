@@ -83,4 +83,26 @@ public class AuthDTOs {
         private Role userRole;
         private String mobileNo;
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ForgotPasswordRequest {
+        @NotBlank(message = "Email is required")
+        @Email(message = "Invalid email format")
+        private String email;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ResetPasswordRequest {
+        @NotBlank(message = "Email is required")
+        @Email(message = "Invalid email format")
+        private String email;
+
+        @NotBlank(message = "New password is required")
+        @Size(min = 6, message = "Password must be at least of 6 characters")
+        private String newPassword;
+    }
 }
