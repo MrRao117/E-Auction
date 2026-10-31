@@ -239,6 +239,7 @@ public class ProductServiceImpl implements ProductService {
         product.setImageURL(request.getImageUrl());
         // Re-verify product if seller modifies details
         product.setVerified(false);
+        product.setCreatedAt(LocalDateTime.now());
 
         Product updatedProduct = productRepository.save(product);
         return mapToProductResponse(updatedProduct);
