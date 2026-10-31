@@ -23,6 +23,7 @@ public interface ProductService {
     List<ProductDTOs.ProductResponse> getMyProducts(String sellerEmail); // SELLER ONLY - Seller inventory
     List<ProductDTOs.ProductResponse> getProductsBySellerId(Long sellerId);
     List<ProductDTOs.ProductResponse> getProductsByCategory(Long categoryId);
+    List<ProductDTOs.ProductResponse> getProductsByCategoryName(String categoryName);
 
     ProductDTOs.ProductResponse updateProduct(Long productId, ProductDTOs.CreateProductRequest request, String sellerEmail);
 
