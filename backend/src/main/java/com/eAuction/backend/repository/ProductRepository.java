@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByIsVerifiedFalse(); // Useful for Admin verification queue
 
     List<Product> findByCategoryIdCategoryId(Long categoryId);
+
+    List<Product> findByCategoryId_CategoryNameIgnoreCase(String categoryName);
 }
