@@ -92,7 +92,7 @@ public class MiscServiceImpl implements MiscService {
                 .collect(Collectors.toList());
     }
 
-    @Override
+@Override
     public MiscDTOs.KycResponse updateKycStatus(Long kycId, String adminEmail, VerificationStatus status, String remarks) {
         String normalizedAdminEmail = adminEmail.toLowerCase().trim();
         log.info("Admin Email {} updating KYC ID {} to status: {}", normalizedAdminEmail, kycId, status);
@@ -107,14 +107,14 @@ public class MiscServiceImpl implements MiscService {
         kyc.setVerificationStatus(status);
         kyc.setVerifiedAt(LocalDateTime.now());
 
+        User user = kyc.getUser();
+
         if (status == VerificationStatus.VERIFIED) {
-            User user = kyc.getUser();
             user.setUserRole(Role.SELLER);
             user.setIsVerified(true);
             userRepository.save(user);
             log.info("User email {} promoted from BUYER to SELLER role upon KYC approval.", user.getEmail());
         } else if (status == VerificationStatus.REJECTED) {
-            User user = kyc.getUser();
             user.setUserRole(Role.BUYER);
             user.setIsVerified(false);
             userRepository.save(user);
@@ -125,6 +125,8 @@ public class MiscServiceImpl implements MiscService {
         }
 
         KycVerification updatedKyc = kycRepository.save(kyc);
+        
+        
         String message = "Your KYC application has been " + status.name().toLowerCase() + 
                 (remarks != null && !remarks.isBlank() ? ". Remarks: " + remarks : ".");
         notificationService.createNotification(user, message);
