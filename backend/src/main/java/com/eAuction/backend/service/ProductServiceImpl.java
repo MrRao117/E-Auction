@@ -244,9 +244,9 @@ public class ProductServiceImpl implements ProductService {
         return mapToProductResponse(updatedProduct);
     }
 
-    @Override
+   @Override
     @CacheEvict(value = "verifiedProducts", allEntries = true)
-    public ProductDTOs.ProductResponse verifyProduct(Long productId,String adminEmail, ProductDTOs.VerifyProductRequest request) {
+    public ProductDTOs.ProductResponse verifyProduct(Long productId, String adminEmail, ProductDTOs.VerifyProductRequest request) {
         log.info("Verifying product ID: {} by admin email: {}", productId, adminEmail);
 
         Product product = productRepository.findById(productId)
@@ -258,7 +258,8 @@ public class ProductServiceImpl implements ProductService {
         Admin admin = adminRepository.findByEmail(adminEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Admin not found with email: " + adminEmail));
 
-        product.setVerified(request.getIsVerified() != null ? request.getIsVerified() : true);
+        boolean isVerified = request.getIsVerified() != null ? request.getIsVerified() : true;
+        product.setVerified(isVerified);
         product.setVerifiedBy(admin);
         product.setRemarks(request.getRemarks());
 
@@ -266,7 +267,8 @@ public class ProductServiceImpl implements ProductService {
         log.info("Product ID: {} verification status updated to: {}", productId, verifiedProduct.isVerified());
 
         if (verifiedProduct.getSeller() != null) {
-            String statusText = isVerified ? "approved & verified" : "rejected";
+            // FIXED: Use verifiedProduct.isVerified() instead of undefined 'isVerified' variable
+            String statusText = verifiedProduct.isVerified() ? "approved & verified" : "rejected";
             String remarksText = (request.getRemarks() != null && !request.getRemarks().isBlank()) 
                     ? " Remarks: " + request.getRemarks() : "";
             
