@@ -14,6 +14,7 @@ import java.util.List;
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
     List<Auction> findByAuctionStatus(AuctionStatus status);
     List<Auction> findByProductSellerUserId(Long sellerId);
+    List<Auction> findByProduct_Seller_UserIdAndAuctionStatus(Long userId, AuctionStatus auctionStatus);
     boolean existsByProductProductIdAndAuctionStatusIn(Long productId, List<AuctionStatus> statuses);
 
     List<Auction> findByAuctionStatusAndStartTimeBefore(AuctionStatus auctionStatus, LocalDateTime now);
