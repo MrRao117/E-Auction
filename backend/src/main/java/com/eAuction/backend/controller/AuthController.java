@@ -29,4 +29,16 @@ public class AuthController {
         AuthDTOs.AuthResponse response = userService.loginUser(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@Valid @RequestBody AuthDTOs.ForgotPasswordRequest request) {
+        userService.forgotPassword(request);
+        return ResponseEntity.ok("Password reset instructions sent successfully.");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody AuthDTOs.ResetPasswordRequest request) {
+        userService.resetPassword(request);
+        return ResponseEntity.ok("Password has been reset successfully.");
+    }
 }
