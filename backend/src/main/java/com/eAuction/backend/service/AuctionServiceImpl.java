@@ -32,6 +32,7 @@ public class AuctionServiceImpl implements AuctionService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final AuctionStateTransitionService transitionService;
+    private final NotificationService notificationService;
 
     @Override
     public AuctionDTOs.AuctionResponse createAuction(AuctionDTOs.CreateAuctionRequest request, String sellerEmail) {
@@ -210,6 +211,11 @@ public class AuctionServiceImpl implements AuctionService {
         auction.setAuctionStatus(newStatus);
         Auction updatedAuction = auctionRepository.save(auction);
 
+        if (auction.getProduct() != null && auction.getProduct().getSeller() != null) {
+            String message = "Your auction '" + auction.getTitle() + "' status has been updated to " + newStatus + ".";
+            notificationService.createNotification(auction.getProduct().getSeller(), message);
+        }
+        
         log.info("Auction ID: {} status updated to {}", auctionId, updatedAuction.getAuctionStatus());
         return mapToAuctionResponse(updatedAuction);
     }
