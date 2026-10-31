@@ -32,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
     private final UserRepository userRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final AdminRepository adminRepository;
+    private final NotificationService notificationService;
 
 
     @Override
@@ -263,6 +264,15 @@ public class ProductServiceImpl implements ProductService {
 
         Product verifiedProduct = productRepository.save(product);
         log.info("Product ID: {} verification status updated to: {}", productId, verifiedProduct.isVerified());
+
+        if (verifiedProduct.getSeller() != null) {
+            String statusText = isVerified ? "approved & verified" : "rejected";
+            String remarksText = (request.getRemarks() != null && !request.getRemarks().isBlank()) 
+                    ? " Remarks: " + request.getRemarks() : "";
+            
+            String message = "Your product '" + verifiedProduct.getPname() + "' has been " + statusText + "." + remarksText;
+            notificationService.createNotification(verifiedProduct.getSeller(), message);
+        }
 
         return mapToProductResponse(verifiedProduct);
     }
