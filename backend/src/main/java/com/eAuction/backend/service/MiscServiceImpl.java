@@ -28,6 +28,7 @@ public class MiscServiceImpl implements MiscService {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
     private final ProductRepository productRepository;
+    private final NotificationService notificationService;
 
     @Override
     public MiscDTOs.KycResponse submitKyc(MiscDTOs.KycSubmissionRequest request, String userEmail) {
@@ -124,6 +125,10 @@ public class MiscServiceImpl implements MiscService {
         }
 
         KycVerification updatedKyc = kycRepository.save(kyc);
+        String message = "Your KYC application has been " + status.name().toLowerCase() + 
+                (remarks != null && !remarks.isBlank() ? ". Remarks: " + remarks : ".");
+        notificationService.createNotification(user, message);
+        
         return mapToKycResponse(updatedKyc);
     }
 
