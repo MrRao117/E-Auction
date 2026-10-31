@@ -100,12 +100,20 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AuctionDTOs.AuctionResponse> getAuctionsForLoggedInSeller(String sellerEmail) {
+    public List<AuctionDTOs.AuctionResponse> getAuctionsForLoggedInSeller(String sellerEmail, AuctionStatus status) {
         User seller = userRepository.findByEmail(sellerEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Seller not found with email: " + sellerEmail));
 
-        return auctionRepository.findByProductSellerUserId(seller.getUserId())
-                .stream()
+        List<Auction> auctions;
+        if (status != null) {
+            log.info("Fetching auctions for seller ID: {} with status: {}", seller.getUserId(), status);
+            auctions = auctionRepository.findByProduct_Seller_UserIdAndAuctionStatus(seller.getUserId(), status);
+        } else {
+            log.info("Fetching all auctions for seller ID: {}", seller.getUserId());
+            auctions = auctionRepository.findByProductSellerUserId(seller.getUserId());
+        }
+
+        return auctions.stream()
                 .map(this::mapToAuctionResponse)
                 .toList();
     }
