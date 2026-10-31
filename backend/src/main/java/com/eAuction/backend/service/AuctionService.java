@@ -9,8 +9,7 @@ public interface AuctionService {
 
     AuctionDTOs.AuctionResponse createAuction(AuctionDTOs.CreateAuctionRequest request, String sellerEmail);
 
-    List<AuctionDTOs.AuctionResponse> getAuctionsForLoggedInSeller(String sellerEmail);
-
+    List<AuctionDTOs.AuctionResponse> getAuctionsForLoggedInSeller(String sellerEmail, AuctionStatus status);
     AuctionDTOs.AuctionResponse getAuctionById(Long auctionId);
 
     List<AuctionDTOs.AuctionResponse> getAllAuctions();
