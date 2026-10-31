@@ -76,6 +76,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductsByCategory(categoryId));
     }
 
+    @GetMapping("/category/name/{categoryName}")
+    public ResponseEntity<List<ProductDTOs.ProductResponse>> getProductsByCategoryName(@PathVariable String categoryName) {
+        return ResponseEntity.ok(productService.getProductsByCategoryName(categoryName));
+    }
+
     // --- DYNAMIC PATH VARIABLE GET (MUST BE LAST) ---
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDTOs.ProductResponse> getProductById(@PathVariable Long productId) {
