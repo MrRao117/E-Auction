@@ -319,6 +319,7 @@ public class ProductServiceImpl implements ProductService {
                 .sellerEmail(product.getSeller() != null ? product.getSeller().getEmail() : null)
                 .sellerName(product.getSeller() != null ? product.getSeller().getName() : null)
                 .remarks(product.getRemarks())
+                .createdAt(product.getCreatedAt())
                 .build();
     }
 }
