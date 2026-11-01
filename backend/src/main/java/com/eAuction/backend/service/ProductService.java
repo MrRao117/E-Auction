@@ -25,7 +25,6 @@ public interface ProductService {
     List<ProductDTOs.ProductResponse> getProductsByCategory(Long categoryId);
     List<ProductDTOs.ProductResponse> getProductsByCategoryName(String categoryName);
 
-    List<ProductDTOs.ProductResponse> getProductsByCategoryName(String categoryName);
 
     ProductDTOs.ProductResponse updateProduct(Long productId, ProductDTOs.CreateProductRequest request, String sellerEmail);
 
