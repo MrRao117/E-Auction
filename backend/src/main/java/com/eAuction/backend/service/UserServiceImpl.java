@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(AuthDTOs.ResetPasswordRequest request) {
-        String normalizedEmail = request.Email().toLowerCase().trim();
+        String normalizedEmail = request.getEmail().toLowerCase().trim();
         User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + normalizedEmail));
 
