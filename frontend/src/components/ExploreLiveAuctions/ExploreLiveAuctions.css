@@ -1,0 +1,292 @@
+/* =========================================
+   LIVE AUCTIONS SECTION
+========================================= */
+
+.live-auctions-section {
+  width: 100%;
+  min-width: 0;
+  margin-top: 30px;
+}
+
+/* =========================================
+   HEADING LAYOUT
+========================================= */
+
+.live-auctions-section .auction-heading {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.live-auctions-section .auction-heading-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+/* =========================================
+   LIVE AUCTIONS HEADING
+========================================= */
+
+.live-auctions-section .live-auction-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 10px 0 0;
+  color: #161616;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* =========================================
+   LIVE BADGE
+========================================= */
+
+.live-auctions-section .live-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 14px;
+  background-color: #e53935;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.live-auctions-section .live-indicator {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: live-pulse 1.5s infinite;
+}
+
+/* =========================================
+   LIVE BADGE ANIMATION
+========================================= */
+
+@keyframes live-pulse {
+  0% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6);
+  }
+
+  70% {
+    opacity: 0.8;
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0);
+  }
+
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/* =========================================
+   SUBTITLE
+========================================= */
+
+.live-auctions-section .auction-heading h3 {
+  margin: 4px 0 0;
+  color: #030303;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* =========================================
+   VIEW ALL AUCTIONS
+========================================= */
+
+.live-auctions-section .auction-view-all {
+  padding: 0;
+  margin-top: 35px;
+  border: none;
+  background: transparent;
+  color: #075d38;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.live-auctions-section .auction-view-all:hover {
+  color: #064b2e;
+  transform: translateX(2px);
+}
+
+.live-auctions-section .auction-view-all:hover::after {
+  content: " >";
+  margin-left: 3px;
+}
+
+/* =========================================
+   LIVE AUCTION CARDS
+   DESKTOP: 6 COLUMNS
+========================================= */
+
+.live-auctions-section .live-auctions-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: 12px;
+  row-gap: 20px;
+  align-items: stretch;
+}
+
+/* Prevent cards from overflowing their grid columns */
+
+.live-auctions-section .live-auctions-grid > * {
+  min-width: 0;
+  width: 100%;
+}
+
+/* =========================================
+   LOADING, ERROR AND EMPTY STATES
+========================================= */
+
+.live-auctions-section .no-auctions {
+  width: 100%;
+  padding: 24px 16px;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.live-auctions-section .no-auctions h3 {
+  margin: 0 0 8px;
+  color: #161616;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.live-auctions-section .no-auctions p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.live-auctions-section .no-auctions button {
+  margin-top: 14px;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #075d38;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.live-auctions-section .no-auctions button:hover {
+  background-color: #064b2e;
+}
+
+/* =========================================
+   TABLETS
+   3 COLUMNS
+========================================= */
+
+@media (max-width: 900px) {
+  .live-auctions-section .live-auctions-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 12px;
+    row-gap: 16px;
+  }
+}
+
+/* =========================================
+   MOBILE
+   2 COLUMNS
+========================================= */
+
+@media (max-width: 600px) {
+  .live-auctions-section .auction-heading {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .live-auctions-section .live-auction-heading {
+    font-size: 18px;
+  }
+
+  .live-auctions-section .live-badge {
+    padding: 7px 12px;
+    font-size: 13px;
+    gap: 7px;
+  }
+
+  .live-auctions-section .live-indicator {
+    width: 8px;
+    height: 8px;
+  }
+
+  .live-auctions-section .auction-heading h3 {
+    font-size: 13px;
+  }
+
+  .live-auctions-section .auction-view-all {
+    margin-top: 35px;
+    font-size: 12px;
+  }
+
+  .live-auctions-section .live-auctions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 12px;
+    row-gap: 16px;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+   KEEP 2 COLUMNS
+========================================= */
+
+@media (max-width: 420px) {
+  .live-auctions-section .auction-heading {
+    flex-wrap: wrap;
+  }
+
+  .live-auctions-section .live-auction-heading {
+    font-size: 16px;
+  }
+
+  .live-auctions-section .live-badge {
+    padding: 6px 11px;
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .live-auctions-section .live-indicator {
+    width: 7px;
+    height: 7px;
+  }
+
+  .live-auctions-section .live-auctions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .live-auctions-section .auction-view-all {
+    margin-top: 8px;
+  }
+}

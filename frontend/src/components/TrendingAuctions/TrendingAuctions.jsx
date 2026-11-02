@@ -21,9 +21,9 @@ export default function TrendingAuctions({
   const [error, setError] = useState("");
   const [now, setNow] = useState(() => Date.now());
 
-  /* =========================================================
+  /* 
      REAL-TIME CLOCK
-  ========================================================= */
+   */
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -33,9 +33,9 @@ export default function TrendingAuctions({
     return () => clearInterval(timer);
   }, []);
 
-  /* =========================================================
+  /* 
      FETCH ALL AUCTIONS AND PRODUCT DETAILS
-  ========================================================= */
+   */
 
   useEffect(() => {
     let isMounted = true;
@@ -89,15 +89,15 @@ export default function TrendingAuctions({
     };
   }, []);
 
-  /* =========================================================
+  /* 
      UPCOMING AUCTIONS
-  ========================================================= */
+   */
 
   const upcomingAuctions = getUpcomingAuctions(auctions, now).slice(0, 6);
 
-  /* =========================================================
+  /* 
      OPEN PRODUCT DETAILS
-  ========================================================= */
+   */
 
   const handleProductClick = (auction) => {
     if (typeof onProductDetails !== "function") {
@@ -113,9 +113,9 @@ export default function TrendingAuctions({
     });
   };
 
-  /* =========================================================
+  /* 
      RETURN
-  ========================================================= */
+   */
 
   return (
     <section className="upcoming-section">

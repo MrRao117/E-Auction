@@ -17,18 +17,22 @@
 /* =========================================================
    MODAL
 ========================================================= */
+
 .seller-modal {
   position: relative;
-  width: min(990px, 100%);
+  width: min(1150px, calc(100vw - 50px));
+  max-width: 1150px;
   max-height: 92vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 34px 42px 30px;
   box-sizing: border-box;
+  border: 1px solid #e5ece7;
   border-radius: 14px;
   background: #ffffff;
   box-shadow: 0 20px 60px rgba(0, 40, 25, 0.25);
+  font-family: "Inter", sans-serif;
 }
 
 .seller-modal::-webkit-scrollbar {
@@ -49,6 +53,7 @@
   align-items: center;
   justify-content: center;
   border: none;
+  border-radius: 50%;
   background: transparent;
   color: #333333;
   font-size: 29px;
@@ -57,12 +62,14 @@
   cursor: pointer;
   transition:
     color 0.2s ease,
+    background 0.2s ease,
     transform 0.2s ease;
 }
 
 .seller-modal-close:hover {
   color: #087d46;
-  transform: scale(1.08);
+  background: #eef7f1;
+  transform: scale(1.05);
 }
 
 /* =========================================================
@@ -70,13 +77,17 @@
 ========================================================= */
 
 .seller-modal-header {
-  text-align: center;
-  padding: 0 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0;
   margin-bottom: 28px;
+  text-align: left;
 }
 
 .seller-modal-header h2 {
-  margin: 0 0 7px;
+  margin: 0;
   color: #202522;
   font-size: 27px;
   font-weight: 800;
@@ -84,8 +95,9 @@
 }
 
 .seller-modal-header p {
-  max-width: 650px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   color: #606a65;
   font-size: 14px;
   font-weight: 500;
@@ -98,9 +110,13 @@
 
 .seller-policy-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 38px;
   margin-bottom: 18px;
+}
+
+.seller-policy-section {
+  min-width: 0;
 }
 
 .seller-policy-section h3 {
@@ -115,9 +131,9 @@
 ========================================================= */
 
 .seller-policy-box {
+  display: block;
   width: 100%;
   height: 260px;
-  display: block;
   box-sizing: border-box;
   resize: none;
   padding: 16px;
@@ -132,10 +148,14 @@
   line-height: 1.65;
   overflow-y: auto;
   cursor: default;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .seller-policy-box:focus {
   border-color: #087d46;
+  box-shadow: 0 0 0 2px rgba(8, 125, 70, 0.08);
 }
 
 /* =========================================================
@@ -155,7 +175,7 @@
 }
 
 /* =========================================================
-   AGREEMENT
+   TERMS AND PRIVACY AGREEMENT
 ========================================================= */
 
 .seller-agreement {
@@ -179,8 +199,8 @@
 .seller-agreement input {
   width: 18px;
   height: 18px;
-  margin: 1px 0 0;
   flex-shrink: 0;
+  margin: 1px 0 0;
   accent-color: #087d46;
   cursor: pointer;
 }
@@ -200,7 +220,7 @@
 
 .seller-document-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 38px;
   margin-top: 21px;
 }
@@ -209,6 +229,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
 .seller-field label {
@@ -231,6 +252,10 @@
   font-family: "Inter", sans-serif;
   font-size: 13px;
   font-weight: 500;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .seller-field select {
@@ -243,7 +268,8 @@
   box-shadow: 0 0 0 2px rgba(8, 125, 70, 0.08);
 }
 
-.seller-field input:disabled {
+.seller-field input:disabled,
+.seller-field select:disabled {
   background: #f5f7f6;
   color: #999999;
   cursor: not-allowed;
@@ -258,22 +284,69 @@
 ========================================================= */
 
 .seller-document-note {
-  margin: 7px 0 0;
+  margin: 2px 0 0;
   color: #737c77;
   font-size: 11px;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 /* =========================================================
-   VERIFY NUMBER BUTTON
+   FIELD VALIDATION ERROR
+   Use with: className="seller-field-error"
 ========================================================= */
+
+.seller-field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 2px 0 0;
+  color: #c62828;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.seller-field-error::before {
+  content: "!";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  margin-top: 1px;
+  border: 1px solid #c62828;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* Highlight an invalid input when JSX adds aria-invalid="true". */
+
+.seller-field input[aria-invalid="true"],
+.seller-field select[aria-invalid="true"] {
+  border-color: #d93025;
+  background: #fffafa;
+}
+
+.seller-field input[aria-invalid="true"]:focus,
+.seller-field select[aria-invalid="true"]:focus {
+  border-color: #d93025;
+  box-shadow: 0 0 0 2px rgba(217, 48, 37, 0.09);
+}
+
+/* =========================================================
+   VERIFY DOCUMENT NUMBER BUTTON
+========================================================= */
+
 .verify-number-btn {
+  display: block;
   width: 140px;
   height: 34px;
   margin: 12px auto 0;
   padding: 0 20px;
-  display: block;
   border: none;
   border-radius: 8px;
   background: #087d46;
@@ -295,24 +368,30 @@
   box-shadow: 0 4px 12px rgba(8, 125, 70, 0.18);
 }
 
+.verify-number-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 .verify-number-btn:disabled {
   background: #b9c9c0;
   color: #ffffff;
   cursor: not-allowed;
   opacity: 0.75;
 }
+
 /* =========================================================
    VERIFIED BADGE
 ========================================================= */
 
 .verified-badge {
-  width: 100%;
-  height: 43px;
-  margin-top: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 43px;
   box-sizing: border-box;
+  margin-top: 12px;
+  border: 1px solid #d5e9dc;
   border-radius: 8px;
   background: #eef7f1;
   color: #087d46;
@@ -321,28 +400,88 @@
 }
 
 /* =========================================================
-   VERIFICATION MESSAGE
+   GENERAL VERIFICATION MESSAGE
+   Supports .error and .success
 ========================================================= */
 
 .seller-verification-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
   margin-top: 13px;
-  padding: 9px 12px;
-  border-radius: 7px;
+  padding: 11px 13px;
+  border: 1px solid transparent;
+  border-radius: 8px;
   font-size: 12px;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  animation: seller-message-appear 0.2s ease;
 }
 
 .seller-verification-message.error {
-  border: 1px solid #f0caca;
+  border-color: #f0caca;
   background: #fff4f4;
-  color: #b33a3a;
+  color: #b42318;
 }
 
 .seller-verification-message.success {
-  border: 1px solid #c8dcd0;
-  background: #eef7f1;
+  border-color: #c8e6d1;
+  background: #eef8f1;
   color: #087d46;
+}
+
+/* Optional message icons. */
+
+.seller-verification-message.error::before {
+  content: "!";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  margin-top: 1px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.seller-verification-message.success::before {
+  content: "✓";
+  flex: 0 0 auto;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   API / ACCOUNT FETCH ERROR
+   For the standalone error state
+========================================================= */
+
+.seller-modal-error {
+  padding: 28px 20px;
+  border: 1px solid #f0caca;
+  border-radius: 10px;
+  background: #fff7f7;
+  text-align: center;
+}
+
+.seller-modal-error h2 {
+  margin: 0 0 10px;
+  color: #b42318;
+  font-size: 21px;
+  font-weight: 750;
+}
+
+.seller-modal-error p {
+  margin: 0;
+  color: #6b3434;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 /* =========================================================
@@ -409,7 +548,7 @@
 }
 
 /* =========================================================
-   FOOTER
+   MODAL FOOTER
 ========================================================= */
 
 .seller-modal-footer {
@@ -453,7 +592,92 @@
 }
 
 /* =========================================================
-   RESPONSIVE
+   SUCCESS / ALREADY SELLER / LOADING STATES
+========================================================= */
+
+.seller-verification-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 35px 18px;
+  text-align: center;
+}
+
+.seller-success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 18px;
+  border: 1px solid #cce7d5;
+  border-radius: 50%;
+  background: #eef7f1;
+  color: #087d46;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.seller-verification-success h2 {
+  margin: 0 0 12px;
+  color: #202522;
+  font-size: 23px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.seller-verification-success p {
+  max-width: 540px;
+  margin: 0 0 12px;
+  color: #606a65;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.seller-login-again-btn {
+  min-width: 120px;
+  min-height: 40px;
+  margin-top: 12px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 8px;
+  background: #087d46;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.seller-login-again-btn:hover {
+  background: #075b42;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   MESSAGE ANIMATION
+========================================================= */
+
+@keyframes seller-message-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
 ========================================================= */
 
 @media (max-width: 800px) {
@@ -463,14 +687,23 @@
 
   .seller-policy-grid,
   .seller-document-section {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 20px;
   }
 
   .seller-policy-box {
     height: 220px;
   }
+
+  .seller-otp-content .seller-field {
+    width: 230px;
+    max-width: 100%;
+  }
 }
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
 
 @media (max-width: 500px) {
   .seller-modal-overlay {
@@ -478,13 +711,20 @@
   }
 
   .seller-modal {
+    width: 100%;
     max-height: 95vh;
     padding: 25px 17px 20px;
     border-radius: 11px;
   }
 
+  .seller-modal-close {
+    top: 12px;
+    right: 12px;
+  }
+
   .seller-modal-header {
-    padding: 0 20px;
+    padding-right: 15px;
+    margin-bottom: 22px;
   }
 
   .seller-modal-header h2 {
@@ -495,15 +735,70 @@
     font-size: 12px;
   }
 
+  .seller-policy-section h3 {
+    font-size: 15px;
+  }
+
   .seller-policy-box {
     height: 200px;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .seller-document-section {
+    gap: 17px;
   }
 
   .verify-number-btn {
+    width: 100%;
     height: 42px;
+  }
+
+  .seller-otp-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .seller-otp-content .seller-field {
+    width: 100%;
+  }
+
+  .verify-otp-btn {
+    width: 100%;
+  }
+
+  .seller-modal-footer {
+    margin-top: 18px;
   }
 
   .verify-request-btn {
     width: 100%;
+    min-width: 0;
+  }
+
+  .seller-verification-success {
+    padding: 30px 8px;
+  }
+
+  .seller-verification-success h2 {
+    font-size: 21px;
+  }
+
+  .seller-verification-success p {
+    font-size: 13px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .seller-modal *,
+  .seller-modal *::before,
+  .seller-modal *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

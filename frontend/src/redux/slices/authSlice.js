@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// =====================================================
+//
 // LOAD SAVED AUTHENTICATION DATA
-// =====================================================
+//
 
 const savedUser = localStorage.getItem("user");
 const savedToken = localStorage.getItem("token");
@@ -18,9 +18,9 @@ try {
   parsedUser = null;
 }
 
-// =====================================================
+//
 // INITIAL STATE
-// =====================================================
+//
 
 const initialState = {
   user: parsedUser,
@@ -37,9 +37,9 @@ const initialState = {
   registeredUser: null,
 };
 
-// =====================================================
+//
 // AUTH SLICE
-// =====================================================
+//
 
 const authSlice = createSlice({
   name: "auth",
@@ -47,9 +47,9 @@ const authSlice = createSlice({
   initialState,
 
   reducers: {
-    // =========================
+    //
     // REGISTER
-    // =========================
+    //
 
     registerStart: (state) => {
       state.isLoading = true;
@@ -72,9 +72,9 @@ const authSlice = createSlice({
       state.registrationSuccess = false;
     },
 
-    // =========================
+    //
     // LOGIN START
-    // =========================
+    //
 
     loginStart: (state) => {
       state.isLoading = true;
@@ -91,9 +91,9 @@ const authSlice = createSlice({
       localStorage.removeItem("loginType");
     },
 
-    // =========================
+    //
     // LOGIN SUCCESS
-    // =========================
+    //
 
     loginSuccess: (state, action) => {
       state.isLoading = false;
@@ -124,9 +124,9 @@ const authSlice = createSlice({
       }
     },
 
-    // =========================
+    //
     // LOGIN FAILURE
-    // =========================
+    //
 
     loginFailure: (state, action) => {
       state.isLoading = false;
@@ -141,9 +141,9 @@ const authSlice = createSlice({
       localStorage.removeItem("loginType");
     },
 
-    // =========================
+    //
     // LOGOUT
-    // =========================
+    //
 
     logout: (state) => {
       state.user = null;
@@ -163,17 +163,17 @@ const authSlice = createSlice({
       localStorage.removeItem("isSeller");
     },
 
-    // =========================
+    //
     // CLEAR ERROR
-    // =========================
+    //
 
     clearAuthError: (state) => {
       state.error = null;
     },
 
-    // =========================
+    //
     // CLEAR REGISTRATION
-    // =========================
+    //
 
     clearRegistrationSuccess: (state) => {
       state.registrationSuccess = false;
@@ -182,9 +182,9 @@ const authSlice = createSlice({
   },
 });
 
-// =====================================================
+//
 // EXPORT ACTIONS
-// =====================================================
+//
 
 export const {
   registerStart,
@@ -201,8 +201,8 @@ export const {
   clearRegistrationSuccess,
 } = authSlice.actions;
 
-// =====================================================
+//
 // EXPORT REDUCER
-// =====================================================
+//
 
 export default authSlice.reducer;

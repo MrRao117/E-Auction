@@ -1,34 +1,18 @@
 import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   Clock,
-  Cpu,
   Eye,
   Gavel,
-  HardDrive,
-  Heart,
   Maximize,
-  MemoryStick,
-  Monitor,
   Radio,
-  Search,
   ShieldCheck,
-  ShoppingCart,
   Star,
-  TrendingUp,
-  UserRound,
-  Users,
   X,
 } from "lucide-react";
 
 import { useCallback, useEffect, useState } from "react";
 
 import { getAuctionById } from "../../api/auction/auctionApi";
-import {
-  getAuctionRegistrationCount,
-  getRegistrationsForAuction,
-} from "../../api/auction/auctionRegistrationApi";
+import { getAuctionRegistrationCount } from "../../api/auction/auctionRegistrationApi";
 import {
   getBidCountForAuction,
   getBidsByAuctionId,
@@ -38,6 +22,124 @@ import {
 import { getProductById } from "../../api/product/productApi";
 
 import "./LiveAuction.css";
+
+const getImages = (item = {}) => {
+  // The product state starts as null; normalize it before reading properties.
+  item = item && typeof item === "object" ? item : {};
+  const nested = item.product || {};
+  const productDetails = item.productDetails || {};
+
+  const possible = [
+    item.image,
+    item.imageUrl,
+    item.imageURL,
+    item.productImage,
+    item.productImageUrl,
+    item.productImagesUrl,
+    item.imagePath,
+    item.images,
+    item.imageUrls,
+    item.productImages,
+    item.photos,
+    item.imageList,
+    item.imagePaths,
+
+    nested.image,
+    nested.imageUrl,
+    nested.imageURL,
+    nested.productImage,
+    nested.productImageUrl,
+    nested.productImagesUrl,
+    nested.imagePath,
+    nested.images,
+    nested.imageUrls,
+    nested.productImages,
+    nested.photos,
+    nested.imageList,
+    nested.imagePaths,
+
+    productDetails.image,
+    productDetails.imageUrl,
+    productDetails.imageURL,
+    productDetails.productImage,
+    productDetails.images,
+    productDetails.imageUrls,
+  ];
+
+  const extractImages = (value) => {
+    if (value == null || value === "") return [];
+
+    if (Array.isArray(value)) {
+      return value.flatMap(extractImages);
+    }
+
+    if (typeof value === "object") {
+      return extractImages(
+        value.imageUrl ??
+          value.imageURL ??
+          value.image ??
+          value.url ??
+          value.imagePath,
+      );
+    }
+
+    if (typeof value !== "string") return [];
+
+    let cleaned = value.trim();
+    if (!cleaned) return [];
+
+    // Decode JSON/string wrappers such as:
+    // ["data:image/png;base64,..."] or "%22data:image/png;base64,...%22"
+    if (
+      cleaned.includes("%22") ||
+      cleaned.includes("%5B") ||
+      cleaned.includes("%5D")
+    ) {
+      try {
+        const decoded = decodeURIComponent(cleaned);
+        if (decoded !== cleaned) cleaned = decoded.trim();
+      } catch {
+        // Continue with the original string if it is not valid URI encoding.
+      }
+    }
+
+    // Parse JSON arrays and JSON-encoded strings when possible.
+    if (
+      (cleaned.startsWith("[") && cleaned.endsWith("]")) ||
+      (cleaned.startsWith('"') && cleaned.endsWith('"'))
+    ) {
+      try {
+        const parsed = JSON.parse(cleaned);
+        if (parsed !== cleaned) return extractImages(parsed);
+      } catch {
+        // Continue with safe wrapper cleanup below.
+      }
+    }
+
+    // Recover a single image if an array/string wrapper was partially encoded.
+    cleaned = cleaned
+      .replace(/^\s*\[\s*/, "")
+      .replace(/\s*\]\s*$/, "")
+      .replace(/^["']+|["']+$/g, "")
+      .trim();
+
+    if (!cleaned) return [];
+
+    // A remaining JSON delimiter means this is not a clean image source.
+    if (cleaned.startsWith("{") || cleaned.startsWith("[")) return [];
+
+    return [cleaned];
+  };
+
+  return [
+    ...new Set(
+      possible
+        .flatMap(extractImages)
+        .map((url) => url.trim())
+        .filter(Boolean),
+    ),
+  ].slice(0, 6);
+};
 
 const formatCurrency = (amount) => {
   if (amount == null || amount === "") return "---";
@@ -94,7 +196,6 @@ function LiveAuction({ auctionId, onBack }) {
   const [product, setProduct] = useState(null);
 
   const [bids, setBids] = useState([]);
-  const [participants, setParticipants] = useState([]);
   const [participantCount, setParticipantCount] = useState(0);
   const [bidCount, setBidCount] = useState(0);
 
@@ -102,8 +203,6 @@ function LiveAuction({ auctionId, onBack }) {
 
   const [activeImage, setActiveImage] = useState(0);
   const [activeTab, setActiveTab] = useState("Description");
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [showAllBidders, setShowAllBidders] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
 
   const [loading, setLoading] = useState(true);
@@ -113,9 +212,8 @@ function LiveAuction({ auctionId, onBack }) {
   const [message, setMessage] = useState("");
   const [currentTime, setCurrentTime] = useState(Date.now());
 
-  const imageUrl = product?.imageUrl || "";
-
-  const productImages = imageUrl ? [imageUrl] : [];
+  const productImages = getImages(product);
+  const imageUrl = productImages[activeImage] || productImages[0] || "";
 
   const startTime = auction?.startTime
     ? new Date(auction.startTime).getTime()
@@ -151,9 +249,9 @@ function LiveAuction({ auctionId, onBack }) {
     "Terms",
   ];
 
-  // =====================================================
+  //
   // FETCH AUCTION, PRODUCT, BIDS, AND PARTICIPANTS
-  // =====================================================
+  //
 
   const fetchAuctionData = useCallback(
     async (showLoader = false) => {
@@ -259,21 +357,6 @@ function LiveAuction({ auctionId, onBack }) {
 
           setParticipantCount(Number.isFinite(count) ? count : 0);
         }
-
-        // Participant details endpoint is admin-only in the current backend.
-        try {
-          const registrationResponse =
-            await getRegistrationsForAuction(auctionId);
-
-          const registrationData = getResponseData(registrationResponse);
-
-          setParticipants(
-            Array.isArray(registrationData) ? registrationData : [],
-          );
-        } catch (error) {
-          console.warn("Participant details are unavailable:", error);
-          setParticipants([]);
-        }
       } catch (error) {
         console.error("Failed to fetch auction details:", error);
         setMessage("Failed to load auction details.");
@@ -319,9 +402,9 @@ function LiveAuction({ auctionId, onBack }) {
     return () => clearTimeout(timer);
   }, [cooldown]);
 
-  // =====================================================
+  //
   // IMAGE CONTROLS
-  // =====================================================
+  //
 
   const changeImage = (direction) => {
     if (productImages.length <= 1) return;
@@ -335,9 +418,9 @@ function LiveAuction({ auctionId, onBack }) {
     });
   };
 
-  // =====================================================
+  //
   // PLACE BID
-  // =====================================================
+  //
 
   const handlePlaceBid = async () => {
     if (!auctionId) {
@@ -356,6 +439,20 @@ function LiveAuction({ auctionId, onBack }) {
     }
 
     if (bidLoading || cooldown > 0) {
+      return;
+    }
+
+    // Prevent the auction creator from bidding on their own auction.
+    // The login flow stores the current user's email in localStorage as sellerEmail.
+    const currentUserEmail = localStorage.getItem("sellerEmail")?.trim();
+    const auctionSellerEmail = product?.sellerEmail?.trim();
+
+    if (
+      currentUserEmail &&
+      auctionSellerEmail &&
+      currentUserEmail.toLowerCase() === auctionSellerEmail.toLowerCase()
+    ) {
+      setMessage("You created this auction, so you can't bid on it.");
       return;
     }
 
@@ -384,10 +481,17 @@ function LiveAuction({ auctionId, onBack }) {
     } catch (error) {
       console.error("Failed to place bid:", error);
 
+      const status = error?.response?.status;
+      const backendMessage =
+        error?.response?.data?.message || error?.response?.data?.error;
+
+      // Prefer the actual backend validation message when available.
+      // Use a login prompt only when the backend did not provide a message.
       const errorMessage =
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        "Failed to place your bid. Please try again.";
+        backendMessage ||
+        (status === 401
+          ? "Please log in to place a bid."
+          : "Failed to place your bid. Please try again.");
 
       setMessage(errorMessage);
     } finally {
@@ -403,9 +507,9 @@ function LiveAuction({ auctionId, onBack }) {
     }
   };
 
-  // =====================================================
+  //
   // LOADING / ERROR STATES
-  // =====================================================
+  //
 
   if (loading) {
     return (
@@ -434,88 +538,43 @@ function LiveAuction({ auctionId, onBack }) {
     );
   }
 
-  // =====================================================
+  //
   // MAIN UI
-  // =====================================================
+  //
 
   return (
     <div className="live-auction-page">
-      {/* Header */}
-      <header className="la-header">
-        <div className="la-brand">
-          <div className="la-brand-icon">
-            <Gavel size={29} strokeWidth={2.5} />
-          </div>
-          <span className="la-brand-name">
-            <span>e</span>Auction
-          </span>
-        </div>
-
-        <nav className="la-nav">
-          <a href="/">Home</a>
-          <a href="/auctions">All Auctions</a>
-          <a href="/categories">Categories</a>
-          <a href="/how-it-works">How It Works</a>
-        </nav>
-
-        <div className="la-search">
-          <Search size={19} />
-          <input
-            type="text"
-            placeholder="Search auctions, products, categories..."
-          />
-          <Search size={21} />
-        </div>
-
-        <div className="la-header-actions">
-          <button className="la-header-action" type="button">
-            <Heart size={23} />
-            <span>Watchlist</span>
-          </button>
-
-          <button className="la-cart-button" type="button" aria-label="Cart">
-            <ShoppingCart size={25} />
-          </button>
-
-          <button className="la-profile-button" type="button">
-            <span className="la-profile-avatar">B</span>
-            <span>Bidder</span>
-            <ChevronDown size={17} />
-          </button>
-        </div>
-      </header>
-
-      {/* Breadcrumb */}
-      <div className="la-breadcrumb">
-        <a href="/">Home</a>
-        <ChevronRight size={15} />
-        <a href="/auctions">All Auctions</a>
-        <ChevronRight size={15} />
-        <span>{product?.categoryName || "---"}</span>
-        <ChevronRight size={15} />
-        <span>{product?.pname || auction?.productTitle || "---"}</span>
+      <div className="la-topbar">
+        <button className="la-back-button" type="button" onClick={handleBack}>
+          <span aria-hidden="true">←</span> Back
+        </button>
       </div>
-
       <main className="la-main-grid">
-        {/* LEFT COLUMN */}
-        <section className="la-left-column">
-          {/* Product gallery */}
-          <div className="la-gallery">
+        <div className="la-left-column">
+          <section className="la-gallery la-layout-photo">
             <div className="la-main-image">
               {imageUrl ? (
                 <img
                   src={imageUrl}
-                  alt={product?.pname || auction?.productTitle || "Product"}
+                  alt={
+                    product?.pname || auction?.productTitle || "Auction product"
+                  }
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                    event.currentTarget.parentElement?.classList.add(
+                      "la-image-failed",
+                    );
+                  }}
                 />
               ) : (
-                <div className="la-image-placeholder">No image available</div>
+                <div className="la-image-placeholder">
+                  Product image unavailable
+                </div>
               )}
-
               <div className="la-live-badge">
-                <Radio size={19} />
+                <Radio size={18} />
                 {auctionEnded ? "AUCTION ENDED" : "LIVE AUCTION"}
               </div>
-
               {imageUrl && (
                 <button
                   className="la-image-expand"
@@ -526,502 +585,313 @@ function LiveAuction({ auctionId, onBack }) {
                   <Maximize size={20} />
                 </button>
               )}
-
-              <button
-                className="la-gallery-arrow la-gallery-prev"
-                onClick={() => changeImage("prev")}
-                aria-label="Previous image"
-                type="button"
-                disabled={productImages.length <= 1}
-              >
-                <ChevronLeft size={23} />
-              </button>
-
-              <button
-                className="la-gallery-arrow la-gallery-next"
-                onClick={() => changeImage("next")}
-                aria-label="Next image"
-                type="button"
-                disabled={productImages.length <= 1}
-              >
-                <ChevronRight size={23} />
-              </button>
-
               <div className="la-image-count">
-                {productImages.length
+                {imageUrl
                   ? `${activeImage + 1} / ${productImages.length}`
-                  : "---"}
+                  : "No image"}
               </div>
             </div>
+          </section>
 
-            <div className="la-thumbnails">
-              {productImages.map((image, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className={`la-thumbnail ${
-                    activeImage === index ? "active" : ""
-                  }`}
-                  onClick={() => setActiveImage(index)}
-                >
-                  <img src={image} alt={`Product view ${index + 1}`} />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Seller information */}
-          <div className="la-card la-seller-card">
-            <div className="la-seller-heading">
-              <h3>Seller Information</h3>
-              <span className="la-verified-badge">
-                <ShieldCheck size={14} />
-                {product?.isVerified ? "Verified Seller" : "---"}
-              </span>
-            </div>
-
-            <div className="la-seller-main">
-              <div className="la-seller-avatar">
-                {(product?.sellerName || "---").charAt(0).toUpperCase()}
+          <section
+            className="la-other-photos"
+            aria-label="Other product photos"
+          >
+            {productImages.length > 1 ? (
+              <div className="la-other-photos-list">
+                {productImages.map((photo, index) => (
+                  <button
+                    key={`${photo}-${index}`}
+                    type="button"
+                    className={`la-other-photo ${activeImage === index ? "active" : ""}`}
+                    onClick={() => setActiveImage(index)}
+                    aria-label={`View product photo ${index + 1}`}
+                  >
+                    <img
+                      src={photo}
+                      alt={`${product?.pname || "Product"} view ${index + 1}`}
+                    />
+                  </button>
+                ))}
               </div>
-
-              <div className="la-seller-details">
-                <h4>{product?.sellerName || "---"}</h4>
-                <p>{product?.sellerEmail || "---"}</p>
-                <div className="la-seller-rating">
-                  <span className="la-stars">
-                    <Star />
-                    <Star />
-                    <Star />
-                    <Star />
-                    <Star />
-                  </span>
-                  <strong>---</strong>
-                  <span>Reviews unavailable</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Product information tabs */}
-          <div className="la-card la-description-card">
-            <div className="la-tabs">
-              {tabs.map((tab) => (
-                <button
-                  key={tab}
-                  type="button"
-                  className={activeTab === tab ? "active" : ""}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            <div className="la-tab-content">
-              {activeTab === "Description" && (
-                <p>{product?.description || "---"}</p>
-              )}
-
-              {activeTab === "Specifications" && (
-                <div className="la-spec-list">
-                  <p>
-                    <strong>Product:</strong> {product?.pname || "---"}
-                  </p>
-                  <p>
-                    <strong>Category:</strong> {product?.categoryName || "---"}
-                  </p>
-                  <p>
-                    <strong>Base Price:</strong>{" "}
-                    {formatCurrency(product?.basePrice)}
-                  </p>
-                </div>
-              )}
-
-              {activeTab === "Shipping & Delivery" && (
-                <div className="la-spec-list">
-                  <p>---</p>
-                </div>
-              )}
-
-              {activeTab === "Terms" && (
-                <div className="la-spec-list">
-                  <p>---</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* CENTER COLUMN */}
-        <section className="la-center-column">
-          <div className="la-product-heading">
-            <div className="la-title-row">
-              <h1>{product?.pname || auction?.productTitle || "---"}</h1>
-              <button
-                className={`la-favorite-button ${isFavorite ? "selected" : ""}`}
-                type="button"
-                onClick={() => setIsFavorite(!isFavorite)}
-                aria-label="Add to watchlist"
-              >
-                <Heart size={23} fill={isFavorite ? "currentColor" : "none"} />
-              </button>
-            </div>
-
-            <p className="la-product-category">
-              {product?.categoryName || "---"}
-            </p>
-
-            <div className="la-product-tags">
-              <span>{auction?.auctionStatus || "---"}</span>
-              {product?.isVerified && <span>Verified Product</span>}
-            </div>
-
-            <p className="la-product-description">
-              {product?.description || "---"}
-            </p>
-
-            <div className="la-product-features">
-              <div>
-                <Cpu size={23} />
-                <span>
-                  <strong>---</strong>
-                  <small>Processor</small>
-                </span>
-              </div>
-
-              <div>
-                <MemoryStick size={23} />
-                <span>
-                  <strong>---</strong>
-                  <small>Memory</small>
-                </span>
-              </div>
-
-              <div>
-                <HardDrive size={23} />
-                <span>
-                  <strong>---</strong>
-                  <small>Storage</small>
-                </span>
-              </div>
-
-              <div>
-                <Monitor size={23} />
-                <span>
-                  <strong>---</strong>
-                  <small>Display</small>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bidding panel */}
-          <div className="la-card la-bidding-card">
-            <div className="la-bidding-top">
-              <span className="la-live-text">
-                <span className="la-live-dot" />
-                {auctionEnded
-                  ? "AUCTION ENDED"
-                  : auctionStarted
-                    ? "LIVE AUCTION"
-                    : "SCHEDULED"}
-              </span>
-
-              <span className="la-watching">
-                <Eye size={18} />
-                {participantCount} participants
-              </span>
-            </div>
-
-            <div className="la-countdown">
-              <Clock size={28} />
-              <div>
-                <strong>{formatTime(timeLeft)}</strong>
-                <small>
-                  {auctionEnded
-                    ? "Auction Ended"
-                    : auction?.endTime
-                      ? `Ends ${formatDateTime(auction.endTime)}`
-                      : "---"}
-                </small>
-              </div>
-            </div>
-
-            <div className="la-current-bid-label">
-              <span>Current Bid</span>
-              <span className="la-bid-count">
-                <Gavel size={20} />
-                {bidCount} bids
-              </span>
-            </div>
-
-            <div className="la-current-bid-value">
-              {formatCurrency(currentBid)}
-            </div>
-
-            <div className="la-bid-progress">
-              <div
-                style={{
-                  width: `${
-                    product?.basePrice && currentBid
-                      ? Math.min(
-                          (Number(currentBid) /
-                            (Number(product.basePrice) * 2)) *
-                            100,
-                          100,
-                        )
-                      : 0
-                  }%`,
-                }}
-              />
-            </div>
-
-            <div className="la-bid-meta">
-              <span>
-                Minimum next bid: {formatCurrency(minimumBid)} (Increment:{" "}
-                {formatCurrency(bidIncrement)} — {incrementPercentage}%)
-              </span>
-            </div>
-
-            <div className="la-bid-input-row">
-              <div className="la-bid-input-wrap">
-                <span>₹</span>
-                <input
-                  type="text"
-                  value={
-                    minimumBid != null
-                      ? Number(minimumBid).toLocaleString("en-IN", {
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 2,
-                        })
-                      : ""
-                  }
-                  aria-label="Calculated bid amount"
-                  readOnly
-                  disabled={bidLoading || auctionEnded || !auctionStarted}
-                />
-              </div>
-
-              <button
-                type="button"
-                className="la-place-bid-button"
-                onClick={handlePlaceBid}
-                disabled={
-                  bidLoading ||
-                  cooldown > 0 ||
-                  auctionEnded ||
-                  !auctionStarted ||
-                  timeLeft === 0
-                }
-              >
-                <Gavel size={22} />
-                {bidLoading
-                  ? "Please wait..."
-                  : cooldown > 0
-                    ? `Wait ${cooldown}s`
-                    : "Place Bid"}
-              </button>
-            </div>
-
-            {message && (
-              <div
-                className={`la-bid-message ${
-                  message.includes("successfully") ? "success" : "error"
-                }`}
-              >
-                {message}
-              </div>
+            ) : (
+              <p className="la-no-other-photos">
+                No additional product photos available.
+              </p>
             )}
+          </section>
+        </div>
 
-            <p className="la-bid-terms">
-              By placing a bid, you agree to our{" "}
-              <a href="/auction-terms">Auction Terms & Conditions</a>
-            </p>
-          </div>
-
-          {/* Auction summary cards: no Time Remaining card */}
-          <div className="la-summary-grid">
-            <div className="la-card la-summary-card">
-              <Users size={27} />
-              <strong>{participantCount}</strong>
-              <span>Total Participants</span>
-              <small>Registered for this auction</small>
-            </div>
-
-            <div className="la-card la-summary-card">
-              <TrendingUp size={27} />
-              <strong>{formatCurrency(bidIncrement)}</strong>
-              <span>Bid Increment</span>
-              <small>{incrementPercentage}% minimum increment</small>
-            </div>
-          </div>
-        </section>
-
-        {/* RIGHT COLUMN */}
-        <aside className="la-right-column">
-          {/* Participants */}
-          <div className="la-card la-participants-card">
-            <div className="la-section-heading">
-              <div>
-                <UserRound size={23} />
-                <h3>
-                  Auction Participants <span>({participantCount})</span>
-                </h3>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setShowAllBidders(!showAllBidders)}
-              >
-                {showAllBidders ? "Show Less" : "View All"}
-              </button>
-            </div>
-
-            <div className="la-participants-list">
-              {participants.length > 0 ? (
-                (showAllBidders ? participants : participants.slice(0, 5)).map(
-                  (participant, index) => {
-                    const name = participant?.userName || "---";
-
-                    return (
-                      <div
-                        className="la-participant"
-                        key={
-                          participant?.userId ?? participant?.userEmail ?? index
-                        }
-                      >
-                        <div className="la-participant-avatar">
-                          {name.charAt(0).toUpperCase()}
-                        </div>
-                        <span>{name}</span>
+        <div className="la-right-layout">
+          <div className="la-info-cards-grid">
+            <section className="la-product-info-card la-layout-product-info">
+              <h2 className="la-auction-details-title">Auction Details</h2>
+              <hr className="la-auction-details-divider" />
+              <div className="la-product-info-split">
+                <div className="la-product-info-main">
+                  <div className="la-product-details-layout">
+                    <div
+                      className="la-auction-meta-grid"
+                      aria-label="Auction information"
+                    >
+                      <div className="la-auction-meta-item">
+                        <span>Auction ID:</span>
+                        <strong>
+                          {auction?.auctionId ??
+                            auction?.id ??
+                            auction?.auction_id ??
+                            "---"}
+                        </strong>
                       </div>
-                    );
-                  },
-                )
-              ) : (
-                <p>No participant details available.</p>
-              )}
-            </div>
-          </div>
-
-          {/* Bid history */}
-          <div className="la-card la-bid-history-card">
-            <div className="la-section-heading">
-              <div>
-                <Gavel size={23} />
-                <h3>Bid History</h3>
+                      <div className="la-auction-meta-item la-product-category-box">
+                        <span>Product Category:</span>
+                        <strong>
+                          {product?.categoryName ||
+                            product?.category?.categoryName ||
+                            product?.category?.name ||
+                            "Unavailable"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="la-product-name-row">
+                      <span className="la-product-field-label">
+                        Product Name:
+                      </span>
+                      <span className="la-product-field-value la-product-name-value">
+                        {product?.pname || auction?.productTitle || "Product"}
+                      </span>
+                    </div>
+                    <div className="la-auction-time-grid">
+                      <div className="la-auction-meta-item">
+                        <span>Start Time:</span>
+                        <strong>
+                          {formatDateTime(
+                            auction?.startTime ??
+                              auction?.startDateTime ??
+                              auction?.start_time,
+                          )}
+                        </strong>
+                      </div>
+                      <div className="la-auction-meta-item">
+                        <span>End Time:</span>
+                        <strong>
+                          {formatDateTime(
+                            auction?.endTime ??
+                              auction?.endDateTime ??
+                              auction?.end_time,
+                          )}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="la-product-description">
+                      <strong className="la-product-field-label">
+                        Product Description
+                      </strong>
+                      <p>
+                        {product?.description ||
+                          "No product description available."}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <span className="la-live-updates">
-                <span className="la-live-dot" />
-                Live Updates
-              </span>
+            </section>
+            <aside className="la-product-info-card la-product-seller-panel la-layout-seller-info">
+              <h2 className="la-seller-info-title">Seller Information</h2>
+              <section className="la-card la-seller-card la-layout-seller">
+                <div className="la-seller-heading">
+                  <span className="la-verified-badge">
+                    <ShieldCheck size={14} />
+                    {product?.isVerified ? "Verified Seller" : "Seller"}
+                  </span>
+                </div>
+                <div className="la-seller-main">
+                  <div className="la-seller-avatar">
+                    {(product?.sellerName || "S").charAt(0).toUpperCase()}
+                  </div>
+                  <div className="la-seller-details">
+                    <h4>{product?.sellerName || "Seller"}</h4>
+                    <p>
+                      {product?.sellerEmail || "Contact details unavailable"}
+                    </p>
+                    <div className="la-seller-rating">
+                      <span className="la-stars">
+                        <Star />
+                        <Star />
+                        <Star />
+                        <Star />
+                        <Star />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </aside>
+          </div>
+          <div className="la-auction-lower-grid">
+            <div className="la-middle-column">
+              <section className="la-card la-bidding-card la-layout-bidding">
+                <div className="la-bidding-top">
+                  <span className="la-live-text">
+                    <span className="la-live-dot" />
+                    {auctionEnded
+                      ? "AUCTION ENDED"
+                      : auctionStarted
+                        ? "LIVE AUCTION"
+                        : "SCHEDULED"}
+                  </span>
+                  <span className="la-watching">
+                    <Eye size={18} />
+                    {participantCount} participants
+                  </span>
+                </div>
+                <div className="la-countdown">
+                  <Clock size={28} />
+                  <div>
+                    <strong>{formatTime(timeLeft)}</strong>
+                    <small>
+                      {auctionEnded
+                        ? "Auction Ended"
+                        : auction?.endTime
+                          ? `Ends ${formatDateTime(auction.endTime)}`
+                          : "---"}
+                    </small>
+                  </div>
+                </div>
+                <div className="la-current-bid-label">
+                  <span>Current Bid</span>
+                  <span className="la-bid-count">
+                    <Gavel size={20} />
+                    {bidCount} bids
+                  </span>
+                </div>
+                <div className="la-current-bid-value">
+                  {formatCurrency(currentBid)}
+                </div>
+                <div className="la-bid-progress">
+                  <div
+                    style={{
+                      width: `${product?.basePrice && currentBid ? Math.min((Number(currentBid) / (Number(product.basePrice) * 2)) * 100, 100) : 0}%`,
+                    }}
+                  />
+                </div>
+                <div className="la-bid-meta">
+                  <span>
+                    Minimum next bid: {formatCurrency(minimumBid)} (
+                    {incrementPercentage}% increase)
+                  </span>
+                </div>
+                <div className="la-bid-input-row">
+                  <div className="la-bid-input-wrap">
+                    <span>₹</span>
+                    <input
+                      type="text"
+                      value={
+                        minimumBid != null
+                          ? Number(minimumBid).toLocaleString("en-IN", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            })
+                          : ""
+                      }
+                      aria-label="Calculated bid amount"
+                      readOnly
+                      disabled={bidLoading || auctionEnded || !auctionStarted}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className="la-place-bid-button"
+                    onClick={handlePlaceBid}
+                    disabled={
+                      bidLoading ||
+                      cooldown > 0 ||
+                      auctionEnded ||
+                      !auctionStarted ||
+                      timeLeft === 0
+                    }
+                  >
+                    <Gavel size={22} />
+                    {bidLoading
+                      ? "Please wait..."
+                      : cooldown > 0
+                        ? `Wait ${cooldown}s`
+                        : "Place Bid"}
+                  </button>
+                </div>
+                {message && (
+                  <div
+                    className={`la-bid-message ${message.includes("successfully") ? "success" : "error"}`}
+                  >
+                    {message}
+                  </div>
+                )}
+                <p className="la-bid-terms">
+                  By placing a bid, you agree to our{" "}
+                  <a href="/auction-terms">Auction Terms &amp; Conditions</a>
+                </p>
+              </section>
             </div>
-
-            <div className="la-bid-table-wrap">
-              <table className="la-bid-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Bidder</th>
-                    <th>Bid Amount</th>
-                    <th>Bid Time</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {bids.length > 0 ? (
-                    bids.slice(0, 7).map((bid, index) => (
-                      <tr
-                        key={`${bid.bidTime}-${index}`}
-                        className={index === 0 ? "highest" : ""}
-                      >
-                        <td>{bidCount - index || index + 1}</td>
-                        <td>
-                          <div className="la-table-bidder">
-                            <span className="la-mini-avatar">
-                              {(bid.bidderAlias || "---")
-                                .charAt(0)
-                                .toUpperCase()}
-                            </span>
-                            <span>{bid.bidderAlias || "---"}</span>
-                          </div>
-                        </td>
-                        <td>{formatCurrency(bid.bidAmount)}</td>
-                        <td>{formatDateTime(bid.bidTime)}</td>
+            <div className="la-right-column">
+              <section className="la-card la-bid-history-card la-layout-history">
+                <div className="la-section-heading">
+                  <div>
+                    <Gavel size={23} />
+                    <h3>Bid History</h3>
+                  </div>
+                  <span className="la-live-updates">
+                    <span className="la-live-dot" />
+                    Live Updates
+                  </span>
+                </div>
+                <div className="la-bid-table-wrap">
+                  <table className="la-bid-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Bidder</th>
+                        <th>Bid Amount</th>
+                        <th>Bid Time</th>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={4}>No bids yet.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    </thead>
+                    <tbody>
+                      {bids.length > 0 ? (
+                        bids.slice(0, 7).map((bid, index) => (
+                          <tr
+                            key={`${bid.bidTime}-${index}`}
+                            className={index === 0 ? "highest" : ""}
+                          >
+                            <td>{bidCount - index || index + 1}</td>
+                            <td>
+                              <div className="la-table-bidder">
+                                <span className="la-mini-avatar">
+                                  {String(bid?.bidderAlias || "B")
+                                    .charAt(0)
+                                    .toUpperCase()}
+                                </span>
+                                <span>
+                                  {String(bid?.bidderAlias || "Bidder")}
+                                </span>
+                              </div>
+                            </td>
+                            <td>{formatCurrency(bid.bidAmount)}</td>
+                            <td>{formatDateTime(bid.bidTime)}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={4}>No bids yet.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
             </div>
           </div>
-
-          {/* Auction details */}
-          <div className="la-card la-auction-details-card">
-            <div className="la-section-heading">
-              <div>
-                <Gavel size={25} />
-                <h3>Auction Details</h3>
-              </div>
-            </div>
-
-            <div className="la-detail-list">
-              <div>
-                <span>Auction ID</span>
-                <strong>{auction?.auctionId ?? "---"}</strong>
-              </div>
-
-              <div>
-                <span>Start Time</span>
-                <strong>{formatDateTime(auction?.startTime)}</strong>
-              </div>
-
-              <div>
-                <span>End Time</span>
-                <strong>{formatDateTime(auction?.endTime)}</strong>
-              </div>
-
-              <div>
-                <span>Auction Status</span>
-                <strong>{auction?.auctionStatus || "---"}</strong>
-              </div>
-
-              <div>
-                <span>Base Price</span>
-                <strong>{formatCurrency(product?.basePrice)}</strong>
-              </div>
-
-              <div>
-                <span>Bid Increment</span>
-                <strong>{formatCurrency(bidIncrement)}</strong>
-              </div>
-
-              <div>
-                <span>Total Bids</span>
-                <strong>{bidCount}</strong>
-              </div>
-
-              <div>
-                <span>Total Participants</span>
-                <strong>{participantCount}</strong>
-              </div>
-
-              <div>
-                <span>Category</span>
-                <strong>{product?.categoryName || "---"}</strong>
-              </div>
-            </div>
-          </div>
-        </aside>
+        </div>
       </main>
 
-      {/* Fullscreen image modal */}
       {showImageModal && imageUrl && (
         <div
           className="la-image-modal"
@@ -1036,10 +906,9 @@ function LiveAuction({ auctionId, onBack }) {
           >
             <X size={26} />
           </button>
-
           <img
             src={imageUrl}
-            alt="Expanded product"
+            alt="Expanded auction product"
             onClick={(event) => event.stopPropagation()}
           />
         </div>

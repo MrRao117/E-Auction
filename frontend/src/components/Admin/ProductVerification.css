@@ -1,6 +1,4 @@
-/* ================================
-   PRODUCT VERIFICATION PAGE
-================================ */
+/* PRODUCT VERIFICATION PAGE */
 
 .product-verification-page {
   width: 100%;
@@ -17,9 +15,7 @@
   box-sizing: border-box;
 }
 
-/* ================================
-   PAGE HEADING
-================================ */
+/* PAGE HEADING */
 
 .pv-page-heading {
   display: flex;
@@ -62,9 +58,7 @@
   color: #171a3a;
 }
 
-/* ================================
-   SUMMARY CARDS
-================================ */
+/* SUMMARY CARDS */
 
 .pv-stats-grid {
   display: grid;
@@ -176,9 +170,7 @@
   font-size: 13px;
 }
 
-/* ================================
-   MAIN CARD
-================================ */
+/* MAIN CARD */
 
 .pv-main-card {
   width: 100%;
@@ -188,9 +180,7 @@
   background: #fff;
 }
 
-/* ================================
-   TABS
-================================ */
+/* TABS */
 
 .pv-tabs {
   display: flex;
@@ -259,9 +249,7 @@
   background: #047857;
 }
 
-/* ================================
-   FILTER BAR
-================================ */
+/* FILTER BAR */
 
 .pv-filter-bar {
   display: grid;
@@ -346,9 +334,7 @@
   background: #f3fbf7;
 }
 
-/* ================================
-   TABLE
-================================ */
+/* TABLE */
 
 .pv-table-wrapper {
   width: 100%;
@@ -414,9 +400,7 @@
   cursor: pointer;
 }
 
-/* ================================
-   PRODUCT CELL
-================================ */
+/* PRODUCT CELL */
 
 .pv-product-cell {
   display: flex;
@@ -462,9 +446,7 @@
   color: #65739a !important;
 }
 
-/* ================================
-   SELLER CELL
-================================ */
+/* SELLER CELL */
 
 .pv-seller-cell {
   display: flex;
@@ -504,9 +486,7 @@
   font-size: 12px;
 }
 
-/* ================================
-   CATEGORY BADGES
-================================ */
+/* CATEGORY BADGES */
 
 .pv-category-tag {
   display: inline-flex;
@@ -545,9 +525,7 @@
   color: #b45309;
 }
 
-/* ================================
-   STATUS BADGES
-================================ */
+/* STATUS BADGES */
 
 .pv-status-badge {
   display: inline-flex;
@@ -594,9 +572,7 @@
   background: #e5232d;
 }
 
-/* ================================
-   ROW ACTIONS
-================================ */
+/* ROW ACTIONS */
 
 .pv-row-actions {
   display: flex;
@@ -666,9 +642,7 @@
   background: #e9f8f0;
 }
 
-/* ================================
-   EMPTY STATE
-================================ */
+/* EMPTY STATE */
 
 .pv-empty-state {
   height: 140px !important;
@@ -677,9 +651,7 @@
   font-size: 14px !important;
 }
 
-/* ================================
-   PAGINATION
-================================ */
+/* PAGINATION */
 
 .pv-pagination {
   display: flex;
@@ -738,9 +710,7 @@
   color: #65739a;
 }
 
-/* ================================
-   PRODUCT DETAILS MODAL
-================================ */
+/* PRODUCT DETAILS MODAL */
 
 .pv-modal-overlay {
   position: fixed;
@@ -893,9 +863,7 @@
   background: #047857;
 }
 
-/* ================================
-   RESPONSIVE: LAPTOP
-================================ */
+/* RESPONSIVE: LAPTOP */
 
 @media (max-width: 1400px) {
   .product-verification-page {
@@ -925,9 +893,7 @@
   }
 }
 
-/* ================================
-   RESPONSIVE: TABLET
-================================ */
+/* RESPONSIVE: TABLET */
 
 @media (max-width: 1100px) {
   .pv-stats-grid {
@@ -1033,9 +999,7 @@
   }
 }
 
-/* ================================
-   RESPONSIVE: MOBILE
-================================ */
+/* RESPONSIVE: MOBILE */
 
 @media (max-width: 480px) {
   .pv-stats-grid {

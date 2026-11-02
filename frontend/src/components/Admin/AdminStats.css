@@ -1,6 +1,4 @@
-/* =========================================
-   ADMIN DASHBOARD STATISTICS
-========================================= */
+/* ADMIN DASHBOARD STATISTICS */
 
 .admin-stats-grid {
   display: grid;
@@ -11,9 +9,7 @@
   align-items: stretch;
 }
 
-/* =========================================
-   STATISTIC CARD
-========================================= */
+/* STATISTIC CARD */
 
 .admin-stat-card {
   display: flex;
@@ -43,9 +39,7 @@
   box-shadow: 0 5px 16px rgba(15, 23, 42, 0.06);
 }
 
-/* =========================================
-   ICON CONTAINER
-========================================= */
+/* ICON CONTAINER */
 
 .admin-stat-icon {
   display: flex;
@@ -84,9 +78,7 @@
   background: #d1fae5;
 }
 
-/* =========================================
-   STATISTIC CONTENT
-========================================= */
+/* STATISTIC CONTENT */
 
 .admin-stat-content {
   flex: 1;
@@ -103,9 +95,7 @@
   line-height: 1.4;
 }
 
-/* =========================================
-   VALUE AND TREND ROW
-========================================= */
+/* VALUE AND TREND ROW */
 
 .admin-stat-value-row {
   display: flex;
@@ -125,11 +115,7 @@
   overflow-wrap: anywhere;
 }
 
-/* =========================================
-   REVENUE CARD
-   Stack amount and change vertically
-   Keep the same amount font size
-========================================= */
+/* REVENUE CARD - Stack amount and change vertically */
 
 .revenue-stat-card .admin-stat-value-row {
   display: flex;
@@ -150,9 +136,7 @@
   align-items: flex-start;
 }
 
-/* =========================================
-   MONTHLY CHANGE
-========================================= */
+/* MONTHLY CHANGE */
 
 .admin-stat-change {
   display: flex;
@@ -188,9 +172,7 @@
   white-space: nowrap;
 }
 
-/* =========================================
-   TABLET RESPONSIVE
-========================================= */
+/* TABLET RESPONSIVE */
 
 @media (max-width: 1200px) {
   .admin-stats-grid {
@@ -207,9 +189,7 @@
   }
 }
 
-/* =========================================
-   SMALL TABLET
-========================================= */
+/* SMALL TABLET */
 
 @media (max-width: 768px) {
   .admin-stats-grid {
@@ -260,9 +240,7 @@
   }
 }
 
-/* =========================================
-   MOBILE RESPONSIVE
-========================================= */
+/* MOBILE RESPONSIVE */
 
 @media (max-width: 480px) {
   .admin-stats-grid {

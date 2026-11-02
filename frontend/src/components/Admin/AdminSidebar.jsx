@@ -17,9 +17,7 @@ import {
 
 import "./AdminSidebar.css";
 
-// ==========================================
 // ADMIN SIDEBAR NAVIGATION
-// ==========================================
 
 const navigation = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -82,14 +80,10 @@ const navigation = [
   },
 ];
 
-// ==========================================
 // ADMIN SIDEBAR COMPONENT
-// ==========================================
 
 export default function AdminSidebar({ activePage, setActivePage }) {
-  // ==========================================
   // HANDLE NAVIGATION
-  // ==========================================
 
   const handleNavigation = (id, label) => {
     if (id === "notifications") {
@@ -100,9 +94,7 @@ export default function AdminSidebar({ activePage, setActivePage }) {
     setActivePage(label);
   };
 
-  // ==========================================
   // RENDER SIDEBAR
-  // ==========================================
 
   return (
     <aside className="admin-sidebar">

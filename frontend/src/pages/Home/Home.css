@@ -1,10 +1,10 @@
-/* =========================================   
+/*    
    HOME PAGE   
-========================================= */
+ */
 
-/* =========================================   
+/*    
    FULL WIDTH HEADER   
-========================================= */
+ */
 
 .header {
   position: fixed;
@@ -28,18 +28,18 @@
   box-sizing: border-box;
 }
 
-/* =========================================   
+/*    
    MAIN CONTENT   
-========================================= */
+ */
 
 main {
   width: 100%;
 }
 
-/* =========================================   
+/*    
    COMMON CONTENT WIDTH   
    AUCTION SECTION   
-========================================= */
+ */
 
 .auction-content {
   width: calc(100% - 60px);
@@ -65,9 +65,9 @@ main {
   box-sizing: border-box;
 }
 
-/* =========================================   
+/*    
    LAPTOP   
-========================================= */
+ */
 
 @media (max-width: 1200px) {
   .auction-content {
@@ -91,9 +91,9 @@ main {
   }
 }
 
-/* =========================================   
+/*    
    TABLET   
-========================================= */
+ */
 
 @media (max-width: 900px) {
   .auction-content {
@@ -113,9 +113,9 @@ main {
   }
 }
 
-/* =========================================   
+/*    
    MOBILE   
-========================================= */
+ */
 
 @media (max-width: 600px) {
   .header.dashboard-header-fixed {
@@ -145,9 +145,9 @@ main {
   }
 }
 
-/* =========================================   
+/*    
    SMALL MOBILE   
-========================================= */
+ */
 
 @media (max-width: 420px) {
   .header.dashboard-header-fixed {
@@ -177,10 +177,40 @@ main {
   }
 }
 
-/* =========================================   
+/*    
    AUCTION LEFT   
-========================================= */
+ */
 
 .auction-left {
   width: 100%;
+}
+
+/* 
+   CATEGORY AUCTIONS
+   Match Explore Auctions container
+ */
+
+.home-category-wrapper {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.home-category-wrapper .category-auctions-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .home-category-wrapper {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-category-wrapper {
+    margin-top: 20px;
+  }
 }

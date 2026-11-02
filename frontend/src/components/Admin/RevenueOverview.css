@@ -1,6 +1,6 @@
-/* ================================
+/* 
    Revenue Overview Card
-================================ */
+ */
 
 .admin-chart-card {
   background: #ffffff;
@@ -12,9 +12,9 @@
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
 }
 
-/* ================================
+/* 
    Chart Header
-================================ */
+ */
 
 .admin-chart-header {
   display: flex;
@@ -32,9 +32,9 @@
   letter-spacing: -0.3px;
 }
 
-/* ================================
+/* 
    Period Dropdown
-================================ */
+ */
 
 .chart-period-select {
   -moz-appearance: none;
@@ -63,9 +63,9 @@
   border-color: #059669;
 }
 
-/* ================================
+/* 
    Revenue Chart Layout
-================================ */
+ */
 
 .revenue-chart {
   display: flex;
@@ -75,9 +75,9 @@
   min-width: 0;
 }
 
-/* ================================
+/* 
    Y Axis
-================================ */
+ */
 
 .revenue-y-axis {
   display: flex;
@@ -97,9 +97,9 @@
   white-space: nowrap;
 }
 
-/* ================================
+/* 
    Bars Container
-================================ */
+ */
 
 .revenue-bars {
   display: flex;
@@ -110,9 +110,9 @@
   border-bottom: 1px solid #e5eee9;
 }
 
-/* ================================
+/* 
    Individual Bar Column
-================================ */
+ */
 
 .revenue-bar-column {
   display: flex;
@@ -137,9 +137,9 @@
   background: linear-gradient(to top, #f8faf9 0%, #ffffff 100%);
 }
 
-/* ================================
+/* 
    Revenue Bar
-================================ */
+ */
 
 .revenue-bar {
   width: 70%;
@@ -156,9 +156,9 @@
   background: linear-gradient(180deg, #34d399 0%, #047857 100%);
 }
 
-/* ================================
+/* 
    Month Labels
-================================ */
+ */
 
 .revenue-bar-column > span {
   font-size: 11px;
@@ -168,9 +168,9 @@
   text-align: center;
 }
 
-/* ================================
+/* 
    Tablet
-================================ */
+ */
 
 @media (max-width: 1024px) {
   .admin-chart-card {
@@ -203,9 +203,9 @@
   }
 }
 
-/* ================================
+/* 
    Mobile
-================================ */
+ */
 
 @media (max-width: 600px) {
   .admin-chart-card {
@@ -264,9 +264,9 @@
   }
 }
 
-/* ================================
+/* 
    Small Mobile
-================================ */
+ */
 
 @media (max-width: 380px) {
   .admin-chart-card {

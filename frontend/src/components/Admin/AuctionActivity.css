@@ -1,7 +1,4 @@
-/* =========================================
-   AUCTION ACTIVITY CHART
-   eAuction Admin Dashboard
-========================================= */
+/* AUCTION ACTIVITY CHART - eAuction Admin Dashboard */
 
 .admin-chart-card {
   width: 100%;
@@ -20,9 +17,7 @@
   box-sizing: border-box;
 }
 
-/* =========================================
-   CHART HEADER
-========================================= */
+/* CHART HEADER */
 
 .admin-chart-header {
   display: flex;
@@ -42,9 +37,7 @@
   line-height: 1.4;
 }
 
-/* =========================================
-   CHART LEGEND
-========================================= */
+/* CHART LEGEND */
 
 .admin-chart-legend {
   display: flex;
@@ -65,7 +58,7 @@
   white-space: nowrap;
 }
 
-/* Legend dots */
+/* LEGEND DOTS */
 
 .legend-dot {
   display: inline-block;
@@ -85,9 +78,7 @@
   background: #6fcf97;
 }
 
-/* =========================================
-   CHART CONTAINER
-========================================= */
+/* CHART CONTAINER */
 
 .auction-chart {
   width: 100%;
@@ -106,9 +97,7 @@
   overflow: visible;
 }
 
-/* =========================================
-   HORIZONTAL GRID LINES
-========================================= */
+/* HORIZONTAL GRID LINES */
 
 .auction-chart .chart-grid-line {
   stroke: #e5eee9;
@@ -116,9 +105,7 @@
   vector-effect: non-scaling-stroke;
 }
 
-/* =========================================
-   VERTICAL GRID LINES
-========================================= */
+/* VERTICAL GRID LINES */
 
 .auction-chart .chart-vertical-line {
   stroke: #edf2f5;
@@ -126,9 +113,7 @@
   vector-effect: non-scaling-stroke;
 }
 
-/* =========================================
-   Y-AXIS LABELS
-========================================= */
+/* Y-AXIS LABELS */
 
 .auction-chart .chart-axis-label {
   fill: #64748b;
@@ -138,9 +123,7 @@
   font-weight: 400;
 }
 
-/* =========================================
-   X-AXIS MONTH LABELS
-========================================= */
+/* X-AXIS MONTH LABELS */
 
 .auction-chart .chart-month-label {
   fill: #64748b;
@@ -151,27 +134,21 @@
   text-anchor: middle;
 }
 
-/* =========================================
-   LIVE AUCTION AREA
-========================================= */
+/* LIVE AUCTION AREA */
 
 .auction-chart .live-area {
   fill: rgba(5, 150, 105, 0.12);
   stroke: none;
 }
 
-/* =========================================
-   COMPLETED AUCTION AREA
-========================================= */
+/* COMPLETED AUCTION AREA */
 
 .auction-chart .completed-area {
   fill: rgba(111, 207, 151, 0.18);
   stroke: none;
 }
 
-/* =========================================
-   LIVE AUCTION LINE
-========================================= */
+/* LIVE AUCTION LINE */
 
 .auction-chart .live-line {
   fill: none;
@@ -184,9 +161,7 @@
   vector-effect: non-scaling-stroke;
 }
 
-/* =========================================
-   COMPLETED AUCTION LINE
-========================================= */
+/* COMPLETED AUCTION LINE */
 
 .auction-chart .completed-line {
   fill: none;
@@ -199,9 +174,7 @@
   vector-effect: non-scaling-stroke;
 }
 
-/* =========================================
-   LIVE AUCTION DATA POINTS
-========================================= */
+/* LIVE AUCTION DATA POINTS */
 
 .auction-chart .live-point {
   fill: #059669;
@@ -213,9 +186,7 @@
   transition: r 0.2s ease;
 }
 
-/* =========================================
-   COMPLETED AUCTION DATA POINTS
-========================================= */
+/* COMPLETED AUCTION DATA POINTS */
 
 .auction-chart .completed-point {
   fill: #6fcf97;
@@ -227,9 +198,7 @@
   transition: r 0.2s ease;
 }
 
-/* =========================================
-   HOVER EFFECTS
-========================================= */
+/* HOVER EFFECTS */
 
 .auction-chart .live-point:hover {
   r: 5;
@@ -241,9 +210,7 @@
   fill: #34a66b;
 }
 
-/* =========================================
-   TABLET RESPONSIVE
-========================================= */
+/* TABLET RESPONSIVE */
 
 @media (max-width: 1100px) {
   .admin-chart-card {
@@ -267,9 +234,7 @@
   }
 }
 
-/* =========================================
-   SMALL TABLET
-========================================= */
+/* SMALL TABLET */
 
 @media (max-width: 768px) {
   .admin-chart-card {
@@ -305,9 +270,7 @@
   }
 }
 
-/* =========================================
-   MOBILE RESPONSIVE
-========================================= */
+/* MOBILE RESPONSIVE */
 
 @media (max-width: 480px) {
   .admin-chart-card {
@@ -347,9 +310,7 @@
   }
 }
 
-/* =========================================
-   EXTRA SMALL MOBILE
-========================================= */
+/* EXTRA SMALL MOBILE */
 
 @media (max-width: 360px) {
   .admin-chart-card {

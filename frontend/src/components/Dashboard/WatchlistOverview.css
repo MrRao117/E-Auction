@@ -1,15 +1,15 @@
-/* ================================
+/* 
    OVERVIEW WATCHLIST
-================================ */
+ */
 
 .overview-watchlist {
   width: 100%;
   box-sizing: border-box;
 }
 
-/* ================================
+/* 
    HEADER
-================================ */
+ */
 
 .overview-watchlist .card-header {
   display: flex;
@@ -44,9 +44,9 @@
   color: #065f46;
 }
 
-/* ================================
+/* 
    WATCHLIST LIST
-================================ */
+ */
 
 .overview-watchlist-list {
   display: flex;
@@ -55,9 +55,9 @@
   margin-top: 18px;
 }
 
-/* ================================
+/* 
    WATCHLIST ITEM
-================================ */
+ */
 
 .overview-watchlist-item {
   width: 100%;
@@ -92,9 +92,9 @@
   box-shadow: 0 5px 15px rgba(16, 24, 40, 0.06);
 }
 
-/* ================================
+/* 
    IMAGE
-================================ */
+ */
 
 .overview-watchlist-image {
   width: 150px;
@@ -116,9 +116,9 @@
   object-fit: cover;
 }
 
-/* ================================
+/* 
    PRODUCT DETAILS
-================================ */
+ */
 
 .overview-watchlist-product {
   min-width: 0;
@@ -139,9 +139,9 @@
   text-overflow: ellipsis;
 }
 
-/* ================================
+/* 
    CURRENT BID LABEL
-================================ */
+ */
 
 .overview-watchlist-label {
   display: block;
@@ -154,9 +154,9 @@
   line-height: 1.4;
 }
 
-/* ================================
+/* 
    PRICE
-================================ */
+ */
 
 .overview-watchlist-price {
   display: block;
@@ -169,25 +169,25 @@
   line-height: 1.2;
 }
 
-/* ================================
+/* 
    TIMER
-================================ */
+ */
 
 .overview-watchlist-timer {
   display: none;
 }
 
-/* ================================
+/* 
    BIDS
-================================ */
+ */
 
 .overview-watchlist-bids {
   display: none;
 }
 
-/* ================================
+/* 
    RESPONSIVE
-================================ */
+ */
 
 @media (max-width: 1200px) {
   .overview-watchlist-item {

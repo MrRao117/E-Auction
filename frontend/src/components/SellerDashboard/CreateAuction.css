@@ -1,6 +1,6 @@
-/* =========================================================
+/* 
    CREATE AUCTION PAGE
-   ========================================================= */
+    */
 
 .create-auction-page {
   width: 100%;
@@ -23,13 +23,13 @@
 .create-auction-heading p {
   margin: 7px 0 0;
   color: #344b72;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.5;
 }
 
-/* =========================================================
+/* 
    ONLY TWO MAIN FORMS USE GRID
-   ========================================================= */
+    */
 
 .create-auction-content {
   display: grid;
@@ -40,9 +40,9 @@
   box-sizing: border-box;
 }
 
-/* =========================================================
+/* 
    TWO MAIN CARDS
-   ========================================================= */
+    */
 
 .create-product-card,
 .create-auction-card {
@@ -63,9 +63,9 @@
   padding: 17px;
 }
 
-/* =========================================================
+/* 
    SECTION HEADER
-   ========================================================= */
+    */
 
 .create-section-header {
   display: flex;
@@ -107,9 +107,9 @@
   line-height: 1.5;
 }
 
-/* =========================================================
+/* 
    PRODUCT FORM
-   ========================================================= */
+    */
 
 .create-product-form {
   width: 100%;
@@ -175,9 +175,9 @@
   box-shadow: 0 0 0 2px rgba(23, 105, 224, 0.08);
 }
 
-/* =========================================================
+/* 
    CATEGORY
-   ========================================================= */
+    */
 
 .category-input-row {
   display: grid;
@@ -212,9 +212,9 @@
   color: #ffffff;
 }
 
-/* =========================================================
+/* 
    BASE PRICE
-   ========================================================= */
+    */
 
 .price-input-wrapper {
   position: relative;
@@ -236,9 +236,9 @@
   padding-left: 25px;
 }
 
-/* =========================================================
+/* 
    PRODUCT PHOTO UPLOAD
-   ========================================================= */
+    */
 
 .product-image-upload {
   width: 100%;
@@ -299,9 +299,9 @@
   font-size: 8px;
 }
 
-/* =========================================================
+/* 
    ADD PRODUCT BUTTON
-   ========================================================= */
+    */
 
 .add-product-button {
   width: 100%;
@@ -330,9 +330,9 @@
   background: #1059c4;
 }
 
-/* =========================================================
+/* 
    PRODUCT VERIFICATION NOTICE
-   ========================================================= */
+    */
 
 .product-verification-notice,
 .auction-verification-notice,
@@ -381,9 +381,9 @@
   line-height: 1.45;
 }
 
-/* =========================================================
+/* 
    PRODUCT TO AUCTION PROGRESS FLOW
-   ========================================================= */
+    */
 
 .flow-card {
   width: 100%;
@@ -470,9 +470,9 @@
   line-height: 1.3;
 }
 
-/* =========================================================
+/* 
    SELECTED PRODUCT
-   ========================================================= */
+    */
 
 .selected-product-card {
   display: grid;
@@ -561,9 +561,9 @@
   color: #21824b;
 }
 
-/* =========================================================
+/* 
    AUCTION FORM
-   ========================================================= */
+    */
 
 .auction-form {
   display: grid;
@@ -602,9 +602,9 @@
   line-height: 1.4;
 }
 
-/* =========================================================
+/* 
    DATE / TIME
-   ========================================================= */
+    */
 
 .datetime-input-wrapper {
   position: relative;
@@ -633,9 +633,9 @@
   opacity: 0.65;
 }
 
-/* =========================================================
+/* 
    DISABLED FORM
-   ========================================================= */
+    */
 
 .auction-form-disabled input,
 .auction-form-disabled select,
@@ -654,9 +654,9 @@
   color: #a7afa9;
 }
 
-/* =========================================================
+/* 
    CREATE AUCTION BUTTON
-   ========================================================= */
+    */
 
 .create-auction-button {
   width: 100%;
@@ -681,9 +681,9 @@
   cursor: not-allowed;
 }
 
-/* =========================================================
+/* 
    ADDED PRODUCT LIST
-   ========================================================= */
+    */
 
 .product-details-list {
   grid-column: 1 / -1;
@@ -703,9 +703,9 @@
   box-shadow: 0 1px 5px rgba(30, 50, 40, 0.03);
 }
 
-/* =========================================================
+/* 
    PRODUCT DETAILS HEADER
-   ========================================================= */
+    */
 
 .product-details-header {
   display: flex;
@@ -758,9 +758,9 @@
   color: #21824b;
 }
 
-/* =========================================================
+/* 
    PRODUCT DETAILS GRID
-   ========================================================= */
+    */
 
 .product-details-grid {
   display: grid;
@@ -803,9 +803,9 @@
   overflow-wrap: anywhere;
 }
 
-/* =========================================================
+/* 
    DESCRIPTION
-   ========================================================= */
+    */
 
 .product-detail-description {
   grid-column: 2 / -1;
@@ -820,9 +820,9 @@
   line-height: 1.5;
 }
 
-/* =========================================================
+/* 
    RESPONSIVE
-   ========================================================= */
+    */
 
 @media (max-width: 900px) {
   .create-auction-content {
@@ -903,9 +903,9 @@
   }
 }
 
-/* =========================================================
+/* 
    PHOTO SELECTION PREVIEWS
-   ========================================================= */
+    */
 
 .photo-count {
   margin-top: 7px;
@@ -961,9 +961,9 @@
   font-weight: 700;
 }
 
-/* =========================================================
+/* 
    AUCTION SECTION
-   ========================================================= */
+    */
 
 .auction-form-panel {
   width: 100%;
@@ -1045,9 +1045,9 @@
   cursor: not-allowed;
 }
 
-/* =========================================================
+/* 
    ADDED PRODUCTS
-   ========================================================= */
+    */
 
 .added-products-section {
   width: 100%;
@@ -1073,7 +1073,7 @@
 .added-products-heading p {
   margin: 4px 0 0;
   color: #566b88;
-  font-size: 10px;
+  font-size: 15px;
   line-height: 1.4;
 }
 
@@ -1268,9 +1268,9 @@
   line-height: 1.5;
 }
 
-/* =========================================================
+/* 
    FINAL RESPONSIVE RULES
-   ========================================================= */
+    */
 
 @media (max-width: 900px) {
   .create-auction-content {
@@ -1351,5 +1351,1334 @@
   .product-upload-previews,
   .product-details-photo-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* =====================================================
+   SELLER PRODUCT LISTING FIRST WORKFLOW
+   ===================================================== */
+.create-auction-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.listing-add-product-button,
+.listing-back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 17px;
+  border: 0;
+  border-radius: 7px;
+  background: #087f4f;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.listing-add-product-button:hover,
+.listing-back-button:hover {
+  background: #066b42;
+}
+
+.listing-add-product-button span {
+  font-size: 19px;
+  line-height: 1;
+}
+
+.listing-back-button {
+  border: 1px solid #d4e4dc;
+  background: #fff;
+  color: #087f4f;
+}
+
+.listing-back-button:hover {
+  background: #eff8f3;
+  color: #066b42;
+}
+
+.added-products-section {
+  margin-top: 0;
+}
+
+.added-products-heading h2 {
+  font-size: 22px;
+}
+
+.added-products-heading p {
+  font-size: 15px;
+}
+
+.added-products-heading > span {
+  background: #e8f5ee;
+  color: #087f4f;
+  font-size: 11px;
+}
+
+.product-list-empty {
+  display: flex;
+  min-height: 270px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 18px;
+  border: 1px dashed #cbdcd2;
+  border-radius: 12px;
+  background: #fbfdfc;
+  text-align: center;
+}
+
+.product-empty-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  margin-bottom: 13px;
+  border-radius: 16px;
+  background: #e8f5ee;
+  color: #087f4f;
+  font-size: 28px;
+}
+
+.product-list-empty h3 {
+  margin: 0;
+  color: #142b23;
+  font-size: 18px;
+}
+
+.product-list-empty p {
+  margin: 7px 0 17px;
+  color: #6d7d74;
+  font-size: 13px;
+}
+
+.seller-product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.seller-product-row {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr) 220px;
+  align-items: center;
+  gap: 17px;
+  padding: 15px;
+  border: 1px solid #e0e8e3;
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 2px 7px rgba(25, 55, 40, 0.035);
+}
+
+.seller-product-image {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e0e8e3;
+  border-radius: 9px;
+  background: #f1f6f3;
+  color: #8a9a91;
+  font-size: 11px;
+}
+
+.seller-product-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.seller-product-info {
+  min-width: 0;
+}
+
+.seller-product-details-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.seller-product-details-grid > div {
+  min-width: 0;
+}
+
+.seller-product-details-grid span {
+  display: block;
+  margin-bottom: 4px;
+  color: #829087;
+  font-size: 11px;
+}
+
+.seller-product-details-grid strong {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #20372d;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.seller-product-remarks {
+  margin: 10px 0 9px;
+  color: #65766c;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.seller-product-progress {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  padding-top: 3px;
+}
+
+.seller-product-progress::before {
+  position: absolute;
+  top: 15px;
+  right: 12%;
+  left: 12%;
+  height: 2px;
+  background: #dce5df;
+  content: "";
+}
+
+.seller-progress-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.seller-progress-step > span {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  margin-bottom: 5px;
+  border: 2px solid #d3ddd6;
+  border-radius: 50%;
+  background: #fff;
+  color: #74847a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.seller-progress-step.done > span {
+  border-color: #087f4f;
+  background: #087f4f;
+  color: #fff;
+}
+
+.seller-progress-step strong {
+  color: #263b30;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.seller-progress-step small {
+  margin-top: 2px;
+  color: #89978f;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.seller-product-action {
+  display: flex;
+  min-height: 100px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 11px;
+  padding-left: 16px;
+  border-left: 1px solid #e1e9e4;
+}
+
+.seller-product-action .product-verification-badge {
+  align-self: center;
+  font-size: 11px;
+  padding: 7px 11px;
+}
+
+.product-verification-badge-rejected {
+  background: #fdeaea;
+  color: #b42318;
+}
+
+.seller-create-auction-button {
+  min-height: 41px;
+  width: 100%;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 7px;
+  background: #087f4f;
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.seller-create-auction-button:hover:not(:disabled) {
+  background: #066b42;
+}
+
+.seller-create-auction-button:disabled {
+  background: #c2d0c7;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.seller-product-action > small {
+  color: #87948c;
+  font-size: 10px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+/* Add Product is a standalone screen, so its form must span the full content area. */
+.add-product-only-content {
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+}
+
+.add-product-only-content .create-product-card {
+  width: 100%;
+  max-width: none;
+}
+
+.auction-only-content {
+  grid-template-columns: minmax(0, 1fr);
+}
+.auction-only-content .create-auction-card {
+  max-width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .seller-product-row {
+    grid-template-columns: 85px minmax(0, 1fr);
+  }
+  .seller-product-image {
+    width: 85px;
+    height: 85px;
+  }
+  .seller-product-action {
+    grid-column: 1 / -1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: auto minmax(180px, 240px) auto;
+    align-items: center;
+    padding: 12px 0 0;
+    border-top: 1px solid #e1e9e4;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .create-auction-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .seller-product-row {
+    grid-template-columns: 68px minmax(0, 1fr);
+    gap: 11px;
+    padding: 11px;
+  }
+  .seller-product-image {
+    width: 68px;
+    height: 68px;
+  }
+  .seller-product-details-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .seller-product-progress {
+    margin-top: 10px;
+  }
+  .seller-progress-step strong {
+    font-size: 9px;
+  }
+  .seller-progress-step small {
+    font-size: 8px;
+  }
+  .seller-product-action {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .seller-product-action .product-verification-badge {
+    justify-self: start;
+  }
+  .seller-product-action > small {
+    text-align: left;
+  }
+}
+
+/* =====================================================
+   FULL-WIDTH STANDALONE FORMS
+   Keep Add Product and Create Auction cards the same width.
+   These rules intentionally come last to override older
+   two-column dashboard layout rules.
+   ===================================================== */
+.create-auction-page > .add-product-only-content,
+.create-auction-page > .auction-only-content {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0;
+  gap: 18px;
+}
+
+.create-auction-page > .add-product-only-content > .create-product-card,
+.create-auction-page > .auction-only-content > .create-auction-card {
+  grid-column: 1 / -1;
+  width: 100% !important;
+  min-width: 0;
+  max-width: none !important;
+  justify-self: stretch;
+}
+
+.create-auction-page > .auction-only-content .auction-form-panel {
+  width: 100%;
+  max-width: none;
+}
+
+/* Auction fields use the same broad, balanced form layout. */
+.create-auction-page > .auction-only-content .auction-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.create-auction-page
+  > .auction-only-content
+  .auction-form
+  > .create-form-group {
+  min-width: 0;
+  width: 100%;
+}
+
+.create-auction-page > .auction-only-content .create-auction-button {
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .create-auction-page > .auction-only-content .auction-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* =====================================================
+   ADD PRODUCT FORM — requested row layout
+   Row 1: Product name (full width)
+   Row 2: Category selector + Create Category button | Base price
+   Row 3: Product photos | Description
+   Bottom: Terms checkbox | Add Product button at bottom-right
+   ===================================================== */
+.create-auction-page > .add-product-only-content .create-product-form {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-areas:
+    "name name name name name name"
+    "category category category price price price"
+    "photos photos photos description description description"
+    "terms terms terms submit submit submit";
+  column-gap: 14px;
+  row-gap: 14px;
+  align-items: start;
+}
+
+.create-auction-page > .add-product-only-content .product-name-group {
+  grid-area: name;
+  min-width: 0;
+}
+.create-auction-page > .add-product-only-content .product-category-group {
+  grid-area: category;
+  min-width: 0;
+}
+.create-auction-page > .add-product-only-content .product-base-price-group {
+  grid-area: price;
+  min-width: 0;
+}
+.create-auction-page > .add-product-only-content .product-photos-group {
+  grid-area: photos;
+  min-width: 0;
+}
+.create-auction-page > .add-product-only-content .product-description-group {
+  grid-area: description;
+  min-width: 0;
+}
+.create-auction-page
+  > .add-product-only-content
+  .create-product-form
+  > .product-terms-checkbox {
+  grid-area: terms;
+}
+.create-auction-page
+  > .add-product-only-content
+  .create-product-form
+  > .add-product-button {
+  grid-area: submit;
+  justify-self: end;
+  align-self: end;
+  width: min(100%, 195px);
+  margin-top: 0;
+}
+
+/* Keep the Create Category button beside the category selector. */
+.create-auction-page > .add-product-only-content .category-input-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+.create-auction-page > .add-product-only-content .category-input-row select,
+.create-auction-page > .add-product-only-content .category-input-row input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 0;
+}
+.create-auction-page > .add-product-only-content .create-category-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.create-auction-page > .add-product-only-content .product-image-upload,
+.create-auction-page > .add-product-only-content .upload-placeholder {
+  height: 122px;
+  min-height: 122px;
+}
+.create-auction-page > .add-product-only-content .upload-placeholder {
+  position: relative;
+  padding: 12px 12px 12px 58px;
+}
+.create-auction-page > .add-product-only-content .upload-icon {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  margin: 0;
+}
+.create-auction-page
+  > .add-product-only-content
+  .product-description-group
+  textarea {
+  min-height: 122px;
+  height: 122px;
+}
+.create-auction-page > .add-product-only-content .product-terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 40px;
+  margin: 0;
+  color: #17231d;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.create-auction-page > .add-product-only-content .product-terms-checkbox input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #087f4f;
+}
+.create-auction-page > .add-product-only-content .product-terms-checkbox a {
+  color: #1769e0;
+  text-decoration: none;
+}
+.create-auction-page
+  > .add-product-only-content
+  .product-terms-checkbox
+  a:hover {
+  text-decoration: underline;
+}
+.create-auction-page > .add-product-only-content .product-terms-checkbox b {
+  color: #e23b30;
+}
+.create-auction-page > .add-product-only-content .product-verification-notice {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .create-auction-page > .add-product-only-content .create-product-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "name name"
+      "category price"
+      "photos photos"
+      "description description"
+      "terms submit";
+  }
+  .create-auction-page > .add-product-only-content .product-photos-group,
+  .create-auction-page > .add-product-only-content .product-description-group {
+    width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .create-auction-page > .add-product-only-content .create-product-form {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "name" "category" "price" "photos" "description" "terms" "submit";
+  }
+  .create-auction-page
+    > .add-product-only-content
+    .create-product-form
+    > .add-product-button {
+    width: 100%;
+  }
+}
+
+/* =====================================================
+   FINAL FIX: PRODUCT FORM GRID + SLIGHTLY LARGER TYPOGRAPHY
+   Uses the actual DOM order of .create-form-group elements,
+   so the layout works even when modifier classes are absent.
+   ===================================================== */
+.create-auction-page .create-product-form {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  grid-template-areas:
+    "name name name name name name"
+    "category category category price price price"
+    "photos photos photos description description description"
+    "terms terms terms submit submit submit";
+  gap: 16px 18px !important;
+  align-items: start;
+  width: 100%;
+}
+
+/* Actual JSX order: name, category, price, description, photos. */
+.create-auction-page .create-product-form > .create-form-group:nth-child(1) {
+  grid-area: name;
+  min-width: 0;
+}
+.create-auction-page .create-product-form > .create-form-group:nth-child(2) {
+  grid-area: category;
+  min-width: 0;
+}
+.create-auction-page .create-product-form > .create-form-group:nth-child(3) {
+  grid-area: price;
+  min-width: 0;
+}
+.create-auction-page .create-product-form > .create-form-group:nth-child(4) {
+  grid-area: description;
+  min-width: 0;
+}
+.create-auction-page .create-product-form > .create-form-group:nth-child(5) {
+  grid-area: photos;
+  min-width: 0;
+}
+
+/* Also support the named classes if present in a newer JSX version. */
+.create-auction-page .create-product-form > .product-name-group {
+  grid-area: name;
+}
+.create-auction-page .create-product-form > .product-category-group {
+  grid-area: category;
+}
+.create-auction-page .create-product-form > .product-base-price-group {
+  grid-area: price;
+}
+.create-auction-page .create-product-form > .product-description-group {
+  grid-area: description;
+}
+.create-auction-page .create-product-form > .product-photos-group {
+  grid-area: photos;
+}
+
+.create-auction-page .create-product-form > .product-terms-checkbox {
+  grid-area: terms;
+  align-self: center;
+}
+.create-auction-page .create-product-form > .add-product-button {
+  grid-area: submit;
+  justify-self: end;
+  align-self: end;
+  width: min(100%, 220px);
+  margin: 0;
+}
+
+/* Slightly larger, more readable form typography. */
+.create-auction-page .create-section-header h2,
+.create-auction-page .create-product-card h2 {
+  font-size: 21px;
+  line-height: 1.3;
+}
+.create-auction-page .create-section-header p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.create-auction-page .create-product-form .create-form-group label {
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 7px;
+}
+.create-auction-page .create-product-form .create-form-group input,
+.create-auction-page .create-product-form .create-form-group select,
+.create-auction-page .create-product-form .create-form-group textarea {
+  font-size: 13px;
+}
+.create-auction-page .create-product-form .create-form-group input,
+.create-auction-page .create-product-form .create-form-group select {
+  height: 42px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.create-auction-page .create-product-form .create-form-group textarea {
+  min-height: 132px;
+  height: 132px;
+  padding: 11px 12px;
+  line-height: 1.5;
+}
+.create-auction-page .create-product-form .create-category-button {
+  font-size: 12px;
+  padding: 0 14px;
+}
+.create-auction-page .create-product-form .upload-placeholder,
+.create-auction-page .create-product-form .product-image-upload {
+  min-height: 132px;
+  height: 132px;
+}
+.create-auction-page .create-product-form .upload-placeholder,
+.create-auction-page .create-product-form .upload-placeholder * {
+  font-size: 12px;
+}
+.create-auction-page .create-product-form .product-terms-checkbox {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.create-auction-page .create-product-form .add-product-button {
+  min-height: 44px;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .create-auction-page .create-product-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-areas:
+      "name name"
+      "category price"
+      "photos description"
+      "terms submit";
+  }
+}
+@media (max-width: 600px) {
+  .create-auction-page .create-product-form {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "name"
+      "category"
+      "price"
+      "photos"
+      "description"
+      "terms"
+      "submit";
+  }
+  .create-auction-page .create-product-form > .add-product-button {
+    width: 100%;
+  }
+}
+
+/* =====================================================
+   FINAL POLISH: BASE PRICE SPACING + CENTERED PHOTO UPLOAD
+   ===================================================== */
+.create-auction-page .create-product-form .price-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Keep the rupee symbol separate from the placeholder text. */
+.create-auction-page
+  .create-product-form
+  .price-input-wrapper
+  .currency-symbol {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: block;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  color: #5d6c63;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.create-auction-page .create-product-form .price-input-wrapper input {
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 38px !important;
+  padding-right: 14px !important;
+}
+
+/* Stack the upload icon above the text and center the whole group. */
+.create-auction-page .create-product-form .product-image-upload {
+  width: 100%;
+}
+
+.create-auction-page .create-product-form .upload-placeholder {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 165px;
+  height: 165px;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px;
+  padding: 16px;
+  text-align: center !important;
+}
+
+.create-auction-page .create-product-form .upload-placeholder .upload-icon {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  margin: 0 0 4px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.create-auction-page .create-product-form .upload-placeholder strong,
+.create-auction-page .create-product-form .upload-placeholder span,
+.create-auction-page .create-product-form .upload-placeholder small {
+  display: block !important;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 !important;
+  text-align: center !important;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.create-auction-page .create-product-form .upload-placeholder strong {
+  color: #34463c;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.create-auction-page .create-product-form .upload-placeholder span {
+  color: #d92d20;
+  font-size: 12px;
+}
+
+.create-auction-page .create-product-form .upload-placeholder small {
+  color: #87938c;
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .create-auction-page .create-product-form .upload-placeholder {
+    min-height: 155px;
+    height: 155px;
+  }
+}
+
+/* FINAL FIX: match photo/description heights and center the upload content */
+.create-auction-page
+  .create-product-form
+  > .create-form-group:nth-child(4)
+  textarea,
+.create-auction-page
+  .create-product-form
+  > .product-description-group
+  textarea {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 206px !important;
+  min-height: 206px !important;
+}
+
+.create-auction-page
+  .create-product-form
+  > .create-form-group:nth-child(5)
+  .product-image-upload,
+.create-auction-page
+  .create-product-form
+  > .create-form-group:nth-child(5)
+  .upload-placeholder,
+.create-auction-page
+  .create-product-form
+  > .product-photos-group
+  .product-image-upload,
+.create-auction-page
+  .create-product-form
+  > .product-photos-group
+  .upload-placeholder {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 206px !important;
+  min-height: 206px !important;
+}
+
+.create-auction-page .create-product-form .upload-placeholder {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  padding: 16px !important;
+  text-align: center !important;
+}
+
+/* Override older absolute positioning that pins the upload icon to the left. */
+.create-auction-page .create-product-form .upload-placeholder .upload-icon {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  float: none !important;
+  margin: 0 0 4px !important;
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+}
+
+.create-auction-page .create-product-form .upload-placeholder strong,
+.create-auction-page .create-product-form .upload-placeholder span,
+.create-auction-page .create-product-form .upload-placeholder small {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  float: none !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  text-align: center !important;
+  line-height: 1.45 !important;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .create-auction-page
+    .create-product-form
+    > .create-form-group:nth-child(4)
+    textarea,
+  .create-auction-page
+    .create-product-form
+    > .product-description-group
+    textarea,
+  .create-auction-page
+    .create-product-form
+    > .create-form-group:nth-child(5)
+    .product-image-upload,
+  .create-auction-page
+    .create-product-form
+    > .create-form-group:nth-child(5)
+    .upload-placeholder,
+  .create-auction-page
+    .create-product-form
+    > .product-photos-group
+    .product-image-upload,
+  .create-auction-page
+    .create-product-form
+    > .product-photos-group
+    .upload-placeholder {
+    height: 190px !important;
+    min-height: 190px !important;
+  }
+}
+
+/* Auction creation: selected verified product and all seller-uploaded photos */
+.auction-selected-product-section {
+  width: 100%;
+  min-width: 0;
+  margin: 0 0 18px;
+}
+
+.auction-product-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.auction-product-gallery-image {
+  width: 100%;
+  height: 130px;
+  overflow: hidden;
+  border: 1px solid #dce5df;
+  border-radius: 9px;
+  background: #f4f8f5;
+}
+
+.auction-product-gallery-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.auction-product-gallery-empty {
+  grid-column: 1 / -1;
+  padding: 18px;
+  border: 1px dashed #cbd8d0;
+  border-radius: 8px;
+  color: #718078;
+  font-size: 14px;
+  text-align: center;
+}
+
+.verified-product-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin-bottom: 7px;
+}
+
+.verified-product-heading label {
+  color: #17231d;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.verified-product-heading label span {
+  color: #e23b30;
+}
+
+.verified-product-fixed-note {
+  color: #7b8981;
+  font-size: 12px;
+}
+
+.auction-only-content .auction-section-header h2 {
+  font-size: 23px;
+}
+
+.auction-only-content .auction-section-header p,
+.auction-only-content .auction-verification-message,
+.auction-only-content .selected-product-details p,
+.auction-only-content .selected-product-id span,
+.auction-only-content .selected-product-id strong,
+.auction-only-content .product-status,
+.auction-only-content .auction-form label,
+.auction-only-content .auction-form input,
+.auction-only-content .auction-form small {
+  font-size: 14px;
+}
+
+.auction-only-content .selected-product-card {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 14px;
+  gap: 12px;
+}
+
+.auction-only-content .selected-product-details h3 {
+  font-size: 17px;
+}
+
+.auction-only-content .auction-form input {
+  min-height: 44px;
+}
+
+@media (max-width: 600px) {
+  .auction-product-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .auction-product-gallery-image {
+    height: 115px;
+  }
+
+  .verified-product-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* Inline verified-product summary: name, category, ID and status */
+.auction-only-content .selected-product-inline-card {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.5fr) minmax(0, 1fr) minmax(90px, 0.65fr)
+    minmax(110px, 0.75fr);
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+  padding: 18px 20px;
+  border: 1px solid #dce5df;
+  border-radius: 9px;
+  background: #f9fcfa;
+}
+
+.auction-only-content .selected-product-inline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.auction-only-content .selected-product-inline-item > span {
+  color: #68776f;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.auction-only-content .selected-product-inline-item > strong {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: #18352a;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.auction-only-content .selected-product-inline-status > strong {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.auction-only-content
+  .selected-product-inline-status
+  > strong.product-status-verified {
+  color: #087f4f;
+  background: #e5f6ed;
+}
+
+@media (max-width: 760px) {
+  .auction-only-content .selected-product-inline-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 12px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 420px) {
+  .auction-only-content .selected-product-inline-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Final refinements: evenly spaced verified-product fields and readable auction CTA */
+.auction-only-content .selected-product-inline-card {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: clamp(18px, 3vw, 48px);
+  row-gap: 16px;
+  align-items: center;
+}
+
+.auction-only-content .selected-product-inline-item {
+  min-width: 0;
+  width: 100%;
+}
+
+.auction-only-content .selected-product-inline-item > span {
+  font-size: 14px;
+}
+
+.auction-only-content .selected-product-inline-item > strong {
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.auction-only-content .selected-product-inline-status > strong {
+  font-size: 14px;
+}
+
+.create-auction-page > .auction-only-content .create-auction-button {
+  min-height: 48px;
+  height: auto;
+  padding: 12px 18px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+@media (max-width: 760px) {
+  .auction-only-content .selected-product-inline-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 20px;
+    row-gap: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .auction-only-content .selected-product-inline-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+}
+
+/* Form typography alignment: match seller sidebar readability without changing sidebar styles */
+.auction-only-content .auction-section-header h2 {
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.auction-only-content .auction-section-header p,
+.auction-only-content .auction-verification-message,
+.auction-only-content .auction-form label {
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.auction-only-content .auction-form input,
+.auction-only-content .auction-form select,
+.auction-only-content .auction-form textarea {
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.auction-only-content .auction-form input,
+.auction-only-content .auction-form select {
+  min-height: 48px;
+}
+
+.auction-only-content .auction-form small,
+.auction-only-content .selected-product-details p,
+.auction-only-content .selected-product-id span,
+.auction-only-content .selected-product-id strong {
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.auction-only-content .verified-product-heading label {
+  font-size: 16px;
+}
+
+.auction-only-content .verified-product-fixed-note {
+  font-size: 14px;
+}
+
+.auction-only-content .selected-product-inline-item > span {
+  font-size: 15px;
+}
+
+.auction-only-content .selected-product-inline-item > strong {
+  font-size: 18px;
+}
+
+.auction-only-content .selected-product-inline-status > strong {
+  font-size: 15px;
+}
+
+.create-auction-page > .auction-only-content .create-auction-button {
+  font-size: 16px;
+  font-weight: 650;
+}
+
+@media (max-width: 600px) {
+  .auction-only-content .auction-form label,
+  .auction-only-content .auction-form input,
+  .auction-only-content .auction-form select,
+  .auction-only-content .auction-form textarea,
+  .auction-only-content .auction-section-header p {
+    font-size: 15px;
+  }
+}
+
+/* Typography refinement: keep auction form text proportionate to the seller sidebar. */
+.create-auction-page > .auction-only-content .auction-form label,
+.create-auction-page > .auction-only-content .auction-form input,
+.create-auction-page > .auction-only-content .auction-form select,
+.create-auction-page > .auction-only-content .auction-form textarea {
+  font-size: 14px;
+}
+
+.create-auction-page > .auction-only-content .auction-form input,
+.create-auction-page > .auction-only-content .auction-form select,
+.create-auction-page > .auction-only-content .auction-form textarea {
+  line-height: 1.4;
+}
+
+.create-auction-page > .auction-only-content .auction-form .form-helper-text,
+.create-auction-page > .auction-only-content .auction-form small,
+.create-auction-page > .auction-only-content .auction-form .field-hint {
+  font-size: 12px;
+}
+
+.auction-only-content .verified-product-heading label {
+  font-size: 15px;
+}
+
+.auction-only-content .selected-product-inline-item > span {
+  font-size: 14px;
+}
+
+.auction-only-content .selected-product-inline-item > strong {
+  font-size: 16px;
+}
+
+.auction-only-content .selected-product-inline-status > strong {
+  font-size: 14px;
+}
+
+.create-auction-page > .auction-only-content .create-auction-button {
+  font-size: 15px;
+}
+
+/* Keep the shared sidebar untouched. */
+
+/* Slightly smaller auction-form typography; sidebar styles remain untouched. */
+.create-auction-page > .auction-only-content .auction-form label,
+.create-auction-page > .auction-only-content .auction-form input,
+.create-auction-page > .auction-only-content .auction-form select,
+.create-auction-page > .auction-only-content .auction-form textarea {
+  font-size: 13px;
+}
+
+.create-auction-page > .auction-only-content .auction-form .form-helper-text,
+.create-auction-page > .auction-only-content .auction-form small,
+.create-auction-page > .auction-only-content .auction-form .field-hint {
+  font-size: 11px;
+}
+
+.auction-only-content .verified-product-heading label,
+.auction-only-content .selected-product-inline-item > span {
+  font-size: 13px;
+}
+
+.auction-only-content .selected-product-inline-item > strong {
+  font-size: 15px;
+}
+
+.auction-only-content .selected-product-inline-status > strong {
+  font-size: 13px;
+}
+
+.create-auction-page > .auction-only-content .create-auction-button {
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .create-auction-page > .auction-only-content .auction-form label,
+  .create-auction-page > .auction-only-content .auction-form input,
+  .create-auction-page > .auction-only-content .auction-form select,
+  .create-auction-page > .auction-only-content .auction-form textarea {
+    font-size: 13px;
   }
 }

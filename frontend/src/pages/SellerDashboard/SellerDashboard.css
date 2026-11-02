@@ -1,16 +1,16 @@
-/* =========================================================
+/* 
    SELLER DASHBOARD
-   ========================================================= */
+    */
 
 .seller-dashboard {
   min-height: 100vh;
-  background: #f5f8f6;
+  background: #f7faf8;
   color: #17231d;
 }
 
-/* =========================================================
+/* 
    SELLER HEADER
-   ========================================================= */
+    */
 
 .seller-header {
   height: 76px;
@@ -223,9 +223,9 @@
   color: #c0392b;
 }
 
-/* =========================================================
+/* 
    MAIN LAYOUT
-   ========================================================= */
+    */
 
 .seller-dashboard-layout {
   display: flex;
@@ -236,13 +236,13 @@
 .seller-dashboard-main {
   flex: 1;
   min-width: 0;
-  margin-left: 235px;
+  margin-left: 260px;
   padding: 28px 30px 35px;
 }
 
-/* =========================================================
+/* 
    SIDEBAR
-   ========================================================= */
+    */
 
 .seller-dashboard-sidebar {
   position: fixed;
@@ -251,7 +251,7 @@
   bottom: 0;
   z-index: 90;
 
-  width: 235px;
+  width: 260px;
   flex-shrink: 0;
 
   display: flex;
@@ -314,9 +314,9 @@
   flex-shrink: 0;
 }
 
-/* =========================================================
+/* 
    HELP CARD
-   ========================================================= */
+    */
 
 .seller-help-card {
   margin-top: 22px;
@@ -367,9 +367,9 @@
   background: #066a3b;
 }
 
-/* =========================================================
+/* 
    OVERVIEW HEADING
-   ========================================================= */
+    */
 
 .seller-overview-heading {
   margin-bottom: 22px;
@@ -382,7 +382,7 @@
 .seller-overview-heading h1 {
   margin: 0;
 
-  font-size: 25px;
+  font-size: 22px;
   line-height: 1.2;
   color: #17231d;
 }
@@ -390,13 +390,13 @@
 .seller-overview-heading p {
   margin: 6px 0 0;
 
-  font-size: 12px;
+  font-size: 15px;
   color: #78847d;
 }
 
-/* =========================================================
+/* 
    SECTION COMMON
-   ========================================================= */
+    */
 
 .seller-account-section,
 .seller-summary-section,
@@ -432,9 +432,9 @@
   font-weight: 700;
 }
 
-/* =========================================================
+/* 
    ACCOUNT DETAILS
-   ========================================================= */
+    */
 
 .seller-account-card {
   padding: 23px 24px;
@@ -548,9 +548,9 @@
   text-align: center;
 }
 
-/* =========================================================
+/* 
    SUMMARY CARDS
-   ========================================================= */
+    */
 
 .seller-summary-grid {
   display: grid;
@@ -612,9 +612,9 @@
   color: #929c96;
 }
 
-/* =========================================================
+/* 
    RUNNING AUCTIONS
-   ========================================================= */
+    */
 
 .seller-auction-section {
   padding: 23px 24px;
@@ -693,9 +693,9 @@
   font-size: 10px;
 }
 
-/* =========================================================
+/* 
    BOTTOM GRID
-   ========================================================= */
+    */
 
 .seller-bottom-grid {
   display: grid;
@@ -730,9 +730,9 @@
   font-weight: 600;
 }
 
-/* =========================================================
+/* 
    CREATED / ENDED AUCTIONS
-   ========================================================= */
+    */
 
 .seller-ended-auctions-list,
 .seller-created-auctions-list {
@@ -744,9 +744,9 @@
   min-height: 180px;
 }
 
-/* =========================================================
+/* 
    STATUS OVERVIEW
-   ========================================================= */
+    */
 
 .seller-status-overview-card > .seller-section-heading svg {
   color: #087d46;
@@ -842,17 +842,17 @@
   background: #c96b61;
 }
 
-/* =========================================================
+/* 
    RESPONSIVE
-   ========================================================= */
+    */
 
 @media (max-width: 1200px) {
   .seller-dashboard-sidebar {
-    width: 210px;
+    width: 230px;
   }
 
   .seller-dashboard-main {
-    margin-left: 210px;
+    margin-left: 230px;
     padding: 25px 22px 30px;
   }
 
@@ -1320,4 +1320,938 @@
   .seller-created-auction-title {
     font-size: 15px;
   }
+}
+
+/* =========================================
+   SELLER ACCOUNT DETAILS TYPOGRAPHY
+   Matches the Create Auction form typography.
+   Scoped only to SellerAccountDetails.
+========================================= */
+
+.seller-account-card .seller-section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.seller-account-card .seller-section-heading h2 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.seller-account-card .seller-account-status {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.seller-account-card .seller-account-detail span:not(.seller-status-dot) {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.seller-account-card .seller-account-detail strong {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.seller-account-card .seller-account-loading {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Keep account typography readable on smaller screens. */
+@media (max-width: 600px) {
+  .seller-account-card .seller-section-heading h2 {
+    font-size: 16px;
+  }
+
+  .seller-account-card .seller-account-detail span:not(.seller-status-dot) {
+    font-size: 13px;
+  }
+
+  .seller-account-card .seller-account-detail strong {
+    font-size: 14px;
+  }
+
+  .seller-account-card .seller-account-status {
+    font-size: 12px;
+  }
+}
+
+.seller-account-card .seller-section-label {
+  font-size: 16px;
+}
+
+.seller-account-card .seller-section-heading h2 {
+  font-size: 16px;
+}
+
+.seller-account-card .seller-account-status {
+  font-size: 14px;
+}
+
+.seller-account-card .seller-account-detail span:not(.seller-status-dot) {
+  font-size: 13px;
+}
+
+.seller-account-card .seller-account-detail strong {
+  font-size: 13px;
+}
+
+.seller-account-card .seller-account-loading {
+  font-size: 13px;
+}
+
+/* =========================================
+   SELLER AUCTION SUMMARY TYPOGRAPHY
+   Scoped only to SellerAuctionSummary.
+========================================= */
+
+.seller-summary-card .seller-summary-label {
+  font-size: 16px;
+}
+
+.seller-summary-card .seller-summary-value {
+  font-size: 16px;
+}
+
+.seller-summary-card .seller-summary-description {
+  font-size: 14px;
+}
+
+.seller-summary-error {
+  font-size: 13px;
+}
+
+/* Keep summary typography consistent on mobile screens. */
+@media (max-width: 600px) {
+  .seller-summary-card .seller-summary-label {
+    font-size: 16px;
+  }
+
+  .seller-summary-card .seller-summary-value {
+    font-size: 16px;
+  }
+
+  .seller-summary-card .seller-summary-description {
+    font-size: 14px;
+  }
+
+  .seller-summary-error {
+    font-size: 13px;
+  }
+}
+
+/* =========================================
+   SELLER AUCTION SUMMARY VALUE EMPHASIS
+   Keep each zero/value below its heading,
+   bold, and solid black.
+========================================= */
+
+.seller-summary-card .seller-summary-value {
+  display: block;
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #000000;
+  opacity: 1;
+}
+
+.seller-summary-card .seller-summary-label {
+  font-size: 16px;
+}
+
+.seller-summary-card .seller-summary-description {
+  font-size: 14px;
+  opacity: 1;
+}
+
+.seller-summary-error {
+  font-size: 13px;
+}
+
+/* Summary card labels */
+.seller-summary-card .seller-summary-card-top .seller-summary-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  opacity: 1;
+}
+
+/* Values: zero and earnings */
+.seller-summary-grid .seller-summary-card .seller-summary-value {
+  display: block;
+  margin-top: 15px;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #000000;
+  opacity: 1;
+}
+
+/* Description below each value */
+.seller-summary-card .seller-summary-description {
+  font-size: 13px;
+  color: #000000;
+  opacity: 1;
+}
+
+/* =========================================
+   SELLER AUCTION SUMMARY ALIGNMENT
+   Align values and descriptions with heading text.
+   ========================================= */
+
+.seller-summary-grid .seller-summary-card .seller-summary-value {
+  margin-left: 43px;
+}
+
+.seller-summary-grid .seller-summary-card .seller-summary-description {
+  margin-left: 43px;
+}
+
+/* =========================================
+   ALL AUCTIONS OF YOU
+   Scoped styles for the unified seller auction list.
+========================================= */
+
+.seller-all-auctions-section {
+  width: 100%;
+  min-width: 0;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+/* Section heading */
+.seller-all-auctions-section .seller-all-auctions-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.seller-all-auctions-section .seller-all-auctions-heading h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* Auction count */
+.seller-all-auctions-section .seller-auction-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 7px 13px;
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #d1fae5;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* All / Scheduled / Live / Ended filters */
+.seller-all-auctions-section .seller-auction-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.seller-all-auctions-section .seller-auction-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 8px 18px;
+  border: 1px solid #dbe3e8;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.seller-all-auctions-section .seller-auction-filter:hover {
+  border-color: #087d46;
+  color: #087d46;
+}
+
+.seller-all-auctions-section .seller-auction-filter.active {
+  background: #087d46;
+  border-color: #087d46;
+  color: #ffffff;
+}
+
+.seller-all-auctions-section .seller-auction-filter:focus-visible {
+  outline: 2px solid #087d46;
+  outline-offset: 3px;
+}
+
+/* Auction list */
+.seller-all-auctions-section .seller-running-auctions {
+  width: 100%;
+  min-width: 0;
+}
+
+.seller-all-auctions-section .seller-created-auctions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  min-height: 0;
+}
+
+/* Individual auction row */
+.seller-all-auctions-section .seller-created-auction-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.seller-all-auctions-section .seller-created-auction-item:hover {
+  border-color: #b7dccc;
+  box-shadow: 0 3px 12px rgb(15 23 42 / 5%);
+}
+
+/* Auction image */
+.seller-all-auctions-section .seller-created-auction-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 76px;
+  height: 76px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.seller-all-auctions-section .seller-created-auction-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Auction information */
+.seller-all-auctions-section .seller-created-auction-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  gap: 7px;
+}
+
+.seller-all-auctions-section .seller-created-auction-title {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Auction status */
+.seller-all-auctions-section .seller-auction-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 4px 9px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.seller-all-auctions-section .seller-status-active,
+.seller-all-auctions-section .seller-status-live,
+.seller-all-auctions-section .seller-status-ongoing {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.seller-all-auctions-section .seller-status-scheduled,
+.seller-all-auctions-section .seller-status-upcoming {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.seller-all-auctions-section .seller-status-ended,
+.seller-all-auctions-section .seller-status-completed,
+.seller-all-auctions-section .seller-status-closed {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+
+.seller-all-auctions-section .seller-status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+/* Auction ID */
+.seller-all-auctions-section .seller-created-auction-id {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.seller-all-auctions-section .seller-created-auction-id strong {
+  color: #374151;
+  font-weight: 600;
+}
+
+/* Empty, loading, and error states */
+.seller-all-auctions-section .seller-empty-auctions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 190px;
+  padding: 28px 16px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.seller-all-auctions-section .seller-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  color: #087d46;
+}
+
+.seller-all-auctions-section .seller-empty-auctions h3 {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.seller-all-auctions-section .seller-empty-auctions p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* Responsive styles for the unified auction list */
+@media (max-width: 600px) {
+  .seller-all-auctions-section {
+    padding: 17px;
+    border-radius: 12px;
+  }
+
+  .seller-all-auctions-section .seller-all-auctions-heading {
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+
+  .seller-all-auctions-section .seller-all-auctions-heading h2 {
+    font-size: 20px;
+  }
+
+  .seller-all-auctions-section .seller-auction-count {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  .seller-all-auctions-section .seller-auction-filters {
+    gap: 7px;
+    margin-bottom: 18px;
+  }
+
+  .seller-all-auctions-section .seller-auction-filter {
+    min-height: 33px;
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .seller-all-auctions-section .seller-created-auction-item {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .seller-all-auctions-section .seller-created-auction-image {
+    width: 62px;
+    height: 62px;
+  }
+
+  .seller-all-auctions-section .seller-created-auction-title {
+    font-size: 14px;
+  }
+
+  .seller-all-auctions-section .seller-created-auction-id {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 380px) {
+  .seller-all-auctions-section {
+    padding: 13px;
+  }
+
+  .seller-all-auctions-section .seller-created-auction-item {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .seller-all-auctions-section .seller-created-auction-image {
+    width: 54px;
+    height: 54px;
+  }
+
+  .seller-all-auctions-section .seller-created-auction-title {
+    font-size: 13px;
+  }
+}
+
+/* =========================================
+   FINAL HEADER / SIDEBAR STACKING OVERRIDES
+   Sidebar is layered above the header when they overlap.
+========================================= */
+
+.seller-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 120px;
+  margin: 0;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.seller-dashboard-layout {
+  margin-top: 120px;
+  min-height: calc(100vh - 120px);
+}
+
+.seller-dashboard-sidebar {
+  position: fixed;
+  top: 120px;
+  left: 0;
+  bottom: 0;
+  height: auto;
+  z-index: 1100;
+}
+
+.seller-dashboard-main {
+  margin-left: 260px;
+  min-width: 0;
+}
+
+@media (max-width: 1200px) {
+  .seller-dashboard-sidebar {
+    width: 230px;
+  }
+
+  .seller-dashboard-main {
+    margin-left: 230px;
+  }
+}
+
+@media (max-width: 850px) {
+  .seller-dashboard-sidebar {
+    top: 120px;
+    width: 70px;
+  }
+
+  .seller-dashboard-main {
+    margin-left: 70px;
+  }
+}
+
+@media (max-width: 600px) {
+  .seller-header {
+    height: 68px;
+  }
+
+  .seller-dashboard-layout {
+    margin-top: 68px;
+    min-height: calc(100vh - 68px);
+  }
+
+  .seller-dashboard-sidebar {
+    top: 68px;
+    width: 58px;
+  }
+
+  .seller-dashboard-main {
+    margin-left: 58px;
+  }
+}
+
+/* =========================================================
+   FINAL VISUAL MATCH — BUYER DASHBOARD REFERENCE
+   Header color matches dashboard; component dimensions kept.
+========================================================= */
+
+.seller-header {
+  background: #f7faf8;
+  border-bottom: 1px solid #e1e9e4;
+  box-shadow: none;
+  z-index: 1000;
+}
+
+.seller-dashboard-layout {
+  background: #f7faf8;
+}
+
+/* Floating white sidebar like the buyer dashboard.
+   Keep the existing sidebar widths unchanged. */
+@media (min-width: 851px) {
+  .seller-dashboard-sidebar {
+    top: 140px;
+    left: 20px;
+    bottom: 20px;
+    border: 1px solid #e0e9e3;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(28, 54, 40, 0.025);
+    z-index: 1100;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .seller-dashboard-main {
+    margin-left: 300px;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 851px) {
+  .seller-dashboard-main {
+    margin-left: 276px;
+  }
+}
+
+@media (max-width: 850px) {
+  .seller-dashboard-sidebar {
+    left: 10px;
+    border: 1px solid #e0e9e3;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(28, 54, 40, 0.025);
+    z-index: 1100;
+  }
+}
+
+@media (max-width: 600px) {
+  .seller-dashboard-sidebar {
+    left: 6px;
+    border-radius: 10px;
+  }
+}
+
+/* =========================================================
+   HEADER EDGE-TO-EDGE ALIGNMENT
+   Remove left/right gutters without resizing header controls.
+========================================================= */
+.seller-header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  right: auto;
+  width: 100vw;
+  max-width: none;
+  margin: 0;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  background: #f7faf8;
+  z-index: 1000;
+}
+
+/* Keep the existing header height and control dimensions.
+   Fine-tune vertical placement of header contents only. */
+.seller-header {
+  padding-top: 2px;
+}
+
+/* =========================================================
+   FINAL FIX — TOP ALIGNMENT AND EDGE-TO-EDGE HEADER
+   Keep component dimensions and existing sidebar widths.
+========================================================= */
+
+html,
+body,
+#root {
+  margin: 0;
+  min-width: 0;
+}
+
+.seller-dashboard {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+.seller-header {
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  transform: none;
+  box-sizing: border-box;
+}
+
+/* Align the dashboard area directly under the 120px desktop header. */
+.seller-dashboard-layout {
+  margin-top: 120px;
+  padding-top: 0;
+  min-height: calc(100vh - 120px);
+  box-sizing: border-box;
+}
+
+/* Remove the extra gap above the sidebar; retain its current width. */
+@media (min-width: 851px) {
+  .seller-dashboard-sidebar {
+    top: 120px;
+  }
+
+  .seller-dashboard-main {
+    padding-top: 28px;
+  }
+}
+
+@media (max-width: 850px) {
+  .seller-dashboard-layout {
+    margin-top: 120px;
+    min-height: calc(100vh - 120px);
+  }
+
+  .seller-dashboard-sidebar {
+    top: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .seller-header {
+    height: 68px;
+  }
+
+  .seller-dashboard-layout {
+    margin-top: 68px;
+    min-height: calc(100vh - 68px);
+  }
+
+  .seller-dashboard-sidebar {
+    top: 68px;
+  }
+}
+
+/* =========================================================
+   FINAL ALIGNMENT FIX — SIDEBAR AND DASHBOARD
+   Remove the vertical gap below the header and align the
+   dashboard content closer to the floating sidebar.
+   Existing component dimensions remain unchanged.
+========================================================= */
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.seller-dashboard {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.seller-header {
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  transform: none;
+  box-sizing: border-box;
+}
+
+.seller-dashboard-layout {
+  margin-top: 120px;
+  padding-top: 0;
+  min-height: calc(100vh - 120px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1201px) {
+  .seller-dashboard-sidebar {
+    top: 120px;
+    left: 20px;
+    bottom: 20px;
+  }
+
+  .seller-dashboard-main {
+    margin-left: 270px;
+    padding-top: 28px;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 851px) {
+  .seller-dashboard-sidebar {
+    top: 120px;
+    left: 14px;
+    bottom: 14px;
+  }
+
+  .seller-dashboard-main {
+    margin-left: 246px;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 850px) {
+  .seller-dashboard-layout {
+    margin-top: 120px;
+    min-height: calc(100vh - 120px);
+  }
+
+  .seller-dashboard-sidebar {
+    top: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .seller-header {
+    height: 68px;
+  }
+
+  .seller-dashboard-layout {
+    margin-top: 68px;
+    min-height: calc(100vh - 68px);
+  }
+
+  .seller-dashboard-sidebar {
+    top: 68px;
+  }
+}
+
+/* =========================================================
+   FINAL REQUESTED OVERRIDES
+   Match header and dashboard background; move dashboard
+   content and sidebar upward while preserving their styling.
+========================================================= */
+.seller-dashboard,
+.seller-dashboard-layout,
+.seller-header {
+  background-color: #f7faf8;
+}
+
+@media (min-width: 851px) {
+  .seller-dashboard-layout {
+    margin-top: 95px;
+  }
+
+  .seller-dashboard-sidebar {
+    top: 115px;
+  }
+
+  .seller-dashboard-main {
+    padding-top: 18px;
+  }
+}
+
+@media (max-width: 850px) and (min-width: 601px) {
+  .seller-dashboard-layout {
+    margin-top: 95px;
+  }
+
+  .seller-dashboard-sidebar {
+    top: 115px;
+  }
+}
+
+@media (max-width: 600px) {
+  .seller-header,
+  .seller-dashboard,
+  .seller-dashboard-layout {
+    background-color: #f7faf8;
+  }
+
+  .seller-dashboard-layout {
+    margin-top: 68px;
+  }
+
+  .seller-dashboard-sidebar {
+    top: 68px;
+  }
+}
+
+/* =========================================================
+   FIX — LEFT AND RIGHT OUTER WHITE SPACE
+   Apply the dashboard background to the page canvas only
+   while the Seller Dashboard is present.
+========================================================= */
+html:has(.seller-dashboard),
+body:has(.seller-dashboard),
+body:has(.seller-dashboard) #root {
+  background-color: #f7faf8 !important;
+}
+
+/* Ensure the dashboard surface itself fills the available width. */
+.seller-dashboard {
+  background-color: #f7faf8;
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
 }

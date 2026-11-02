@@ -21,9 +21,9 @@ import SellerDashboard from "./pages/SellerDashboard/SellerDashboard";
 import Header from "./components/Header/Header";
 import { logout } from "./redux/slices/authSlice";
 
-// =====================================================
+//
 // ROLE HELPER
-// =====================================================
+//
 
 const normalizeRole = (role) => {
   if (!role) return "";
@@ -34,9 +34,9 @@ const normalizeRole = (role) => {
     .replace(/^role_/, "");
 };
 
-// =====================================================
+//
 // MAIN APP
-// =====================================================
+//
 
 export default function App() {
   const dispatch = useDispatch();
@@ -59,17 +59,15 @@ export default function App() {
     normalizeRole(localStorage.getItem("loginType")),
   );
 
-  // =====================================================
+  //
   // CURRENT LOGIN TYPE
-  // =====================================================
+  //
 
-  // Use the current login type instead of a possibly stale
-  // role stored in the Redux user object.
   const isAdmin = isAuthenticated && loginType === "admin";
 
-  // =====================================================
+  //
   // NAVIGATION HELPER
-  // =====================================================
+  //
 
   const goTo = (path, options = {}) => {
     navigate(path, options);
@@ -80,9 +78,9 @@ export default function App() {
     });
   };
 
-  // =====================================================
+  //
   // AUTHENTICATION
-  // =====================================================
+  //
 
   const handleOpenAuth = () => {
     goTo("/auth");
@@ -96,9 +94,9 @@ export default function App() {
     }
   };
 
-  // =====================================================
+  //
   // LOGIN SUCCESS
-  // =====================================================
+  //
 
   const handleLoginSuccess = (role) => {
     const selectedRole = normalizeRole(role);
@@ -108,25 +106,20 @@ export default function App() {
       return;
     }
 
-    // Store the current login type.
     localStorage.setItem("loginType", selectedRole);
     setLoginType(selectedRole);
-
     setActiveNav("");
 
-    // ADMIN DASHBOARD
     if (selectedRole === "admin") {
       goTo("/admin");
       return;
     }
 
-    // BUYER DASHBOARD
     if (selectedRole === "buyer") {
       goTo("/dashboard");
       return;
     }
 
-    // SELLER DASHBOARD
     if (selectedRole === "seller") {
       goTo("/seller-dashboard");
       return;
@@ -135,9 +128,9 @@ export default function App() {
     console.error("Unsupported login type:", selectedRole);
   };
 
-  // =====================================================
+  //
   // SELLER VERIFICATION SUCCESS
-  // =====================================================
+  //
 
   const handleSellerVerificationSuccess = () => {
     setIsSeller(true);
@@ -147,20 +140,19 @@ export default function App() {
     goTo("/auth");
   };
 
-  // =====================================================
+  //
   // LOGOUT
-  // =====================================================
+  //
 
   const handleLogout = () => {
     dispatch(logout());
 
-    // Clear the previous account's login information.
     localStorage.removeItem("loginType");
-    setLoginType("");
     localStorage.removeItem("isSeller");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
+    setLoginType("");
     setIsSeller(false);
     setSelectedProduct(null);
     setActiveNav("Home");
@@ -168,24 +160,21 @@ export default function App() {
     goTo("/");
   };
 
-  // =====================================================
+  //
   // VIEW ALL AUCTIONS
-  // =====================================================
+  //
 
   const handleViewAllAuctions = () => {
     setActiveNav("Auctions");
     goTo("/auctions");
   };
 
-  // =====================================================
+  //
   // PRODUCT DETAILS
-  // =====================================================
+  //
 
   const handleProductDetails = (product) => {
     if (!product) return;
-
-    setSelectedProduct(product);
-    setActiveNav("");
 
     const productId = product.productId ?? product.id ?? product.auctionId;
 
@@ -197,23 +186,34 @@ export default function App() {
       return;
     }
 
+    setSelectedProduct(product);
+    setActiveNav("");
+
     goTo(`/product/${productId}`, {
       state: { product },
     });
   };
 
-  // =====================================================
+  //
   // LIVE AUCTION
-  // =====================================================
+  //
 
   const handleLiveAuction = (auction = selectedProduct) => {
-    if (!auction) return;
+    if (!auction) {
+      console.error("Cannot open live auction: no auction was provided.");
+      return;
+    }
 
-    const auctionId = auction.auctionId;
+    // Use the auction ID, not the product ID, for the live-auction route.
+    const auctionId =
+      auction.auctionId ??
+      auction.auction?.auctionId ??
+      auction.auction?.id ??
+      auction.id;
 
-    if (auctionId == null) {
+    if (auctionId == null || String(auctionId).trim() === "") {
       console.error(
-        "Cannot open live auction: auction ID is missing.",
+        "Cannot open live auction: auctionId is missing from the selected auction.",
         auction,
       );
       return;
@@ -222,14 +222,14 @@ export default function App() {
     setSelectedProduct(auction);
     setActiveNav("");
 
-    goTo(`/live-auction/${auctionId}`, {
+    goTo(`/live-auction/${encodeURIComponent(String(auctionId))}`, {
       state: { product: auction },
     });
   };
 
-  // =====================================================
+  //
   // BACK TO PRODUCT DETAILS
-  // =====================================================
+  //
 
   const handleBackToProduct = () => {
     const productId = selectedProduct?.productId ?? selectedProduct?.id;
@@ -243,27 +243,27 @@ export default function App() {
     }
   };
 
-  // =====================================================
+  //
   // HOME
-  // =====================================================
+  //
 
   const handleHome = () => {
     setActiveNav("Home");
     goTo("/");
   };
 
-  // =====================================================
+  //
   // BUYER DASHBOARD
-  // =====================================================
+  //
 
   const handleDashboard = () => {
     setActiveNav("");
     goTo("/dashboard");
   };
 
-  // =====================================================
+  //
   // SELLER DASHBOARD
-  // =====================================================
+  //
 
   const handleSellerDashboard = () => {
     if (loginType !== "seller") {
@@ -275,9 +275,9 @@ export default function App() {
     goTo("/seller-dashboard");
   };
 
-  // =====================================================
+  //
   // ADMIN DASHBOARD
-  // =====================================================
+  //
 
   const handleAdminDashboard = () => {
     if (!isAdmin) {
@@ -289,15 +289,17 @@ export default function App() {
     goTo("/admin");
   };
 
-  // =====================================================
+  //
   // HOW IT WORKS
-  // =====================================================
+  //
 
   const handleHowItWorks = () => {
     setActiveNav("How It Works");
 
     if (location.pathname !== "/") {
-      navigate("/", { state: { scrollToHowItWorks: true } });
+      navigate("/", {
+        state: { scrollToHowItWorks: true },
+      });
 
       setTimeout(() => {
         document.getElementById("how-it-works")?.scrollIntoView({
@@ -313,17 +315,17 @@ export default function App() {
     }
   };
 
-  // =====================================================
+  //
   // ACTIVE NAVIGATION
-  // =====================================================
+  //
 
   const handleActiveNavChange = (link) => {
     setActiveNav(link);
   };
 
-  // =====================================================
+  //
   // COMMON HEADER PROPS
-  // =====================================================
+  //
 
   const headerProps = {
     onLogin: handleOpenAuth,
@@ -342,83 +344,30 @@ export default function App() {
     onActiveLinkChange: handleActiveNavChange,
   };
 
-  // =====================================================
-  // PAGE COMPONENTS
-  // =====================================================
-
-  const HomePage = () => (
-    <Home {...headerProps} onProductDetails={handleProductDetails} />
-  );
-
-  const AuctionsPage = () => (
-    <AllAuction {...headerProps} onProductDetails={handleProductDetails} />
-  );
-
-  const AdminPage = () => {
-    if (!isAuthenticated || !isAdmin) {
-      return <Navigate to="/" replace />;
-    }
-
-    return (
-      <>
-        <Header {...headerProps} dashboardMode adminDashboardMode />
-        <AdminDashboard onLogout={handleLogout} />
-      </>
-    );
-  };
-
-  const BuyerDashboardPage = () => {
-    if (!isAuthenticated || isAdmin) {
-      return <Navigate to="/" replace />;
-    }
-
-    return (
-      <Dashboard
-        onLogout={handleLogout}
-        onSellerVerified={handleSellerVerificationSuccess}
-        isSeller={isSeller}
-        isLoggedIn={isAuthenticated}
-        user={user}
-        onDashboard={handleDashboard}
-        onSellerDashboard={handleSellerDashboard}
-        canAccessSellerDashboard={loginType === "seller"}
-        onHome={handleHome}
-        onViewAllAuctions={handleViewAllAuctions}
-        onHowItWorks={handleHowItWorks}
-        activeLink={activeNav}
-        onActiveLinkChange={handleActiveNavChange}
-        onLiveAuction={handleLiveAuction}
-      />
-    );
-  };
-
-  const SellerDashboardPage = () => {
-    if (!isAuthenticated || isAdmin || loginType !== "seller") {
-      return <Navigate to="/" replace />;
-    }
-
-    return (
-      <SellerDashboard
-        onLogout={handleLogout}
-        onDashboard={handleDashboard}
-        onHome={handleHome}
-        onViewAllAuctions={handleViewAllAuctions}
-        onHowItWorks={handleHowItWorks}
-      />
-    );
-  };
-
-  // =====================================================
+  //
   // ROUTES
-  // =====================================================
+  //
 
   return (
     <Routes>
       {/* HOME */}
-      <Route path="/" element={<HomePage />} />
+      <Route
+        path="/"
+        element={
+          <Home {...headerProps} onProductDetails={handleProductDetails} />
+        }
+      />
 
       {/* ALL AUCTIONS */}
-      <Route path="/auctions" element={<AuctionsPage />} />
+      <Route
+        path="/auctions"
+        element={
+          <AllAuction
+            {...headerProps}
+            onProductDetails={handleProductDetails}
+          />
+        }
+      />
 
       {/* AUTHENTICATION */}
       <Route
@@ -432,13 +381,64 @@ export default function App() {
       />
 
       {/* ADMIN DASHBOARD */}
-      <Route path="/admin" element={<AdminPage />} />
+      <Route
+        path="/admin"
+        element={
+          !isAuthenticated || !isAdmin ? (
+            <Navigate to="/" replace />
+          ) : (
+            <>
+              <Header {...headerProps} dashboardMode adminDashboardMode />
+              <AdminDashboard onLogout={handleLogout} />
+            </>
+          )
+        }
+      />
 
       {/* BUYER DASHBOARD */}
-      <Route path="/dashboard" element={<BuyerDashboardPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          !isAuthenticated || isAdmin ? (
+            <Navigate to="/" replace />
+          ) : (
+            <Dashboard
+              onLogout={handleLogout}
+              onSellerVerified={handleSellerVerificationSuccess}
+              isSeller={isSeller}
+              isLoggedIn={isAuthenticated}
+              user={user}
+              onDashboard={handleDashboard}
+              onSellerDashboard={handleSellerDashboard}
+              canAccessSellerDashboard={loginType === "seller"}
+              onHome={handleHome}
+              onViewAllAuctions={handleViewAllAuctions}
+              onHowItWorks={handleHowItWorks}
+              activeLink={activeNav}
+              onActiveLinkChange={handleActiveNavChange}
+              onLiveAuction={handleLiveAuction}
+            />
+          )
+        }
+      />
 
       {/* SELLER DASHBOARD */}
-      <Route path="/seller-dashboard" element={<SellerDashboardPage />} />
+      <Route
+        path="/seller-dashboard"
+        element={
+          !isAuthenticated || isAdmin || loginType !== "seller" ? (
+            <Navigate to="/" replace />
+          ) : (
+            <SellerDashboard
+              onLogout={handleLogout}
+              onDashboard={handleDashboard}
+              onHome={handleHome}
+              onViewAllAuctions={handleViewAllAuctions}
+              onHowItWorks={handleHowItWorks}
+            />
+          )
+        }
+      />
 
       {/* PRODUCT DETAILS */}
       <Route
@@ -473,44 +473,44 @@ export default function App() {
   );
 }
 
-// =====================================================
+//
 // PRODUCT DETAILS ROUTE
-// =====================================================
+//
 
 function ProductDetailsRoute({
   selectedProduct,
-  setSelectedProduct,
   onLiveAuction,
   ...headerProps
 }) {
-  const { productId } = useParams();
   const location = useLocation();
+  const { productId } = useParams();
 
-  const product = location.state?.product || selectedProduct;
+  const product = location.state?.product ?? selectedProduct;
 
-  if (!product) {
-    return <ProductDetails {...headerProps} onLiveAuction={onLiveAuction} />;
-  }
-
+  // Pass productId even on a direct page refresh/open, so ProductDetails can
+  // load the product when navigation state is not available.
   return (
     <ProductDetails
       {...headerProps}
       product={product}
+      productId={productId}
       onLiveAuction={onLiveAuction}
     />
   );
 }
 
-// =====================================================
+//
 // LIVE AUCTION ROUTE
-// =====================================================
+//
 
 function LiveAuctionRoute({ selectedProduct, onBack, ...headerProps }) {
   const { auctionId } = useParams();
   const location = useLocation();
 
-  const product = location.state?.product || selectedProduct;
+  const product = location.state?.product ?? selectedProduct;
 
+  // LiveAuction can fetch the auction by auctionId, even if the user opens
+  // or refreshes this URL without navigation state.
   return (
     <LiveAuction
       {...headerProps}

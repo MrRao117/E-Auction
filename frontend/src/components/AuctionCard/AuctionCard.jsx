@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
-
 import "./AuctionCard.css";
 
-/* =========================================================
-   GET AUCTION COUNTDOWN
-========================================================= */
-
+// Get auction countdown
 const getAuctionCountdown = (startTime, endTime, now) => {
   const startMs = startTime ? new Date(startTime).getTime() : NaN;
   const endMs = endTime ? new Date(endTime).getTime() : NaN;
 
-  // Missing or invalid timestamps
   if (
     !Number.isFinite(startMs) ||
     !Number.isFinite(endMs) ||
@@ -22,7 +17,6 @@ const getAuctionCountdown = (startTime, endTime, now) => {
     };
   }
 
-  // Auction has not started
   if (now < startMs) {
     return {
       remainingSeconds: Math.max(0, Math.floor((startMs - now) / 1000)),
@@ -30,7 +24,6 @@ const getAuctionCountdown = (startTime, endTime, now) => {
     };
   }
 
-  // Auction has ended
   if (now >= endMs) {
     return {
       remainingSeconds: 0,
@@ -38,17 +31,13 @@ const getAuctionCountdown = (startTime, endTime, now) => {
     };
   }
 
-  // Auction is currently live
   return {
     remainingSeconds: Math.max(0, Math.floor((endMs - now) / 1000)),
     status: "LIVE",
   };
 };
 
-/* =========================================================
-   FORMAT COUNTDOWN
-========================================================= */
-
+// Format countdown
 const formatTime = (value) => {
   if (value === null || value === undefined) {
     return "--";
@@ -57,10 +46,7 @@ const formatTime = (value) => {
   return String(value).padStart(2, "0");
 };
 
-/* =========================================================
-   AUCTION CARD
-========================================================= */
-
+// Auction card component
 export default function AuctionCard({
   auctionId,
   productId,
@@ -79,11 +65,9 @@ export default function AuctionCard({
   imageCount = 5,
   verified = true,
   onProductClick,
+  showLiveBadge = false,
 }) {
-  /* =========================================================
-     REAL-TIME CLOCK
-  ========================================================= */
-
+  // Real-time clock
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -94,12 +78,8 @@ export default function AuctionCard({
     return () => clearInterval(timer);
   }, []);
 
-  /* =========================================================
-     COUNTDOWN CALCULATION
-  ========================================================= */
-
+  // Calculate countdown
   const countdown = getAuctionCountdown(startTime, endTime, now);
-
   const remainingSeconds = countdown.remainingSeconds;
 
   const hours =
@@ -112,18 +92,12 @@ export default function AuctionCard({
 
   const seconds = remainingSeconds === null ? null : remainingSeconds % 60;
 
-  /* =========================================================
-     SELLER INITIAL
-  ========================================================= */
-
+  // Get seller initial
   const sellerInitial =
     (typeof seller === "string" ? seller.trim().charAt(0).toUpperCase() : "") ||
     "S";
 
-  /* =========================================================
-     OPEN PRODUCT DETAILS
-  ========================================================= */
-
+  // Open product details
   const handleCardClick = () => {
     if (typeof onProductClick !== "function") {
       return;
@@ -150,20 +124,13 @@ export default function AuctionCard({
     });
   };
 
-  /* =========================================================
-     KEYBOARD ACCESSIBILITY
-  ========================================================= */
-
+  // Handle keyboard accessibility
   const handleKeyDown = (event) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       handleCardClick();
     }
   };
-
-  /* =========================================================
-     RETURN
-  ========================================================= */
 
   return (
     <article
@@ -173,8 +140,7 @@ export default function AuctionCard({
       role="button"
       tabIndex={0}
     >
-      {/* PRODUCT IMAGE */}
-
+      {/* Product image */}
       <div className="auction-image-wrapper">
         {image ? (
           <img
@@ -188,8 +154,7 @@ export default function AuctionCard({
           </div>
         )}
 
-        {/* VERIFIED */}
-
+        {/* Verified badge */}
         {verified && (
           <div className="auction-verified">
             <span className="verified-check">✓</span>
@@ -197,8 +162,7 @@ export default function AuctionCard({
           </div>
         )}
 
-        {/* WISHLIST */}
-
+        {/* Wishlist button */}
         <button
           type="button"
           className="auction-wishlist"
@@ -210,37 +174,31 @@ export default function AuctionCard({
           ♡
         </button>
 
-        {/* IMAGE COUNT */}
-
+        {/* Image count */}
         <div className="auction-image-count">
           <span className="image-count-icon">▧</span>
           <span>1 / {imageCount}</span>
         </div>
       </div>
 
-      {/* CARD CONTENT */}
-
+      {/* Card content */}
       <div className="auction-card-content">
-        {/* AUCTION ID */}
-
+        {/* Auction ID */}
         <div className="auction-id">
           <span>Auction ID:</span>
           <strong>{auctionId || "N/A"}</strong>
         </div>
 
-        {/* PRODUCT NAME */}
-
+        {/* Product name */}
         <h3 className="auction-title">{title || "---"}</h3>
 
-        {/* CATEGORY */}
-
+        {/* Category */}
         <div className="auction-category">
           <span className="category-icon">◉</span>
           <span>{category || "---"}</span>
         </div>
 
-        {/* SELLER */}
-
+        {/* Seller details */}
         <div className="auction-seller">
           <div className="seller-avatar">{sellerInitial}</div>
 
@@ -250,32 +208,38 @@ export default function AuctionCard({
           </div>
         </div>
 
-        {/* COUNTDOWN - NO LABEL */}
-
+        {/* Countdown or LIVE badge */}
         <div className="auction-bottom">
           <div className="auction-time">
-            <div className="time-details">
-              <div className="countdown">
-                <div className="countdown-box">
-                  <strong>{formatTime(hours)}</strong>
-                  <small>HH</small>
-                </div>
+            {showLiveBadge ? (
+              <div className="auction-live-badge">
+                <span className="auction-live-indicator"></span>
+                <span>LIVE NOW</span>
+              </div>
+            ) : (
+              <div className="time-details">
+                <div className="countdown">
+                  <div className="countdown-box">
+                    <strong>{formatTime(hours)}</strong>
+                    <small>HH</small>
+                  </div>
 
-                <span className="countdown-separator">:</span>
+                  <span className="countdown-separator">:</span>
 
-                <div className="countdown-box">
-                  <strong>{formatTime(minutes)}</strong>
-                  <small>MM</small>
-                </div>
+                  <div className="countdown-box">
+                    <strong>{formatTime(minutes)}</strong>
+                    <small>MM</small>
+                  </div>
 
-                <span className="countdown-separator">:</span>
+                  <span className="countdown-separator">:</span>
 
-                <div className="countdown-box">
-                  <strong>{formatTime(seconds)}</strong>
-                  <small>SS</small>
+                  <div className="countdown-box">
+                    <strong>{formatTime(seconds)}</strong>
+                    <small>SS</small>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

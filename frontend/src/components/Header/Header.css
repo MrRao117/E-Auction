@@ -1,6 +1,51 @@
-/* =========================================================
+/* 
    HEADER
-========================================================= */
+ */
+
+/* 
+   HEADER: SEARCH, LOCATION, NAVIGATION & PROFILE
+ */
+
+/* HEADER ALIGNMENT FIX */
+
+.header {
+  grid-template-columns: 205px minmax(0, 520px) auto auto auto;
+  justify-content: space-between;
+  column-gap: 0;
+}
+
+/* Search bar: preserve original size */
+.header .search-wrap {
+  width: 100%;
+  max-width: 520px;
+  min-width: 0;
+  justify-self: stretch;
+  margin: 0;
+}
+
+/* Location: move 20px left from previous position */
+.header .location-wrapper {
+  justify-self: start;
+  margin-left: 20px;
+  margin-right: 0;
+}
+
+/* Navigation: equal gap between every menu item */
+.header .nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 50px;
+  margin-left: 30px;
+  margin-right: 0;
+  white-space: nowrap;
+}
+
+/* Profile: keep aligned after navigation */
+.header .profile-wrapper {
+  justify-self: end;
+  margin-left: 20px;
+}
 
 .header {
   position: fixed;
@@ -23,10 +68,10 @@
   box-sizing: border-box;
 }
 
-/* =========================================================
+/* 
    DASHBOARD HEADER ALIGNMENT
    Keep the dashboard header to the right of the fixed sidebar.
-========================================================= */
+ */
 
 .header.dashboard-header-fixed {
   left: 0;
@@ -40,9 +85,9 @@
   visibility: visible;
 }
 
-/* =========================================================
+/* 
    BRAND
-========================================================= */
+ */
 
 .brand {
   width: 205px;
@@ -113,9 +158,9 @@
   white-space: nowrap;
 }
 
-/* =========================================================
+/* 
    SEARCH WRAPPER
-========================================================= */
+ */
 
 .search-wrap {
   width: 100%;
@@ -128,9 +173,9 @@
   margin: 0 auto;
 }
 
-/* =========================================================
+/* 
    CATEGORY
-========================================================= */
+ */
 
 .category-wrapper {
   position: relative;
@@ -165,9 +210,9 @@
   transform: scale(0.95);
 }
 
-/* =========================================================
+/* 
    CATEGORY MENU
-========================================================= */
+ */
 
 .category-menu {
   position: absolute;
@@ -209,9 +254,9 @@
   color: var(--green);
 }
 
-/* =========================================================
+/* 
    SEARCH BOX
-========================================================= */
+ */
 
 .header .search-box {
   flex: 1;
@@ -258,9 +303,9 @@
   cursor: pointer;
 }
 
-/* =========================================================
+/* 
    LOCATION
-========================================================= */
+ */
 
 .location-wrapper {
   position: relative;
@@ -330,10 +375,10 @@
   flex-shrink: 0;
 }
 
-/* =========================================================
+/* 
    BECOME A SELLER
    DASHBOARD ONLY
-========================================================= */
+ */
 
 .seller-link {
   position: relative;
@@ -386,10 +431,10 @@
   color: #075b42;
 }
 
-/* =========================================================
+/* 
    NAVIGATION
    HOMEPAGE ONLY
-========================================================= */
+ */
 
 .nav-links {
   display: flex;
@@ -443,10 +488,10 @@
   width: 100%;
 }
 
-/* =========================================================
+/* 
    LOGIN
    HOMEPAGE ONLY
-========================================================= */
+ */
 
 .login-btn {
   height: 34px;
@@ -471,9 +516,9 @@
   background: var(--green-dark);
 }
 
-/* =========================================================
+/* 
    DASHBOARD PROFILE
-========================================================= */
+ */
 
 .profile-wrapper {
   position: relative;
@@ -523,9 +568,9 @@
   margin-left: 2px;
 }
 
-/* =========================================================
+/* 
    PROFILE DROPDOWN
-========================================================= */
+ */
 
 .profile-menu {
   position: absolute;
@@ -568,9 +613,9 @@
   color: #b33a3a;
 }
 
-/* =========================================================
+/* 
    DASHBOARD HEADER - RESPONSIVE ALIGNMENT
-========================================================= */
+ */
 
 @media (max-width: 1250px) {
   .header.dashboard-header-fixed {

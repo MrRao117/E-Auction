@@ -1,7 +1,9 @@
 import { useState } from "react";
 
+import Messages from "../../components/Dashboard/Messages";
 import Header from "../../components/Header/Header";
 import CreateAuction from "../../components/SellerDashboard/CreateAuction";
+import ManualFAQs from "../../components/SellerDashboard/ManualFAQs";
 import SellerDashboardOverview from "../../components/SellerDashboard/SellerDashboardOverview";
 import SellerDashboardSidebar from "../../components/SellerDashboard/SellerDashboardSidebar";
 
@@ -22,10 +24,18 @@ export default function SellerDashboard({
 
   const renderContent = () => {
     switch (activePage) {
+      case "overview":
+        return <SellerDashboardOverview />;
+
       case "create-auction":
         return <CreateAuction />;
 
-      case "overview":
+      case "notifications":
+        return <Messages mode="full" />;
+
+      case "manual-faqs":
+        return <ManualFAQs />;
+
       default:
         return <SellerDashboardOverview />;
     }

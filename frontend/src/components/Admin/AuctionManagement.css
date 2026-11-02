@@ -1,6 +1,4 @@
-/* ============================
-   AUCTION MANAGEMENT
-============================ */
+/* AUCTION MANAGEMENT */
 
 .auction-management {
   width: 100%;
@@ -54,9 +52,7 @@
   color: #171b43;
 }
 
-/* ============================
-   STATISTICS
-============================ */
+/* STATISTICS */
 
 .auction-stats-grid {
   display: grid;
@@ -168,9 +164,7 @@
   font-size: 12px;
 }
 
-/* ============================
-   TABLE CARD
-============================ */
+/* TABLE CARD */
 
 .auction-table-card {
   width: 100%;
@@ -248,9 +242,7 @@
   background: #006b53;
 }
 
-/* ============================
-   FILTERS
-============================ */
+/* FILTERS */
 
 .auction-filter-row {
   display: flex;
@@ -347,9 +339,7 @@
   background: #f4f8fb;
 }
 
-/* ============================
-   TABLE
-============================ */
+/* TABLE */
 
 .auction-table-scroll {
   width: 100%;
@@ -576,9 +566,7 @@
   color: #7b87a7 !important;
 }
 
-/* ============================
-   PAGINATION
-============================ */
+/* PAGINATION */
 
 .auction-pagination {
   min-height: 65px;
@@ -632,9 +620,7 @@
   color: #7180a5;
 }
 
-/* ============================
-   RESPONSIVE DESIGN
-============================ */
+/* RESPONSIVE DESIGN */
 
 @media (max-width: 1350px) {
   .auction-stat-card {

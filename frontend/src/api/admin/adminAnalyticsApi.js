@@ -1,8 +1,8 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+//
 // ADMIN ANALYTICS API
-// ==========================================
+//
 
 // GET ADMIN DASHBOARD ANALYTICS
 // GET /api/admin/analytics/dashboard

@@ -7,12 +7,17 @@ function DashboardStats() {
   const [activeBids, setActiveBids] = useState(0);
   const [wonAuctions, setWonAuctions] = useState(0);
 
+  // No static values for these counters.
+  const [watchlistItems, setWatchlistItems] = useState(0);
+  const [messages, setMessages] = useState(0);
+
   useEffect(() => {
     const fetchDashboardStats = async () => {
       try {
         const bids = await getMyBids();
+        const data = bids?.data ?? bids;
 
-        setActiveBids(Array.isArray(bids) ? bids.length : 0);
+        setActiveBids(Array.isArray(data) ? data.length : 0);
       } catch (error) {
         console.error("Failed to fetch active bids:", error);
         setActiveBids(0);
@@ -20,8 +25,9 @@ function DashboardStats() {
 
       try {
         const orders = await getMyOrders();
+        const data = orders?.data ?? orders;
 
-        setWonAuctions(Array.isArray(orders) ? orders.length : 0);
+        setWonAuctions(Array.isArray(data) ? data.length : 0);
       } catch (error) {
         console.error("Failed to fetch won auctions:", error);
         setWonAuctions(0);
@@ -37,7 +43,7 @@ function DashboardStats() {
         <div className="stat-icon">⚒</div>
 
         <div>
-          <p>Active Bids</p>
+          <p>Total Bids</p>
           <h2>{activeBids}</h2>
         </div>
 
@@ -60,7 +66,7 @@ function DashboardStats() {
 
         <div>
           <p>Watchlist Items</p>
-          <h2>8</h2>
+          <h2>{watchlistItems}</h2>
         </div>
 
         <a href="#watchlist">View All →</a>
@@ -71,7 +77,7 @@ function DashboardStats() {
 
         <div>
           <p>Messages</p>
-          <h2>2</h2>
+          <h2>{messages}</h2>
         </div>
 
         <a href="#messages">View All →</a>

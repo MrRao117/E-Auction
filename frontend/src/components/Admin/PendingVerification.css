@@ -1,7 +1,7 @@
-/* =========================================
+/* 
    PENDING SELLER VERIFICATION
    eAuction Admin Dashboard
-========================================= */
+ */
 
 .pending-seller-verification {
   --verify-primary: #047857;
@@ -24,9 +24,9 @@
   box-sizing: border-box;
 }
 
-/* =========================================
+/* 
    PAGE HEADER
-========================================= */
+ */
 
 .pending-seller-verification .admin-page-header {
   display: flex;
@@ -52,9 +52,9 @@
   line-height: 1.6;
 }
 
-/* =========================================
+/* 
    BUTTONS
-========================================= */
+ */
 
 .pending-seller-verification .admin-btn {
   display: inline-flex;
@@ -110,9 +110,9 @@
   cursor: not-allowed;
 }
 
-/* =========================================
+/* 
    VERIFICATION STATISTICS
-========================================= */
+ */
 
 .pending-seller-verification .admin-stats-grid {
   display: grid;
@@ -189,9 +189,9 @@
   line-height: 1.2;
 }
 
-/* =========================================
+/* 
    TABLE CONTAINER
-========================================= */
+ */
 
 .pending-seller-verification .admin-table-container {
   width: 100%;
@@ -227,9 +227,9 @@
   line-height: 1.6;
 }
 
-/* =========================================
+/* 
    SEARCH AND FILTER
-========================================= */
+ */
 
 .pending-seller-verification .admin-table-actions {
   display: flex;
@@ -297,9 +297,9 @@
   cursor: pointer;
 }
 
-/* =========================================
+/* 
    TABLE
-========================================= */
+ */
 
 .pending-seller-verification .admin-table-wrapper {
   width: 100%;
@@ -393,9 +393,9 @@
   color: var(--verify-primary);
 }
 
-/* =========================================
+/* 
    STATUS BADGES
-========================================= */
+ */
 
 .pending-seller-verification .status-badge {
   display: inline-flex;
@@ -434,9 +434,9 @@
   border-color: #fecaca;
 }
 
-/* =========================================
+/* 
    TABLE ACTION BUTTON
-========================================= */
+ */
 
 .pending-seller-verification .admin-icon-btn {
   display: inline-flex;
@@ -466,9 +466,9 @@
   cursor: not-allowed;
 }
 
-/* =========================================
+/* 
    EMPTY STATE AND TABLE FOOTER
-========================================= */
+ */
 
 .pending-seller-verification .admin-empty-state {
   padding: 35px 16px !important;
@@ -491,9 +491,9 @@
   font-size: 12px;
 }
 
-/* =========================================
+/* 
    MODAL OVERLAY
-========================================= */
+ */
 
 .pending-seller-verification .admin-modal-overlay {
   position: fixed;
@@ -639,9 +639,9 @@
   border-top: 1px solid #e8efeb;
 }
 
-/* =========================================
+/* 
    RESPONSIVE: TABLET
-========================================= */
+ */
 
 @media (max-width: 1100px) {
   .pending-seller-verification {
@@ -672,9 +672,9 @@
   }
 }
 
-/* =========================================
+/* 
    RESPONSIVE: SMALL TABLET
-========================================= */
+ */
 
 @media (max-width: 768px) {
   .pending-seller-verification {
@@ -754,9 +754,9 @@
   }
 }
 
-/* =========================================
+/* 
    RESPONSIVE: MOBILE
-========================================= */
+ */
 
 @media (max-width: 480px) {
   .pending-seller-verification {
@@ -867,9 +867,9 @@
   }
 }
 
-/* =========================================
+/* 
    FIX: VERIFICATION STATISTICS CARD WIDTH
-========================================= */
+ */
 
 .pending-seller-verification .admin-stats-grid {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
@@ -900,6 +900,7 @@
 }
 
 /* Tablet and mobile */
+
 @media (max-width: 480px) {
   .pending-seller-verification .admin-stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -919,10 +920,10 @@
   }
 }
 
-/* =========================================
+/* 
    EXPORT SELLERS BUTTON
    White outlined style matching the All Users Export button
-========================================= */
+ */
 
 .pending-seller-verification .seller-verification-actions {
   display: flex;

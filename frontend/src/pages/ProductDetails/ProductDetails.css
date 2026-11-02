@@ -1,6 +1,6 @@
-/* =========================================================
+/* 
    PRODUCT DETAILS PAGE
-========================================================= */
+ */
 
 .product-details-page {
   width: 100%;
@@ -10,9 +10,9 @@
   box-sizing: border-box;
 }
 
-/* =========================================================
+/* 
    BREADCRUMB
-========================================================= */
+ */
 
 .product-breadcrumb {
   display: flex;
@@ -48,9 +48,9 @@
   font-weight: 600;
 }
 
-/* =========================================================
+/* 
    MAIN PRODUCT SECTION
-========================================================= */
+ */
 
 .product-main-section {
   width: 100%;
@@ -62,9 +62,9 @@
   align-items: start;
 }
 
-/* =========================================================
+/* 
    PRODUCT GALLERY
-========================================================= */
+ */
 
 .product-gallery {
   width: 100%;
@@ -96,9 +96,9 @@
   background: #edf2ef;
 }
 
-/* =========================================================
+/* 
    VERIFIED BADGE
-========================================================= */
+ */
 
 .product-verified-badge {
   position: absolute;
@@ -136,9 +136,9 @@
   font-size: 11px;
 }
 
-/* =========================================================
+/* 
    GALLERY ARROWS
-========================================================= */
+ */
 
 .product-gallery-arrow {
   position: absolute;
@@ -180,9 +180,9 @@
   right: 15px;
 }
 
-/* =========================================================
+/* 
    IMAGE NUMBER
-========================================================= */
+ */
 
 .product-image-number {
   position: absolute;
@@ -200,9 +200,9 @@
   font-weight: 600;
 }
 
-/* =========================================================
+/* 
    THUMBNAILS
-========================================================= */
+ */
 
 .product-thumbnails {
   width: 100%;
@@ -247,9 +247,9 @@
   border-color: #08784b;
 }
 
-/* =========================================================
+/* 
    PRODUCT INFORMATION
-========================================================= */
+ */
 
 .product-information {
   width: 100%;
@@ -281,9 +281,9 @@
   line-height: 1.15;
 }
 
-/* =========================================================
+/* 
    AUCTION ID
-========================================================= */
+ */
 
 .product-auction-id {
   display: flex;
@@ -309,9 +309,9 @@
   line-height: 1.65;
 }
 
-/* =========================================================
+/* 
    SELLER
-========================================================= */
+ */
 
 .product-seller-row {
   display: flex;
@@ -403,9 +403,9 @@
   font-size: 12px;
 }
 
-/* =========================================================
+/* 
    AUCTION BOX
-========================================================= */
+ */
 
 .product-auction-box {
   margin-top: 20px;
@@ -450,9 +450,9 @@
   font-size: 12px;
 }
 
-/* =========================================================
+/* 
    COUNTDOWN
-========================================================= */
+ */
 
 .product-countdown-section {
   float: right;
@@ -501,9 +501,9 @@
   font-size: 16px;
 }
 
-/* =========================================================
+/* 
    REGISTER NOW
-========================================================= */
+ */
 
 .register-now-button {
   width: 100%;
@@ -543,9 +543,9 @@
   font-size: 17px;
 }
 
-/* =========================================================
+/* 
    WATCHLIST
-========================================================= */
+ */
 
 .watchlist-button {
   width: 100%;
@@ -579,9 +579,9 @@
   font-size: 21px;
 }
 
-/* =========================================================
+/* 
    BENEFITS
-========================================================= */
+ */
 
 .product-benefits {
   display: grid;
@@ -628,9 +628,9 @@
   font-weight: 600;
 }
 
-/* =========================================================
+/* 
    CLEAR FLOAT
-========================================================= */
+ */
 
 .product-auction-box::after {
   content: "";
@@ -640,9 +640,9 @@
   clear: both;
 }
 
-/* =========================================================
+/* 
    LOWER SECTION
-========================================================= */
+ */
 
 .product-lower-section {
   display: grid;
@@ -653,9 +653,9 @@
   margin-top: 38px;
 }
 
-/* =========================================================
+/* 
    DESCRIPTION CARD
-========================================================= */
+ */
 
 .product-description-card {
   height: 360px;
@@ -670,9 +670,9 @@
   box-sizing: border-box;
 }
 
-/* =========================================================
+/* 
    TABS
-========================================================= */
+ */
 
 .product-tabs {
   height: 61px;
@@ -723,9 +723,9 @@
   background: #08784b;
 }
 
-/* =========================================================
+/* 
    SCROLLABLE CONTENT AREA
-========================================================= */
+ */
 
 .product-description-content {
   height: calc(360px - 61px);
@@ -744,9 +744,9 @@
   display: none;
 }
 
-/* =========================================================
+/* 
    TAB PANEL
-========================================================= */
+ */
 
 .product-tab-panel {
   width: 100%;
@@ -771,9 +771,9 @@
   line-height: 1.7;
 }
 
-/* =========================================================
+/* 
    DETAILS
-========================================================= */
+ */
 
 .product-details-grid {
   display: grid;
@@ -816,9 +816,9 @@
   text-align: right;
 }
 
-/* =========================================================
+/* 
    SHIPPING
-========================================================= */
+ */
 
 .product-shipping-list {
   border-top: 1px solid #e5ebe8;
@@ -895,9 +895,9 @@
   font-size: 12px;
 }
 
-/* =========================================================
+/* 
    SELLER INFO
-========================================================= */
+ */
 
 .seller-info-profile {
   display: flex;
@@ -992,9 +992,9 @@
   text-align: right;
 }
 
-/* =========================================================
+/* 
    REVIEWS
-========================================================= */
+ */
 
 .reviews-summary {
   display: grid;
@@ -1149,9 +1149,9 @@
   line-height: 1.5;
 }
 
-/* =========================================================
+/* 
    FEATURES
-========================================================= */
+ */
 
 .product-features {
   display: grid;
@@ -1194,9 +1194,9 @@
   font-size: 12px;
 }
 
-/* =========================================================
+/* 
    TRUST CARD
-========================================================= */
+ */
 
 .product-trust-card {
   padding: 20px;
@@ -1264,9 +1264,9 @@
   line-height: 1.5;
 }
 
-/* =========================================================
+/* 
    SIMILAR PRODUCTS
-========================================================= */
+ */
 
 .similar-products-section {
   margin-top: 30px;
@@ -1307,9 +1307,9 @@
   color: #065f3c;
 }
 
-/* =========================================================
+/* 
    SIMILAR PRODUCTS GRID
-========================================================= */
+ */
 
 .similar-products-grid {
   display: grid;
@@ -1319,9 +1319,9 @@
   gap: 12px;
 }
 
-/* =========================================================
+/* 
    TABLET
-========================================================= */
+ */
 
 @media (max-width: 1100px) {
   .product-main-section {
@@ -1343,9 +1343,9 @@
   }
 }
 
-/* =========================================================
+/* 
    TABLET
-========================================================= */
+ */
 
 @media (max-width: 900px) {
   .product-details-page {
@@ -1377,9 +1377,9 @@
   }
 }
 
-/* =========================================================
+/* 
    MOBILE
-========================================================= */
+ */
 
 @media (max-width: 600px) {
   .product-details-page {
@@ -1526,9 +1526,9 @@
   }
 }
 
-/* =========================================================
+/* 
    SMALL MOBILE
-========================================================= */
+ */
 
 @media (max-width: 420px) {
   .product-details-page {
@@ -1583,4 +1583,66 @@
   .similar-products-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/*
+   ENTER LIVE AUCTION
+   Matches the Register button dimensions and typography.
+ */
+
+.enter-auction-button {
+  width: 100%;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 20px;
+  padding: 13px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #dc2626;
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.enter-auction-button:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.enter-auction-button:active {
+  transform: translateY(0);
+}
+
+.enter-auction-button:disabled {
+  background: #fca5a5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.enter-auction-button span:last-child {
+  font-size: 16px;
+  line-height: 1;
+}
+/* LIVE AUCTION — RED TIME LEFT */
+.product-auction-box:has(.enter-auction-button) .product-countdown {
+  background: #fee2e2;
+}
+
+.product-auction-box:has(.enter-auction-button) .product-countdown strong,
+.product-auction-box:has(.enter-auction-button) .product-countdown b {
+  color: #dc2626;
 }

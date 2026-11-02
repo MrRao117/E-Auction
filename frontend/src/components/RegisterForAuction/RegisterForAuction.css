@@ -1,6 +1,6 @@
-/* ================================
+/* 
    MODAL OVERLAY
-================================ */
+ */
 
 .register-auction-overlay {
   position: fixed;
@@ -56,9 +56,9 @@
   color: #00866a;
 }
 
-/* ================================
+/* 
    LEFT: PRODUCT SECTION
-================================ */
+ */
 
 .register-product-section {
   min-width: 0;
@@ -388,9 +388,9 @@
   font-weight: 700;
 }
 
-/* ================================
+/* 
    RIGHT: REGISTRATION FORM
-================================ */
+ */
 
 .register-form-section {
   min-width: 0;
@@ -672,9 +672,9 @@
   line-height: 1.5;
 }
 
-/* ================================
+/* 
    TABLET
-================================ */
+ */
 
 @media (max-width: 900px) {
   .register-auction-overlay {
@@ -705,9 +705,9 @@
   }
 }
 
-/* ================================
+/* 
    MOBILE
-================================ */
+ */
 
 @media (max-width: 600px) {
   .register-auction-overlay {
@@ -850,4 +850,22 @@
   .register-security-box p {
     font-size: 11px;
   }
+}
+
+/* Registration error message — no border or box */
+.register-lookup-error {
+  display: block;
+  margin: 8px 0 12px;
+  padding: 0;
+  color: #dc2626;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }

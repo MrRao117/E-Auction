@@ -1,8 +1,8 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+//
 // ORDER GET APIs
-// ==========================================
+//
 
 // 1. Get orders won by the logged-in user
 // GET /api/v1/orders/my-orders
@@ -28,9 +28,9 @@ export const getAllOrders = async () => {
   return response.data;
 };
 
-// ==========================================
+//
 // ORDER STATUS UPDATE API
-// ==========================================
+//
 
 // 4. Update order status
 // PUT /api/v1/orders/admin/{orderId}/status?status=SHIPPED
@@ -43,5 +43,14 @@ export const updateOrderStatus = async (orderId, status) => {
       params: { status },
     },
   );
+  return response.data;
+};
+
+// 5. Get status history for a specific order
+// GET /api/v1/orders/{orderId}/history
+// Access: BUYER, SELLER, ADMIN
+export const getOrderStatusHistory = async (orderId) => {
+  const response = await axiosClient.get(`/orders/${orderId}/history`);
+
   return response.data;
 };

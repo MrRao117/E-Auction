@@ -1,6 +1,6 @@
-/* ================================
+/* 
    Recent Activities Card
-================================ */
+ */
 
 .admin-content-card {
   background: #ffffff;
@@ -12,9 +12,9 @@
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
 }
 
-/* ================================
+/* 
    Section Header
-================================ */
+ */
 
 .admin-section-header {
   display: flex;
@@ -48,9 +48,9 @@
   color: #047857;
 }
 
-/* ================================
+/* 
    Activities List
-================================ */
+ */
 
 .recent-activities-list {
   display: flex;
@@ -77,9 +77,9 @@
   padding-bottom: 0;
 }
 
-/* ================================
+/* 
    Activity Icon
-================================ */
+ */
 
 .recent-activity-icon {
   width: 42px;
@@ -121,9 +121,9 @@
   color: #ef4444;
 }
 
-/* ================================
+/* 
    Activity Content
-================================ */
+ */
 
 .recent-activity-content {
   display: flex;
@@ -148,9 +148,9 @@
   overflow-wrap: anywhere;
 }
 
-/* ================================
+/* 
    Activity Time
-================================ */
+ */
 
 .recent-activity-item time {
   font-size: 11px;
@@ -160,9 +160,9 @@
   align-self: center;
 }
 
-/* ================================
+/* 
    Tablet
-================================ */
+ */
 
 @media (max-width: 1024px) {
   .admin-content-card {
@@ -188,9 +188,9 @@
   }
 }
 
-/* ================================
+/* 
    Mobile
-================================ */
+ */
 
 @media (max-width: 600px) {
   .admin-content-card {

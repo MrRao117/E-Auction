@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
-/* =========================================================
+/* 
    GLOBAL
-========================================================= */
+ */
 
 * {
   box-sizing: border-box;
@@ -18,10 +18,10 @@
   font-family: "Inter", sans-serif;
 }
 
-/* =========================================================
+/* 
    SIDEBAR
    Compact typography as requested
-========================================================= */
+ */
 
 .dashboard-sidebar {
   width: 260px;
@@ -46,9 +46,9 @@
   box-shadow: 0 2px 10px rgba(30, 60, 45, 0.04);
 }
 
-/* =========================================================
+/* 
    BRAND
-========================================================= */
+ */
 
 .brand {
   display: flex;
@@ -73,9 +73,9 @@
   color: #66716c;
 }
 
-/* =========================================================
+/* 
    SIDEBAR NAVIGATION
-========================================================= */
+ */
 
 .sidebar-nav {
   display: flex;
@@ -159,9 +159,9 @@
   margin-top: 8px;
 }
 
-/* =========================================================
+/* 
    HELP CARD
-========================================================= */
+ */
 
 .help-card {
   margin-top: 10px;
@@ -202,9 +202,9 @@
   cursor: pointer;
 }
 
-/* =========================================================
+/* 
    MAIN CONTENT
-========================================================= */
+ */
 
 .dashboard-main {
   flex: 1;
@@ -216,9 +216,9 @@
   padding: 20px 24px 24px 20px;
 }
 
-/* =========================================================
+/* 
    HEADER
-========================================================= */
+ */
 
 .dashboard-header {
   min-height: 70px;
@@ -367,9 +367,9 @@
   font-size: 17px;
 }
 
-/* =========================================================
+/* 
    STATISTICS
-========================================================= */
+ */
 
 .stats-grid {
   display: grid;
@@ -457,9 +457,9 @@
   white-space: nowrap;
 }
 
-/* =========================================================
+/* 
    COMMON CARD
-========================================================= */
+ */
 
 .dashboard-card {
   width: 100%;
@@ -506,9 +506,9 @@
   font-weight: 600;
 }
 
-/* =========================================================
+/* 
    REAL-TIME CLOCK
-========================================================= */
+ */
 
 .real-time-watch {
   width: 100%;
@@ -638,9 +638,9 @@
   }
 }
 
-/* =========================================================
+/* 
    ACCOUNT SUMMARY
-========================================================= */
+ */
 
 .account-summary-row {
   width: 100%;
@@ -732,9 +732,9 @@
   white-space: nowrap;
 }
 
-/* =========================================================
+/* 
    ACTIVE BIDS + WATCHLIST
-========================================================= */
+ */
 
 .dashboard-columns {
   display: grid;
@@ -755,9 +755,9 @@
   min-width: 0;
 }
 
-/* =========================================================
+/* 
    ACTIVE BIDS
-========================================================= */
+ */
 
 .bid-item {
   min-height: 120px;
@@ -860,9 +860,9 @@
   text-align: right;
 }
 
-/* =========================================================
+/* 
    WATCHLIST
-========================================================= */
+ */
 
 .watch-item {
   min-height: 120px;
@@ -940,10 +940,10 @@
   cursor: pointer;
 }
 
-/* =========================================================
+/* 
    WON AUCTIONS
    FULL WIDTH
-========================================================= */
+ */
 
 .won-auctions-row {
   display: grid;
@@ -1006,10 +1006,10 @@
   color: #69736e;
 }
 
-/* =========================================================
+/* 
    WON AUCTIONS + RECENT ACTIVITY + MESSAGES
    SAME ROW
-========================================================= */
+ */
 
 .bottom-three-row {
   display: grid;
@@ -1029,9 +1029,9 @@
   min-width: 0;
 }
 
-/* =========================================================
+/* 
    RECENT ACTIVITY + MESSAGES
-========================================================= */
+ */
 
 .bottom-grid {
   display: grid;
@@ -1045,9 +1045,9 @@
   margin-bottom: 22px;
 }
 
-/* =========================================================
+/* 
    RECENT ACTIVITY
-========================================================= */
+ */
 
 .activity-item {
   min-height: 70px;
@@ -1103,9 +1103,9 @@
   font-size: 10px;
 }
 
-/* =========================================================
+/* 
    MESSAGES
-========================================================= */
+ */
 
 .message-item {
   min-height: 70px;
@@ -1169,9 +1169,9 @@
   color: #68716d;
 }
 
-/* =========================================================
+/* 
    COPYRIGHT
-========================================================= */
+ */
 
 .dashboard-footer {
   margin-top: 22px;
@@ -1191,9 +1191,9 @@
   color: #69736e;
 }
 
-/* =========================================================
+/* 
    LARGE SCREEN
-========================================================= */
+ */
 
 @media (min-width: 1450px) {
   .dashboard-main {
@@ -1213,9 +1213,9 @@
   }
 }
 
-/* =========================================================
+/* 
    TABLET
-========================================================= */
+ */
 
 @media (max-width: 1250px) {
   .dashboard-sidebar {
@@ -1297,9 +1297,9 @@
   }
 }
 
-/* =========================================================
+/* 
    SMALL TABLET
-========================================================= */
+ */
 
 @media (max-width: 900px) {
   .dashboard-sidebar {
@@ -1359,9 +1359,9 @@
   }
 }
 
-/* =========================================================
+/* 
    MOBILE
-========================================================= */
+ */
 
 @media (max-width: 700px) {
   .dashboard {
@@ -1519,10 +1519,10 @@
   }
 }
 
-/* =========================================================
+/* 
    DASHBOARD HEADER PROFILE
    Circular name tag + profile name
-========================================================= */
+ */
 
 .profile-wrapper {
   position: relative;
@@ -1608,9 +1608,9 @@
   margin-left: 2px;
 }
 
-/* =========================================================
+/* 
    PROFILE DROPDOWN
-========================================================= */
+ */
 
 .profile-menu {
   position: absolute;
@@ -1674,9 +1674,9 @@
   color: #a52f2f;
 }
 
-/* =========================================================
+/* 
    PROFILE RESPONSIVE
-========================================================= */
+ */
 
 @media (max-width: 700px) {
   .profile-btn .profile-name {
@@ -1699,10 +1699,10 @@
   }
 }
 
-/* =========================================================
+/* 
    FULL MESSAGES & NOTIFICATIONS
    Added without changing existing styles
-========================================================= */
+ */
 
 .messages-full-page {
   width: 100%;
@@ -2042,4 +2042,96 @@ html {
 .bid-item.auction-time-zero strong,
 .bid-item.auction-time-zero small {
   color: #ffffff;
+}
+
+/* Status below Base Price — Scheduled only */
+.auction-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 5px 12px;
+  margin-top: 5px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Scheduled — green */
+.status-scheduled {
+  color: #15803d;
+  background-color: #dcfce7;
+}
+
+/* Status in the time section — similar size to View Details */
+.bid-time .auction-status {
+  padding: 9px 12px;
+  margin-top: 0;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Active — red */
+.status-active {
+  color: #dc2626;
+  background-color: #fee2e2;
+}
+
+/* Ended — blood red */
+.status-ended {
+  color: #b91c1c;
+  background-color: #fecaca;
+}
+
+/* Cancelled — deep yellow */
+.status-cancelled {
+  color: #854e0f;
+  background-color: #fef08a;
+}
+
+/* Unknown status */
+.status-unavailable {
+  color: #000000;
+  background-color: #e5e7eb;
+}
+
+/* View Details button */
+.view-details-btn {
+  justify-self: end;
+  border: 1px solid #007b57;
+  border-radius: 10px;
+  padding: 9px 12px;
+  background-color: #ffffff;
+  color: #007b57;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Hover effect */
+.view-details-btn:hover {
+  background-color: #007b57;
+  color: #ffffff;
+}
+
+/* Keyboard focus */
+.view-details-btn:focus-visible {
+  outline: 2px solid #007b57;
+  outline-offset: 3px;
+}
+
+.active-bids-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  align-items: start;
 }

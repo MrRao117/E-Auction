@@ -1,8 +1,8 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+//
 // CATEGORY APIs
-// ==========================================
+//
 
 // 1. Get all product categories
 // GET /api/v1/products/categories/all
@@ -28,9 +28,9 @@ export const getCategoryById = async (categoryId) => {
   return response.data;
 };
 
-// ==========================================
+//
 // PRODUCT GET APIs
-// ==========================================
+//
 
 // 4. Get all products
 // GET /api/v1/products
@@ -76,9 +76,9 @@ export const getProductById = async (productId) => {
   return response.data;
 };
 
-// ==========================================
+//
 // PRODUCT CREATE / UPDATE / DELETE APIs
-// ==========================================
+//
 
 // 10. Create a new product (Seller only)
 // POST /api/v1/products/add
@@ -111,5 +111,15 @@ export const updateProduct = async (productId, productData) => {
 // DELETE /api/v1/products/{productId}/delete
 export const deleteProduct = async (productId) => {
   const response = await axiosClient.delete(`/products/${productId}/delete`);
+  return response.data;
+};
+
+// 14. Get products by category name
+// GET /api/v1/products/category/name/{categoryName}
+export const getProductsByCategoryName = async (categoryName) => {
+  const response = await axiosClient.get(
+    `/products/category/name/${encodeURIComponent(categoryName)}`,
+  );
+
   return response.data;
 };

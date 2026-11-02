@@ -1,8 +1,8 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+//
 // BID CREATE API
-// ==========================================
+//
 
 // 1. Place a bid on an auction
 // POST /api/v1/bids/place/{auctionId}
@@ -12,9 +12,9 @@ export const placeBid = async (auctionId, bidData) => {
   return response.data;
 };
 
-// ==========================================
+//
 // BID GET APIs
-// ==========================================
+//
 
 // 2. Get all bids for an auction
 // GET /api/v1/bids/auction/{auctionId}

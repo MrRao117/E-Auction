@@ -1,8 +1,8 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+//
 // AUCTION REGISTRATION APIs
-// ==========================================
+//
 
 // 1. Register for an auction
 // POST /auction-registration/register/{auctionId}
@@ -46,9 +46,9 @@ export const getMyRegistrations = async () => {
 // Alias for compatibility
 export const getMyRegisteredAuctions = getMyRegistrations;
 
-// ==========================================
+//
 // PUBLIC REGISTRATION APIs
-// ==========================================
+//
 
 // 5. Get the total registration count for an auction
 // GET /auction-registration/public/count/{auctionId}
@@ -62,9 +62,9 @@ export const getAuctionRegistrationCount = async (auctionId) => {
 // Alias for compatibility
 export const getRegistrationCount = getAuctionRegistrationCount;
 
-// ==========================================
+//
 // ADMIN REGISTRATION API
-// ==========================================
+//
 
 // 6. Get registrations for a specific auction
 // GET /auction-registration/admin/auction/{auctionId}

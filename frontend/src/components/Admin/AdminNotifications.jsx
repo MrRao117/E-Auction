@@ -85,7 +85,6 @@ function AdminNotification() {
   const [readFilter, setReadFilter] = useState("All");
   const [selectedNotification, setSelectedNotification] = useState(null);
 
-  // Notification Statistics
   const unreadCount = notifications.filter(
     (notification) => !notification.read,
   ).length;
@@ -94,7 +93,6 @@ function AdminNotification() {
     (notification) => notification.read,
   ).length;
 
-  // Get Icon Based on Notification Type
   const getTypeIcon = (type) => {
     switch (type) {
       case "Auction":
@@ -117,7 +115,6 @@ function AdminNotification() {
     }
   };
 
-  // Get CSS Class Based on Notification Type
   const getTypeClass = (type) => {
     switch (type) {
       case "Auction":
@@ -140,7 +137,6 @@ function AdminNotification() {
     }
   };
 
-  // Search and Filter Notifications
   const filteredNotifications = notifications.filter((notification) => {
     const search = searchTerm.toLowerCase();
 
@@ -160,7 +156,6 @@ function AdminNotification() {
     return matchesSearch && matchesType && matchesRead;
   });
 
-  // Mark Notification as Read
   const markAsRead = (notificationId) => {
     setNotifications((prev) =>
       prev.map((notification) =>
@@ -170,13 +165,11 @@ function AdminNotification() {
       ),
     );
 
-    // Update the selected notification in the modal too
     setSelectedNotification((prev) =>
       prev && prev.id === notificationId ? { ...prev, read: true } : prev,
     );
   };
 
-  // Mark Notification as Unread
   const markAsUnread = (notificationId) => {
     setNotifications((prev) =>
       prev.map((notification) =>
@@ -191,7 +184,6 @@ function AdminNotification() {
     );
   };
 
-  // Mark All Notifications as Read
   const markAllAsRead = () => {
     setNotifications((prev) =>
       prev.map((notification) => ({
@@ -203,7 +195,6 @@ function AdminNotification() {
     setSelectedNotification((prev) => (prev ? { ...prev, read: true } : prev));
   };
 
-  // Delete Notification
   const deleteNotification = (notificationId) => {
     setNotifications((prev) =>
       prev.filter((notification) => notification.id !== notificationId),
@@ -212,7 +203,6 @@ function AdminNotification() {
     setSelectedNotification(null);
   };
 
-  // Clear All Read Notifications
   const clearReadNotifications = () => {
     setNotifications((prev) =>
       prev.filter((notification) => !notification.read),
@@ -221,7 +211,6 @@ function AdminNotification() {
     setSelectedNotification((prev) => (prev && prev.read ? null : prev));
   };
 
-  // Format Date and Time
   const formatDate = (date) =>
     new Date(date).toLocaleString("en-IN", {
       day: "2-digit",
@@ -233,7 +222,6 @@ function AdminNotification() {
 
   return (
     <div className="admin-page admin-notifications">
-      {/* Page Header */}
       <div className="admin-page-header">
         <div>
           <h1>Notifications</h1>
@@ -263,7 +251,6 @@ function AdminNotification() {
         </div>
       </div>
 
-      {/* Statistics */}
       <div className="admin-stats-grid">
         <div className="admin-stat-card">
           <div className="admin-stat-icon">
@@ -299,7 +286,6 @@ function AdminNotification() {
         </div>
       </div>
 
-      {/* Notification List */}
       <div className="admin-table-container">
         <div className="admin-table-header">
           <div>
@@ -308,7 +294,6 @@ function AdminNotification() {
           </div>
 
           <div className="admin-table-actions">
-            {/* Search */}
             <div className="admin-search-box">
               <Search size={18} />
 
@@ -320,7 +305,6 @@ function AdminNotification() {
               />
             </div>
 
-            {/* Type Filter */}
             <div className="admin-filter-box">
               <Filter size={17} />
 
@@ -337,7 +321,6 @@ function AdminNotification() {
               </select>
             </div>
 
-            {/* Read Status Filter */}
             <div className="admin-filter-box">
               <Filter size={17} />
 
@@ -353,7 +336,6 @@ function AdminNotification() {
           </div>
         </div>
 
-        {/* Notification Items */}
         <div className="admin-notification-list">
           {filteredNotifications.length > 0 ? (
             filteredNotifications.map((notification) => (
@@ -363,12 +345,10 @@ function AdminNotification() {
                   !notification.read ? "unread" : ""
                 }`}
               >
-                {/* Type Icon */}
                 <div className={getTypeClass(notification.type)}>
                   {getTypeIcon(notification.type)}
                 </div>
 
-                {/* Notification Content */}
                 <div className="admin-notification-content">
                   <div className="admin-notification-title-row">
                     <h3>{notification.title}</h3>
@@ -390,9 +370,7 @@ function AdminNotification() {
                   </div>
                 </div>
 
-                {/* Notification Actions */}
                 <div className="admin-notification-actions">
-                  {/* View Details */}
                   <button
                     className="admin-icon-btn"
                     title="View Details"
@@ -409,7 +387,6 @@ function AdminNotification() {
                     <Eye size={18} />
                   </button>
 
-                  {/* Mark as Read / Unread */}
                   <button
                     className="admin-icon-btn"
                     title={
@@ -428,7 +405,6 @@ function AdminNotification() {
                     )}
                   </button>
 
-                  {/* Delete */}
                   <button
                     className="admin-icon-btn admin-icon-danger"
                     title="Delete Notification"
@@ -444,7 +420,6 @@ function AdminNotification() {
           )}
         </div>
 
-        {/* Footer */}
         <div className="admin-table-footer">
           <p>
             Showing {filteredNotifications.length} of {notifications.length}{" "}
@@ -453,7 +428,6 @@ function AdminNotification() {
         </div>
       </div>
 
-      {/* Notification Details Modal */}
       {selectedNotification && (
         <div
           className="admin-modal-overlay"
@@ -463,7 +437,6 @@ function AdminNotification() {
             className="admin-modal notification-details-modal"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Header */}
             <div className="admin-modal-header">
               <div>
                 <h2>Notification Details</h2>
@@ -479,7 +452,6 @@ function AdminNotification() {
               </button>
             </div>
 
-            {/* Modal Body */}
             <div className="admin-modal-body">
               <div className="admin-detail-section">
                 <h3>{selectedNotification.title}</h3>
@@ -509,7 +481,6 @@ function AdminNotification() {
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div className="admin-modal-footer">
               <button
                 className="admin-btn admin-btn-secondary"

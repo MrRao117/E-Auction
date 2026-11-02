@@ -1,8 +1,8 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+//
 // ADMIN AUTHENTICATION APIs
-// ==========================================
+//
 
 // 1. Admin Login
 // POST /api/v1/admin/login

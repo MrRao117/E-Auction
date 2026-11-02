@@ -1,6 +1,4 @@
-/* =========================================
-   DISPUTES & SUPPORT PAGE
-========================================= */
+/* DISPUTES & SUPPORT PAGE */
 
 .disputes-page {
   width: 100%;
@@ -32,9 +30,7 @@
   opacity: 0.5;
 }
 
-/* =========================================
-   PAGE HEADER
-========================================= */
+/* PAGE HEADER */
 
 .disputes-page-header {
   display: flex;
@@ -78,9 +74,7 @@
   color: #11183f;
 }
 
-/* =========================================
-   SUMMARY CARDS
-========================================= */
+/* SUMMARY CARDS */
 
 .disputes-stats-grid {
   display: grid;
@@ -186,9 +180,7 @@
   text-align: right;
 }
 
-/* =========================================
-   MAIN WORKSPACE
-========================================= */
+/* MAIN WORKSPACE */
 
 .disputes-workspace {
   display: grid;
@@ -205,9 +197,7 @@
   overflow: hidden;
 }
 
-/* =========================================
-   TABS
-========================================= */
+/* TABS */
 
 .disputes-tabs {
   display: flex;
@@ -264,9 +254,7 @@
   content: "";
 }
 
-/* =========================================
-   BUTTONS
-========================================= */
+/* BUTTONS */
 
 .disputes-primary-button,
 .disputes-outline-button,
@@ -318,9 +306,7 @@
   padding: 9px 15px;
 }
 
-/* =========================================
-   FILTERS
-========================================= */
+/* FILTERS */
 
 .disputes-filters {
   display: grid;
@@ -398,9 +384,7 @@
   background: #f0fdf7;
 }
 
-/* =========================================
-   TABLE
-========================================= */
+/* TABLE */
 
 .disputes-table-wrapper {
   width: 100%;
@@ -582,9 +566,7 @@
   background: #e9f8f1;
 }
 
-/* =========================================
-   CATEGORY BADGES
-========================================= */
+/* CATEGORY BADGES */
 
 .ticket-category {
   display: inline-flex;
@@ -629,9 +611,7 @@
   background: #f0e4ff;
 }
 
-/* =========================================
-   PRIORITY BADGES
-========================================= */
+/* PRIORITY BADGES */
 
 .ticket-priority {
   display: inline-flex;
@@ -668,9 +648,7 @@
   background: #dcf7eb;
 }
 
-/* =========================================
-   STATUS BADGES
-========================================= */
+/* STATUS BADGES */
 
 .ticket-status {
   display: inline-flex;
@@ -703,9 +681,7 @@
   background: #ffe3e6;
 }
 
-/* =========================================
-   PAGINATION
-========================================= */
+/* PAGINATION */
 
 .disputes-pagination {
   display: flex;
@@ -759,9 +735,7 @@
   color: #6876a4;
 }
 
-/* =========================================
-   TICKET DETAILS PANEL
-========================================= */
+/* TICKET DETAILS PANEL */
 
 .ticket-details-panel {
   min-width: 0;
@@ -841,9 +815,7 @@
   flex-shrink: 0;
 }
 
-/* =========================================
-   TICKET DETAIL FIELDS
-========================================= */
+/* TICKET DETAIL FIELDS */
 
 .ticket-details-fields {
   display: flex;
@@ -880,9 +852,7 @@
   font-size: 11px;
 }
 
-/* =========================================
-   DESCRIPTION
-========================================= */
+/* DESCRIPTION */
 
 .ticket-description {
   padding: 15px 0;
@@ -908,9 +878,7 @@
   overflow-wrap: anywhere;
 }
 
-/* =========================================
-   ATTACHMENTS
-========================================= */
+/* ATTACHMENTS */
 
 .ticket-attachments {
   padding: 0 0 15px;
@@ -971,9 +939,7 @@
   text-align: center;
 }
 
-/* =========================================
-   DETAIL ACTIONS
-========================================= */
+/* DETAIL ACTIONS */
 
 .ticket-detail-actions {
   display: flex;
@@ -987,9 +953,7 @@
   min-height: 39px;
 }
 
-/* =========================================
-   REPLY FORM
-========================================= */
+/* REPLY FORM */
 
 .ticket-reply-box {
   display: flex;
@@ -1032,9 +996,7 @@
   width: 100%;
 }
 
-/* =========================================
-   EMPTY SELECTION
-========================================= */
+/* EMPTY SELECTION */
 
 .ticket-no-selection {
   display: flex;
@@ -1052,9 +1014,7 @@
   font-size: 13px;
 }
 
-/* =========================================
-   EMPTY TABLE
-========================================= */
+/* EMPTY TABLE */
 
 .disputes-empty-state {
   height: 140px !important;
@@ -1063,9 +1023,7 @@
   text-align: center;
 }
 
-/* =========================================
-   NEW TICKET MODAL
-========================================= */
+/* NEW TICKET MODAL */
 
 .disputes-modal-backdrop {
   position: fixed;
@@ -1166,9 +1124,7 @@
   padding-top: 5px;
 }
 
-/* =========================================
-   RESPONSIVE: LAPTOP
-========================================= */
+/* RESPONSIVE: LAPTOP */
 
 @media (max-width: 1400px) {
   .disputes-workspace {
@@ -1204,9 +1160,7 @@
   }
 }
 
-/* =========================================
-   RESPONSIVE: TABLET
-========================================= */
+/* RESPONSIVE: TABLET */
 
 @media (max-width: 1100px) {
   .disputes-workspace {
@@ -1340,9 +1294,7 @@
   }
 }
 
-/* =========================================
-   RESPONSIVE: MOBILE
-========================================= */
+/* RESPONSIVE: MOBILE */
 
 @media (max-width: 480px) {
   .disputes-page {

@@ -45,9 +45,9 @@ export default function Header({
 
   const [userName, setUserName] = useState("User");
 
-  // ==========================================
+  //
   // GET PRODUCT CATEGORIES
-  // ==========================================
+  //
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -91,9 +91,9 @@ export default function Header({
     loadCategories();
   }, []);
 
-  // ==========================================
+  //
   // GET LOGGED-IN USER
-  // ==========================================
+  //
 
   useEffect(() => {
     // First use the user already stored in Redux.
@@ -120,9 +120,9 @@ export default function Header({
       });
   }, [user, isLoggedIn, dashboardMode]);
 
-  // ==========================================
+  //
   // GET USER LOCATION
-  // ==========================================
+  //
 
   useEffect(() => {
     const savedLocation = sessionStorage.getItem("eAuctionLocation");
@@ -171,9 +171,9 @@ export default function Header({
       });
   }, []);
 
-  // ==========================================
+  //
   // CATEGORY SELECT
-  // ==========================================
+  //
 
   const handleCategorySelect = (category) => {
     if (category === "All Categories") {
@@ -185,9 +185,9 @@ export default function Header({
     setShowCategories(false);
   };
 
-  // ==========================================
+  //
   // NAVIGATION
-  // ==========================================
+  //
 
   const handleNavClick = (event, link) => {
     event.preventDefault();
@@ -197,9 +197,9 @@ export default function Header({
       onActiveLinkChange(link);
     }
 
-    // ==========================================
+    //
     // HOME
-    // ==========================================
+    //
 
     if (link === "Home") {
       if (onHome) {
@@ -209,9 +209,9 @@ export default function Header({
       return;
     }
 
-    // ==========================================
+    //
     // AUCTIONS
-    // ==========================================
+    //
 
     if (link === "Auctions") {
       if (onViewAllAuctions) {
@@ -221,9 +221,9 @@ export default function Header({
       return;
     }
 
-    // ==========================================
+    //
     // HOW IT WORKS
-    // ==========================================
+    //
 
     if (link === "How It Works") {
       if (onHowItWorks) {
@@ -233,26 +233,26 @@ export default function Header({
       return;
     }
 
-    // ==========================================
+    //
     // FAQ & SUPPORT
-    // ==========================================
+    //
 
     if (link === "FAQ & Support") {
       return;
     }
   };
 
-  // ==========================================
+  //
   // PROFILE MENU
-  // ==========================================
+  //
 
   const handleProfileClick = () => {
     setShowProfileMenu((previous) => !previous);
   };
 
-  // ==========================================
+  //
   // BUYER DASHBOARD
-  // ==========================================
+  //
 
   const handleDashboard = () => {
     setShowProfileMenu(false);
@@ -262,9 +262,9 @@ export default function Header({
     }
   };
 
-  // ==========================================
+  //
   // SELLER DASHBOARD
-  // ==========================================
+  //
 
   const handleSellerDashboard = () => {
     setShowProfileMenu(false);
@@ -274,9 +274,9 @@ export default function Header({
     }
   };
 
-  // ==========================================
+  //
   // ADMIN DASHBOARD
-  // ==========================================
+  //
 
   const handleAdminDashboard = () => {
     setShowProfileMenu(false);
@@ -286,17 +286,17 @@ export default function Header({
     }
   };
 
-  // ==========================================
+  //
   // ACCOUNT SETTINGS
-  // ==========================================
+  //
 
   const handleAccountSettings = () => {
     setShowProfileMenu(false);
   };
 
-  // ==========================================
+  //
   // LOGOUT
-  // ==========================================
+  //
 
   const handleLogout = () => {
     setShowProfileMenu(false);
@@ -306,15 +306,15 @@ export default function Header({
     }
   };
 
-  // ==========================================
+  //
   // USER INITIAL
-  // ==========================================
+  //
 
   const userInitial = userName ? userName.charAt(0).toUpperCase() : "U";
 
-  // ==========================================
+  //
   // BECOME A SELLER
-  // ==========================================
+  //
 
   const handleBecomeSeller = () => {
     if (onBecomeSeller) {
@@ -328,9 +328,9 @@ export default function Header({
         dashboardMode ? "dashboard-header-fixed" : ""
       }`}
     >
-      {/* ========================================
+      {/* 
           BRAND
-      ======================================== */}
+       */}
 
       <a
         href="/"
@@ -351,9 +351,9 @@ export default function Header({
         </div>
       </a>
 
-      {/* ========================================
+      {/* 
           SEARCH
-      ======================================== */}
+       */}
 
       <div className="search-wrap">
         <div className="category-wrapper">
@@ -401,9 +401,9 @@ export default function Header({
         </div>
       </div>
 
-      {/* ========================================
+      {/* 
           LOCATION
-      ======================================== */}
+       */}
 
       <div className="location-wrapper">
         <div className="location-display">
@@ -423,9 +423,9 @@ export default function Header({
         </div>
       </div>
 
-      {/* ========================================
+      {/* 
           HOMEPAGE NAVIGATION
-      ======================================== */}
+       */}
 
       <nav className="nav-links">
         <a
@@ -444,7 +444,7 @@ export default function Header({
           Auctions
         </a>
 
-        <a
+        {/* <a
           href="/how-it-works"
           className={`nav-link ${
             activeLink === "How It Works" ? "active" : ""
@@ -452,7 +452,7 @@ export default function Header({
           onClick={(event) => handleNavClick(event, "How It Works")}
         >
           How It Works
-        </a>
+        </a> */}
 
         <a
           href="/support"
@@ -465,9 +465,9 @@ export default function Header({
         </a>
       </nav>
 
-      {/* ========================================
+      {/* 
           LOGIN BUTTON
-      ======================================== */}
+       */}
 
       {!isLoggedIn && !dashboardMode && (
         <button className="login-btn" type="button" onClick={onLogin}>
@@ -475,9 +475,9 @@ export default function Header({
         </button>
       )}
 
-      {/* ========================================
+      {/* 
           PROFILE
-      ======================================== */}
+       */}
 
       {(isLoggedIn || dashboardMode) && (
         <div className="profile-wrapper">
@@ -539,18 +539,18 @@ export default function Header({
                   className="profile-menu-item"
                   onClick={handleDashboard}
                 >
-                  Dashboard
+                  My Dashboard
                 </button>
               )}
 
               {/* ACCOUNT SETTINGS */}
-              <button
+              {/* <button
                 type="button"
                 className="profile-menu-item"
                 onClick={handleAccountSettings}
               >
                 Account Settings
-              </button>
+              </button> */}
 
               {/* LOGOUT */}
               <button

@@ -32,6 +32,19 @@ export default function RegisterForAuction({
     currentUser?.fullName ?? currentUser?.name ?? currentUser?.username ?? "";
   const email = currentUser?.email ?? "";
 
+  // Support common product response shapes for the auction creator.
+  const auctionSellerEmail =
+    product?.sellerEmail ??
+    product?.seller?.email ??
+    product?.seller?.user?.email ??
+    product?.createdBy?.email ??
+    product?.user?.email ??
+    "";
+  const isAuctionCreator =
+    Boolean(email && auctionSellerEmail) &&
+    email.trim().toLowerCase() === auctionSellerEmail.trim().toLowerCase();
+  const isProfileComplete = Boolean(fullName.trim() && email.trim());
+
   // AuctionRegistration uses userId + auctionId as its composite key.
   // registeredAt is generated automatically by the backend.
   const auctionId = product?.id ?? product?.auctionId ?? "";
@@ -123,7 +136,13 @@ export default function RegisterForAuction({
               registrationResponse?.data?.registered ??
               registrationResponse?.data);
 
-        if (active) setAlreadyRegistered(registrationValue === true);
+        if (active) {
+          const registered = registrationValue === true;
+          setAlreadyRegistered(registered);
+          if (registered) {
+            setErrorMessage("You are already registered for this auction.");
+          }
+        }
       } catch (error) {
         // If the check endpoint fails, leave registration available; the
         // backend must still reject duplicate registrations.
@@ -152,14 +171,33 @@ export default function RegisterForAuction({
     setErrorMessage("");
 
     if (!currentUser) {
-      setErrorMessage("Please log in to register for this auction.");
+      setErrorMessage(
+        "Please log in and complete your profile before registering for an auction.",
+      );
       return;
     }
+
+    if (!isProfileComplete) {
+      setErrorMessage(
+        "Complete your profile first before registering for an auction.",
+      );
+      return;
+    }
+
+    if (isAuctionCreator) {
+      setErrorMessage(
+        "You created this auction, so you can't register for it.",
+      );
+      return;
+    }
+
     if (!acceptedTerms) return;
+
     if (alreadyRegistered) {
-      setErrorMessage("You have already registered for this auction.");
+      setErrorMessage("You are already registered for this auction.");
       return;
     }
+
     if (!auctionId) {
       setErrorMessage("Auction ID is missing for this product.");
       return;
@@ -211,6 +249,7 @@ export default function RegisterForAuction({
       await cancelRegistration(Number(auctionId));
 
       setAlreadyRegistered(false);
+      setErrorMessage("");
       setParticipantCount((previous) => Math.max(0, Number(previous || 0) - 1));
     } catch (error) {
       setErrorMessage(
@@ -421,8 +460,8 @@ export default function RegisterForAuction({
                 <h1 id="register-auction-title">Sign in to Register</h1>
               </div>
               <p className="register-form-subtitle">
-                Please sign in with your buyer account to register for this
-                auction.
+                Please sign in and complete your profile before registering for
+                this auction.
               </p>
               <div className="register-login-form-wrapper">
                 <LoginForm

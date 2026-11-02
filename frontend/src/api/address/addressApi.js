@@ -1,8 +1,8 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+//
 // ADDRESS APIs
-// ==========================================
+//
 
 // 1. Add a new address
 // POST /api/v1/addresses/add

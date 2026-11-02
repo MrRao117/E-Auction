@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import AuctionCard from "../../components/AuctionCard/AuctionCard";
 import Header from "../../components/Header/Header";
 
-import { getAllAuctions } from "../../api/auction/auctionApi";
+import { getAuctionsByStatus } from "../../api/auction/auctionApi";
+
 import {
   getProductById,
   getProductCategories,
@@ -11,9 +12,9 @@ import {
 
 import "./AllAuction.css";
 
-/* =========================================================
-   GET AUCTION LIFECYCLE
-========================================================= */
+/*
+ * GET AUCTION LIFECYCLE
+ */
 
 const getAuctionCountdown = (auction, now) => {
   const startMs = auction?.startTime
@@ -61,9 +62,18 @@ const getAuctionCountdown = (auction, now) => {
   };
 };
 
-/* =========================================================
-   ALL AUCTIONS PAGE
-========================================================= */
+/*
+ * EXTRACT AUCTION LIST FROM API RESPONSE
+ */
+
+const extractAuctionList = (response) => {
+  const data = response?.data?.data ?? response?.data ?? response;
+  return Array.isArray(data) ? data : [];
+};
+
+/*
+ * ALL AUCTIONS PAGE
+ */
 
 export default function AllAuction({
   onLogin,
@@ -80,9 +90,9 @@ export default function AllAuction({
   activeLink,
   onActiveLinkChange,
 }) {
-  /* =========================================================
-     FILTER STATES
-  ========================================================= */
+  /*
+   * FILTER STATES
+   */
 
   const [search, setSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -90,18 +100,18 @@ export default function AllAuction({
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(10000000);
 
-  /* =========================================================
-     AUCTION DATA STATES
-  ========================================================= */
+  /*
+   * AUCTION DATA STATES
+   */
 
   const [auctions, setAuctions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  /* =========================================================
-     REAL-TIME CLOCK
-  ========================================================= */
+  /*
+   * REAL-TIME CLOCK
+   */
 
   const [now, setNow] = useState(() => Date.now());
 
@@ -113,9 +123,9 @@ export default function AllAuction({
     return () => clearInterval(timer);
   }, []);
 
-  /* =========================================================
-     FETCH ALL CATEGORIES
-  ========================================================= */
+  /*
+   * FETCH ALL CATEGORIES
+   */
 
   useEffect(() => {
     let isMounted = true;
@@ -146,9 +156,18 @@ export default function AllAuction({
     };
   }, []);
 
-  /* =========================================================
-     FETCH ALL AUCTIONS + PRODUCT DETAILS
-  ========================================================= */
+  /*
+   * FETCH AUCTIONS BY STATUS + PRODUCT DETAILS
+   *
+   * All Types:
+   *   Fetch SCHEDULED and ACTIVE auctions.
+   *
+   * Scheduled Auctions:
+   *   Fetch SCHEDULED auctions only.
+   *
+   * Live Auctions:
+   *   Fetch ACTIVE auctions only.
+   */
 
   useEffect(() => {
     let isMounted = true;
@@ -158,11 +177,43 @@ export default function AllAuction({
         setLoading(true);
         setError("");
 
-        const response = await getAllAuctions();
+        let auctionList = [];
 
-        const allAuctions = response?.data?.data ?? response?.data ?? response;
+        if (auctionType === "Scheduled Auctions") {
+          // GET /api/v1/auctions/status/SCHEDULED
+          const response = await getAuctionsByStatus("SCHEDULED");
+          auctionList = extractAuctionList(response);
+        } else if (auctionType === "Live Auctions") {
+          // GET /api/v1/auctions/status/ACTIVE
+          const response = await getAuctionsByStatus("ACTIVE");
+          auctionList = extractAuctionList(response);
+        } else {
+          // Fetch both statuses for All Types.
+          const [scheduledResponse, activeResponse] = await Promise.all([
+            // GET /api/v1/auctions/status/SCHEDULED
+            getAuctionsByStatus("SCHEDULED"),
 
-        const auctionList = Array.isArray(allAuctions) ? allAuctions : [];
+            // GET /api/v1/auctions/status/ACTIVE
+            getAuctionsByStatus("ACTIVE"),
+          ]);
+
+          const scheduledAuctions = extractAuctionList(scheduledResponse);
+
+          const activeAuctions = extractAuctionList(activeResponse);
+
+          // Combine both lists and avoid duplicate auction IDs.
+          const uniqueAuctions = new Map();
+
+          [...scheduledAuctions, ...activeAuctions].forEach((auction) => {
+            uniqueAuctions.set(auction.auctionId, auction);
+          });
+
+          auctionList = Array.from(uniqueAuctions.values());
+        }
+
+        /*
+         * FETCH PRODUCT DETAILS FOR EACH AUCTION
+         */
 
         const auctionsWithProducts = await Promise.all(
           auctionList.map(async (auction) => {
@@ -208,6 +259,7 @@ export default function AllAuction({
                 /* REAL-TIME DISPLAY STATUS */
 
                 realTimeStatus: lifecycle.realTimeStatus,
+
                 type:
                   lifecycle.realTimeStatus === "ACTIVE"
                     ? "Live Auctions"
@@ -230,9 +282,10 @@ export default function AllAuction({
           setAuctions(auctionsWithProducts.filter(Boolean));
         }
       } catch (fetchError) {
-        console.error("Failed to fetch all auctions:", fetchError);
+        console.error("Failed to fetch auctions:", fetchError);
 
         if (isMounted) {
+          setAuctions([]);
           setError("Unable to load auctions. Please try again.");
         }
       } finally {
@@ -247,11 +300,11 @@ export default function AllAuction({
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [auctionType]);
 
-  /* =========================================================
-     CATEGORY FILTER
-  ========================================================= */
+  /*
+   * CATEGORY FILTER
+   */
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
@@ -261,9 +314,9 @@ export default function AllAuction({
     );
   };
 
-  /* =========================================================
-     CLEAR FILTERS
-  ========================================================= */
+  /*
+   * CLEAR FILTERS
+   */
 
   const clearFilters = () => {
     setSearch("");
@@ -273,14 +326,16 @@ export default function AllAuction({
     setMaxPrice(10000000);
   };
 
-  /* =========================================================
-     FILTER + SORT
-  ========================================================= */
+  /*
+   * FILTER AUCTIONS
+   */
 
   const filteredAuctions = useMemo(() => {
     let result = [...auctions];
 
-    /* REAL-TIME STATUS FILTER */
+    /*
+     * REAL-TIME STATUS FILTER
+     */
 
     result = result.filter((auction) => {
       const lifecycle = getAuctionCountdown(auction, now);
@@ -289,7 +344,7 @@ export default function AllAuction({
         return false;
       }
 
-      // Hide ended auctions from all active listings.
+      // Hide ended auctions from active listings.
       if (lifecycle.realTimeStatus === "ENDED") {
         return false;
       }
@@ -302,14 +357,16 @@ export default function AllAuction({
         return lifecycle.realTimeStatus === "ACTIVE";
       }
 
-      // All Types shows scheduled + active auctions.
+      // All Types shows scheduled and active auctions.
       return (
         lifecycle.realTimeStatus === "SCHEDULED" ||
         lifecycle.realTimeStatus === "ACTIVE"
       );
     });
 
-    /* SEARCH */
+    /*
+     * SEARCH FILTER
+     */
 
     if (search.trim()) {
       const value = search.toLowerCase().trim();
@@ -322,7 +379,9 @@ export default function AllAuction({
       );
     }
 
-    /* CATEGORY */
+    /*
+     * CATEGORY FILTER
+     */
 
     if (selectedCategories.length > 0) {
       result = result.filter((auction) =>
@@ -330,7 +389,9 @@ export default function AllAuction({
       );
     }
 
-    /* PRICE */
+    /*
+     * PRICE FILTER
+     */
 
     result = result.filter(
       (auction) =>
@@ -350,9 +411,9 @@ export default function AllAuction({
 
   const currentAuctions = filteredAuctions;
 
-  /* =========================================================
-     RETURN
-  ========================================================= */
+  /*
+   * RETURN
+   */
 
   return (
     <>

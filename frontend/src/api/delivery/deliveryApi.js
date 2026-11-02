@@ -1,8 +1,8 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+//
 // DELIVERY CREATE API
-// ==========================================
+//
 
 // 1. Assign delivery to an agent
 // POST /api/v1/deliveries/assign
@@ -11,9 +11,9 @@ export const assignDelivery = async (deliveryData) => {
   return response.data;
 };
 
-// ==========================================
+//
 // DELIVERY GET APIs
-// ==========================================
+//
 
 // 2. Get all deliveries
 // GET /api/v1/deliveries
@@ -43,9 +43,9 @@ export const getDeliveriesByAgentId = async (agentId) => {
   return response.data;
 };
 
-// ==========================================
+//
 // DELIVERY STATUS UPDATE API
-// ==========================================
+//
 
 // 6. Update delivery status
 // PATCH /api/v1/deliveries/{deliveryId}/status

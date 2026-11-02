@@ -41,41 +41,282 @@ export default function RegisterForm({ setActiveTab }) {
   // PASSWORD
   // =========================
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [password, setPassword] = useState("");
-
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [passwordError, setPasswordError] = useState("");
-
-  const [dobError, setDobError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // =========================
-  // TODAY
+  // ERRORS AND TOUCHED FIELDS
+  // =========================
+
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
+  // =========================
+  // DATE LIMITS
   // =========================
 
   const today = new Date();
 
-  const todayString = today.toISOString().split("T")[0];
+  const todayString = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0"),
+  ].join("-");
+
+  // A person who has reached their 18th birthday is eligible.
+  const latestEligibleDOB = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate(),
+  );
+
+  const latestEligibleDOBString = [
+    latestEligibleDOB.getFullYear(),
+    String(latestEligibleDOB.getMonth() + 1).padStart(2, "0"),
+    String(latestEligibleDOB.getDate()).padStart(2, "0"),
+  ].join("-");
 
   // =========================
-  // FORM CHANGE
+  // VALIDATION FUNCTIONS
+  // Empty values are handled separately during submission.
+  // =========================
+
+  const validateName = (name) => {
+    if (!name.trim()) return "";
+
+    if (!/^[A-Za-z]+(?: +[A-Za-z]+)*$/.test(name.trim())) {
+      return "Name must contain alphabets and spaces only.";
+    }
+
+    return "";
+  };
+
+  const validateMobile = (mobileNo) => {
+    if (!mobileNo) return "";
+
+    if (!/^[6-9]\d{9}$/.test(mobileNo)) {
+      return "Enter a valid 10-digit Indian mobile number.";
+    }
+
+    if (/^(\d)\1{9}$/.test(mobileNo)) {
+      return "Mobile number cannot contain the same digit repeatedly.";
+    }
+
+    return "";
+  };
+
+  const validateEmail = (email) => {
+    const value = email.trim();
+
+    if (!value) return "";
+
+    const gmailPattern = /^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@gmail\.com$/i;
+
+    const localPart = value.split("@")[0];
+
+    if (
+      !gmailPattern.test(value) ||
+      !localPart ||
+      localPart.startsWith(".") ||
+      localPart.endsWith(".") ||
+      localPart.includes("..")
+    ) {
+      return "Enter a valid Gmail address ending with @gmail.com.";
+    }
+
+    return "";
+  };
+
+  const validateDOB = (dob) => {
+    if (!dob) return "";
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
+      return "Enter a valid date of birth.";
+    }
+
+    const birthDate = new Date(`${dob}T00:00:00`);
+
+    if (
+      Number.isNaN(birthDate.getTime()) ||
+      birthDate.toISOString().slice(0, 10) !== dob
+    ) {
+      return "Enter a valid date of birth.";
+    }
+
+    if (dob > todayString) {
+      return "Date of birth cannot be in the future.";
+    }
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+
+    const birthdayNotReached =
+      today.getMonth() < birthDate.getMonth() ||
+      (today.getMonth() === birthDate.getMonth() &&
+        today.getDate() < birthDate.getDate());
+
+    if (birthdayNotReached) {
+      age--;
+    }
+
+    if (age < 18) {
+      return "Age must be greater than 18.";
+    }
+
+    return "";
+  };
+
+  const validateGender = (gender) => {
+    if (!gender) return "";
+    return "";
+  };
+
+  const validatePassword = (value) => {
+    if (!value) return "";
+
+    if (value.length < 8) {
+      return "Password must contain at least 8 characters.";
+    }
+
+    if (/\s/.test(value)) {
+      return "Password must not contain spaces.";
+    }
+
+    if (!/[A-Z]/.test(value)) {
+      return "Password must contain at least one uppercase letter.";
+    }
+
+    if (!/[a-z]/.test(value)) {
+      return "Password must contain at least one lowercase letter.";
+    }
+
+    if (!/\d/.test(value)) {
+      return "Password must contain at least one number.";
+    }
+
+    if (!/[^A-Za-z0-9\s]/.test(value)) {
+      return "Password must contain at least one special character.";
+    }
+
+    return "";
+  };
+
+  const validateConfirmPassword = (value, originalPassword) => {
+    if (!value) return "";
+
+    if (value !== originalPassword) {
+      return "Passwords do not match.";
+    }
+
+    return "";
+  };
+
+  // =========================
+  // FIELD VALIDATION ROUTER
+  // =========================
+
+  const validateField = (fieldName, value, currentPassword = password) => {
+    switch (fieldName) {
+      case "name":
+        return validateName(value);
+
+      case "mobileNo":
+        return validateMobile(value);
+
+      case "email":
+        return validateEmail(value);
+
+      case "dob":
+        return validateDOB(value);
+
+      case "gender":
+        return validateGender(value);
+
+      case "password":
+        return validatePassword(value);
+
+      case "confirmPassword":
+        return validateConfirmPassword(value, currentPassword);
+
+      default:
+        return "";
+    }
+  };
+
+  // =========================
+  // FORM FIELD CHANGE
   // =========================
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
+    const updatedValue =
+      name === "mobileNo" ? value.replace(/\D/g, "").slice(0, 10) : value;
+
     setFormData((previous) => ({
       ...previous,
-      [name]: value,
+      [name]: updatedValue,
+    }));
+
+    // Empty fields remain error-free during normal navigation.
+    // After a submission attempt, required errors also update.
+    if (touched[name] || submitted) {
+      let message = "";
+
+      if (!updatedValue.trim?.() && !updatedValue && !submitted) {
+        message = "";
+      } else if (!updatedValue && submitted) {
+        message = `${
+          name === "mobileNo"
+            ? "Mobile number"
+            : name === "dob"
+              ? "Date of birth"
+              : name === "gender"
+                ? "Gender"
+                : name.charAt(0).toUpperCase() + name.slice(1)
+        } is required.`;
+      } else {
+        message = validateField(name, updatedValue);
+      }
+
+      setErrors((previous) => ({
+        ...previous,
+        [name]: message,
+      }));
+    }
+  };
+
+  // =========================
+  // FIELD BLUR / TAB
+  // =========================
+
+  const handleBlur = (fieldName, value) => {
+    setTouched((previous) => ({
+      ...previous,
+      [fieldName]: true,
+    }));
+
+    // Do not show required errors when leaving a blank field.
+    if (!value || !value.trim?.()) {
+      setErrors((previous) => ({
+        ...previous,
+        [fieldName]: "",
+      }));
+
+      return;
+    }
+
+    setErrors((previous) => ({
+      ...previous,
+      [fieldName]: validateField(fieldName, value),
     }));
   };
 
   // =========================
-  // PASSWORD
+  // PASSWORD CHANGE
   // =========================
 
   const handlePasswordChange = (event) => {
@@ -83,15 +324,29 @@ export default function RegisterForm({ setActiveTab }) {
 
     setPassword(value);
 
-    if (confirmPassword && value !== confirmPassword) {
-      setPasswordError("Passwords do not match");
-    } else {
-      setPasswordError("");
+    if (touched.password || submitted) {
+      setErrors((previous) => ({
+        ...previous,
+        password:
+          !value && submitted
+            ? "Password is required."
+            : validatePassword(value),
+      }));
+    }
+
+    if (touched.confirmPassword || submitted) {
+      setErrors((previous) => ({
+        ...previous,
+        confirmPassword:
+          !confirmPassword && submitted
+            ? "Confirm password is required."
+            : validateConfirmPassword(confirmPassword, value),
+      }));
     }
   };
 
   // =========================
-  // CONFIRM PASSWORD
+  // CONFIRM PASSWORD CHANGE
   // =========================
 
   const handleConfirmPasswordChange = (event) => {
@@ -99,61 +354,14 @@ export default function RegisterForm({ setActiveTab }) {
 
     setConfirmPassword(value);
 
-    if (password && password !== value) {
-      setPasswordError("Passwords do not match");
-    } else {
-      setPasswordError("");
-    }
-  };
-
-  // =========================
-  // DOB VALIDATION
-  // =========================
-
-  const handleDobChange = (event) => {
-    const value = event.target.value;
-
-    setDobError("");
-
-    setFormData((previous) => ({
-      ...previous,
-      dob: value,
-    }));
-
-    if (!value) {
-      return;
-    }
-
-    const parts = value.split("-");
-
-    const year = parts[0];
-
-    // Year must contain exactly 4 digits
-
-    if (!year || year.length !== 4 || !/^\d{4}$/.test(year)) {
-      setDobError("Year must contain exactly 4 digits");
-
-      return;
-    }
-
-    // Year must be between 1900 and current year
-
-    const numericYear = Number(year);
-
-    const currentYear = today.getFullYear();
-
-    if (numericYear < 1900 || numericYear > currentYear) {
-      setDobError(`Year must be between 1900 and ${currentYear}`);
-
-      return;
-    }
-
-    // DOB cannot be future
-
-    if (value > todayString) {
-      setDobError("Date of birth cannot be in the future");
-
-      return;
+    if (touched.confirmPassword || submitted) {
+      setErrors((previous) => ({
+        ...previous,
+        confirmPassword:
+          !value && submitted
+            ? "Confirm password is required."
+            : validateConfirmPassword(value, password),
+      }));
     }
   };
 
@@ -164,17 +372,14 @@ export default function RegisterForm({ setActiveTab }) {
   const openDatePicker = () => {
     const dateInput = document.getElementById("register-dob");
 
-    if (!dateInput) {
-      return;
-    }
+    if (!dateInput) return;
 
     if (typeof dateInput.showPicker === "function") {
       try {
         dateInput.showPicker();
-
         return;
-      } catch (error) {
-        // Browser may block showPicker
+      } catch {
+        // Fall back to focusing the date input.
       }
     }
 
@@ -182,107 +387,121 @@ export default function RegisterForm({ setActiveTab }) {
   };
 
   // =========================
-  // SUBMIT
+  // SUBMIT REGISTRATION
   // =========================
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Password validation
+    setSubmitted(true);
 
-    if (!password) {
-      setPasswordError("Password is required");
+    const newErrors = {
+      name: formData.name.trim()
+        ? validateName(formData.name)
+        : "Full name is required.",
 
+      mobileNo: formData.mobileNo
+        ? validateMobile(formData.mobileNo)
+        : "Mobile number is required.",
+
+      email: formData.email.trim()
+        ? validateEmail(formData.email)
+        : "Email address is required.",
+
+      dob: formData.dob
+        ? validateDOB(formData.dob)
+        : "Date of birth is required.",
+
+      gender: formData.gender
+        ? validateGender(formData.gender)
+        : "Gender is required.",
+
+      password: password ? validatePassword(password) : "Password is required.",
+
+      confirmPassword: confirmPassword
+        ? validateConfirmPassword(confirmPassword, password)
+        : "Confirm password is required.",
+    };
+
+    setTouched({
+      name: true,
+      mobileNo: true,
+      email: true,
+      dob: true,
+      gender: true,
+      password: true,
+      confirmPassword: true,
+    });
+
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some(Boolean)) {
       return;
     }
-
-    if (!confirmPassword) {
-      setPasswordError("Please confirm your password");
-
-      return;
-    }
-
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
-
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match");
-
-      return;
-    }
-
-    // DOB validation
-
-    if (dobError) {
-      return;
-    }
-
-    // =========================
-    // SEND TO BACKEND
-    // =========================
 
     dispatch(registerStart());
 
     try {
       const registrationData = {
         name: formData.name.trim(),
-
         email: formData.email.trim(),
-
-        password: password,
-
+        password,
         dob: formData.dob,
-
         gender: formData.gender,
-
-        mobileNo: formData.mobileNo.trim(),
+        mobileNo: formData.mobileNo,
       };
-
-      console.log("Registration request:", registrationData);
 
       const response = await registerUser(registrationData);
 
-      console.log("Registration response:", response);
-
-      // Save registration result in Redux
-
       dispatch(registerSuccess(response));
 
-      // Go to login
-
       setActiveTab("login");
-    } catch (error) {
-      console.error("Registration failed:", error);
+    } catch (registrationError) {
+      console.error("Registration failed:", registrationError);
 
       const message =
-        error.response?.data?.message ||
-        error.response?.data?.error ||
+        registrationError.response?.data?.message ||
+        registrationError.response?.data?.error ||
         "Registration failed. Please try again.";
 
       dispatch(registerFailure(message));
     }
   };
 
+  // =========================
+  // ERROR MESSAGE
+  // =========================
+
+  const renderError = (fieldName) => {
+    if (!errors[fieldName]) {
+      return null;
+    }
+
+    return (
+      <p className="validation-error" role="alert">
+        {errors[fieldName]}
+      </p>
+    );
+  };
+
+  // =========================
+  // FORM UI
+  // =========================
+
   return (
     <div className="auth-form-container register-container">
-      {/* TITLE */}
-
       <div className="form-title">
         <h1>Create your account</h1>
-
         <p>Join eAuction and start bidding today</p>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         {/* FULL NAME */}
 
         <div className="input-group">
           <label htmlFor="register-name">Full name</label>
 
-          <div className="input-wrapper">
+          <div className={`input-wrapper ${errors.name ? "input-error" : ""}`}>
             <div className="input-icon">
               <UserRound size={15} />
             </div>
@@ -295,9 +514,13 @@ export default function RegisterForm({ setActiveTab }) {
               autoComplete="name"
               value={formData.name}
               onChange={handleChange}
+              onBlur={() => handleBlur("name", formData.name)}
+              aria-invalid={Boolean(errors.name)}
               required
             />
           </div>
+
+          {renderError("name")}
         </div>
 
         {/* MOBILE NUMBER */}
@@ -305,7 +528,9 @@ export default function RegisterForm({ setActiveTab }) {
         <div className="input-group">
           <label htmlFor="register-mobile">Mobile number</label>
 
-          <div className="input-wrapper">
+          <div
+            className={`input-wrapper ${errors.mobileNo ? "input-error" : ""}`}
+          >
             <div className="input-icon">
               <Phone size={15} />
             </div>
@@ -314,15 +539,19 @@ export default function RegisterForm({ setActiveTab }) {
               id="register-mobile"
               name="mobileNo"
               type="tel"
+              inputMode="numeric"
               placeholder="Enter your mobile number"
               maxLength={10}
-              autoComplete="tel"
-              pattern="[6-9][0-9]{9}"
+              autoComplete="tel-national"
               value={formData.mobileNo}
               onChange={handleChange}
+              onBlur={() => handleBlur("mobileNo", formData.mobileNo)}
+              aria-invalid={Boolean(errors.mobileNo)}
               required
             />
           </div>
+
+          {renderError("mobileNo")}
         </div>
 
         {/* EMAIL */}
@@ -330,7 +559,7 @@ export default function RegisterForm({ setActiveTab }) {
         <div className="input-group">
           <label htmlFor="register-email">Email address</label>
 
-          <div className="input-wrapper">
+          <div className={`input-wrapper ${errors.email ? "input-error" : ""}`}>
             <div className="input-icon">
               <Mail size={15} />
             </div>
@@ -339,26 +568,30 @@ export default function RegisterForm({ setActiveTab }) {
               id="register-email"
               name="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="Enter your Gmail address"
               autoComplete="email"
               value={formData.email}
               onChange={handleChange}
+              onBlur={() => handleBlur("email", formData.email)}
+              aria-invalid={Boolean(errors.email)}
               required
             />
           </div>
+
+          {renderError("email")}
         </div>
 
         {/* DOB + GENDER */}
 
         <div className="register-two-column">
-          {/* DOB */}
+          {/* DATE OF BIRTH */}
 
           <div className="input-group">
             <label htmlFor="register-dob">Date of birth</label>
 
             <div
               className={`input-wrapper dob-wrapper ${
-                dobError ? "input-error" : ""
+                errors.dob ? "input-error" : ""
               }`}
             >
               <button
@@ -375,14 +608,20 @@ export default function RegisterForm({ setActiveTab }) {
                 name="dob"
                 type="date"
                 min="1900-01-01"
-                max={todayString}
+                max={latestEligibleDOBString}
                 value={formData.dob}
-                onChange={handleDobChange}
+                onChange={handleChange}
+                onBlur={() => handleBlur("dob", formData.dob)}
+                aria-invalid={Boolean(errors.dob)}
                 required
               />
             </div>
 
-            {dobError && <div className="password-error">{dobError}</div>}
+            {renderError("dob")}
+
+            {touched.dob && formData.dob && !errors.dob && (
+              <p className="validation-success">Date of birth is valid.</p>
+            )}
           </div>
 
           {/* GENDER */}
@@ -390,7 +629,9 @@ export default function RegisterForm({ setActiveTab }) {
           <div className="input-group">
             <label htmlFor="register-gender">Gender</label>
 
-            <div className="input-wrapper">
+            <div
+              className={`input-wrapper ${errors.gender ? "input-error" : ""}`}
+            >
               <div className="input-icon">
                 <UserRound size={15} />
               </div>
@@ -400,19 +641,20 @@ export default function RegisterForm({ setActiveTab }) {
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
+                onBlur={() => handleBlur("gender", formData.gender)}
+                aria-invalid={Boolean(errors.gender)}
                 required
               >
                 <option value="" disabled>
                   Select
                 </option>
-
                 <option value="MALE">Male</option>
-
                 <option value="FEMALE">Female</option>
-
                 <option value="OTHER">Other</option>
               </select>
             </div>
+
+            {renderError("gender")}
           </div>
         </div>
 
@@ -422,7 +664,7 @@ export default function RegisterForm({ setActiveTab }) {
           <label htmlFor="register-password">Password</label>
 
           <div
-            className={`input-wrapper ${passwordError ? "input-error" : ""}`}
+            className={`input-wrapper ${errors.password ? "input-error" : ""}`}
           >
             <div className="input-icon">
               <LockKeyhole size={15} />
@@ -435,18 +677,22 @@ export default function RegisterForm({ setActiveTab }) {
               autoComplete="new-password"
               value={password}
               onChange={handlePasswordChange}
-              minLength={6}
+              onBlur={() => handleBlur("password", password)}
+              aria-invalid={Boolean(errors.password)}
               required
             />
 
             <button
               type="button"
               className="password-toggle"
-              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              onClick={() => setShowPassword((previous) => !previous)}
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
+
+          {renderError("password")}
         </div>
 
         {/* CONFIRM PASSWORD */}
@@ -455,7 +701,9 @@ export default function RegisterForm({ setActiveTab }) {
           <label htmlFor="register-confirm">Confirm password</label>
 
           <div
-            className={`input-wrapper ${passwordError ? "input-error" : ""}`}
+            className={`input-wrapper ${
+              errors.confirmPassword ? "input-error" : ""
+            }`}
           >
             <div className="input-icon">
               <LockKeyhole size={15} />
@@ -468,32 +716,36 @@ export default function RegisterForm({ setActiveTab }) {
               autoComplete="new-password"
               value={confirmPassword}
               onChange={handleConfirmPasswordChange}
-              minLength={6}
+              onBlur={() => handleBlur("confirmPassword", confirmPassword)}
+              aria-invalid={Boolean(errors.confirmPassword)}
               required
             />
 
             <button
               type="button"
               className="password-toggle"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              aria-label={
+                showConfirmPassword
+                  ? "Hide confirm password"
+                  : "Show confirm password"
+              }
+              onClick={() => setShowConfirmPassword((previous) => !previous)}
             >
               {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
 
-          {passwordError && (
-            <div className="password-error">{passwordError}</div>
-          )}
+          {renderError("confirmPassword")}
         </div>
 
         {/* BACKEND ERROR */}
 
         {error && (
-          <div className="password-error">
+          <p className="validation-error" role="alert">
             {typeof error === "string"
               ? error
               : "Registration failed. Please try again."}
-          </div>
+          </p>
         )}
 
         {/* TERMS */}
@@ -502,24 +754,14 @@ export default function RegisterForm({ setActiveTab }) {
           <input type="checkbox" required />
 
           <span>
-            I agree to the <button type="button">Terms & Conditions</button> and{" "}
-            <button type="button">Privacy Policy</button>
+            I agree to the <button type="button">Terms &amp; Conditions</button>{" "}
+            and <button type="button">Privacy Policy</button>
           </span>
         </label>
 
         {/* CREATE ACCOUNT */}
 
-        <button
-          type="submit"
-          className="primary-button"
-          disabled={
-            isLoading ||
-            !password ||
-            !confirmPassword ||
-            password !== confirmPassword ||
-            Boolean(dobError)
-          }
-        >
+        <button type="submit" className="primary-button" disabled={isLoading}>
           {isLoading ? "Creating account..." : "Create account"}
         </button>
 

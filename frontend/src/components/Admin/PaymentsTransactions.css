@@ -1,6 +1,4 @@
-/* =========================================
-   PAYMENTS & TRANSACTIONS PAGE
-========================================= */
+/* PAYMENTS & TRANSACTIONS PAGE */
 
 .payments-page {
   width: 100%;
@@ -11,9 +9,7 @@
   font-family: inherit;
 }
 
-/* =========================================
-   PAGE HEADER
-========================================= */
+/* PAGE HEADER */
 
 .payments-page-header {
   display: flex;
@@ -57,9 +53,7 @@
   color: #171b45;
 }
 
-/* =========================================
-   SUMMARY CARDS
-========================================= */
+/* SUMMARY CARDS */
 
 .payments-stats-grid {
   display: grid;
@@ -176,9 +170,7 @@
   color: #e5252a;
 }
 
-/* =========================================
-   MAIN TRANSACTIONS CARD
-========================================= */
+/* MAIN TRANSACTIONS CARD */
 
 .payments-main-card {
   min-width: 0;
@@ -188,9 +180,7 @@
   overflow: hidden;
 }
 
-/* =========================================
-   TABS
-========================================= */
+/* TABS */
 
 .payments-tabs-row {
   display: flex;
@@ -245,9 +235,7 @@
   content: "";
 }
 
-/* =========================================
-   BUTTONS
-========================================= */
+/* BUTTONS */
 
 .payments-export-btn {
   display: inline-flex;
@@ -270,9 +258,7 @@
   background: #047857;
 }
 
-/* =========================================
-   FILTERS
-========================================= */
+/* FILTERS */
 
 .payments-filter-row {
   display: grid;
@@ -386,9 +372,7 @@
   background: #f1faf6;
 }
 
-/* =========================================
-   TABLE AND DETAILS LAYOUT
-========================================= */
+/* TABLE AND DETAILS LAYOUT */
 
 .payments-content-layout {
   display: grid;
@@ -466,9 +450,7 @@
   cursor: pointer;
 }
 
-/* =========================================
-   TRANSACTION TABLE CELLS
-========================================= */
+/* TRANSACTION TABLE CELLS */
 
 .payment-id {
   color: #64749a;
@@ -581,9 +563,7 @@
   font-size: 12px;
 }
 
-/* =========================================
-   STATUS BADGES
-========================================= */
+/* STATUS BADGES */
 
 .transaction-status {
   display: inline-flex;
@@ -626,9 +606,7 @@
   color: #db2860;
 }
 
-/* =========================================
-   TABLE ACTIONS
-========================================= */
+/* TABLE ACTIONS */
 
 .payment-row-actions {
   display: flex;
@@ -659,9 +637,7 @@
   color: #047857;
 }
 
-/* =========================================
-   EMPTY STATE
-========================================= */
+/* EMPTY STATE */
 
 .payments-empty-state {
   height: 150px !important;
@@ -670,9 +646,7 @@
   font-size: 14px;
 }
 
-/* =========================================
-   PAGINATION
-========================================= */
+/* PAGINATION */
 
 .payments-pagination {
   display: flex;
@@ -729,9 +703,7 @@
   padding: 0 3px;
 }
 
-/* =========================================
-   TRANSACTION DETAILS PANEL
-========================================= */
+/* TRANSACTION DETAILS PANEL */
 
 .transaction-details-panel {
   display: flex;
@@ -910,9 +882,7 @@
   color: #fff;
 }
 
-/* =========================================
-   RESPONSIVE: LAPTOP
-========================================= */
+/* RESPONSIVE: LAPTOP */
 
 @media (max-width: 1300px) {
   .payments-content-layout {
@@ -943,9 +913,7 @@
   }
 }
 
-/* =========================================
-   RESPONSIVE: TABLET
-========================================= */
+/* RESPONSIVE: TABLET */
 
 @media (max-width: 1050px) {
   .payments-stats-grid {
@@ -980,9 +948,7 @@
   }
 }
 
-/* =========================================
-   RESPONSIVE: MOBILE
-========================================= */
+/* RESPONSIVE: MOBILE */
 
 @media (max-width: 650px) {
   .payments-page {

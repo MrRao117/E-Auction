@@ -1,6 +1,6 @@
-/* ================================
+/* 
    WATCHLIST PAGE
-================================ */
+ */
 
 .watchlist-page {
   width: 100%;
@@ -9,18 +9,18 @@
   gap: 20px;
 }
 
-/* ================================
+/* 
    WATCHLIST SECTION
-================================ */
+ */
 
 .watchlist-section {
   width: 100%;
   box-sizing: border-box;
 }
 
-/* ================================
+/* 
    CARD HEADER
-================================ */
+ */
 
 .watchlist-section .card-header {
   display: flex;
@@ -40,9 +40,9 @@
   line-height: 1.4;
 }
 
-/* ================================
+/* 
    VIEW ALL BUTTON
-================================ */
+ */
 
 .watchlist-view-all {
   border: 0;
@@ -60,9 +60,9 @@
   color: #065f46;
 }
 
-/* ================================
+/* 
    WATCHLIST AUCTION GRID
-================================ */
+ */
 
 .watchlist-auction-grid {
   width: 100%;
@@ -74,9 +74,9 @@
   align-items: stretch;
 }
 
-/* ================================
+/* 
    AUCTION CARD
-================================ */
+ */
 
 .watchlist-auction-grid .auction-card {
   width: 100%;
@@ -84,18 +84,18 @@
   box-sizing: border-box;
 }
 
-/* ================================
+/* 
    AUCTION TITLE
-================================ */
+ */
 
 .watchlist-auction-grid .auction-title {
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* ================================
+/* 
    CENTER COUNTDOWN
-================================ */
+ */
 
 .watchlist-auction-grid .auction-card .auction-bottom {
   width: 100%;
@@ -129,9 +129,9 @@
   align-items: center;
 }
 
-/* ================================
+/* 
    DISCOVER MORE CARD
-================================ */
+ */
 
 .discover-more-card {
   width: 100%;
@@ -169,9 +169,9 @@
   box-shadow: 0 8px 20px rgba(8, 127, 91, 0.08);
 }
 
-/* ================================
+/* 
    PLUS BUTTON
-================================ */
+ */
 
 .discover-more-plus {
   width: 58px;
@@ -203,9 +203,9 @@
   transform: scale(1.05);
 }
 
-/* ================================
+/* 
    DISCOVER MORE TITLE
-================================ */
+ */
 
 .discover-more-card strong {
   display: block;
@@ -220,9 +220,9 @@
   text-align: center;
 }
 
-/* ================================
+/* 
    DISCOVER MORE DESCRIPTION
-================================ */
+ */
 
 .discover-more-text {
   max-width: 190px;
@@ -235,9 +235,9 @@
   text-align: center;
 }
 
-/* ================================
+/* 
    RESPONSIVE
-================================ */
+ */
 
 @media (max-width: 1250px) {
   .watchlist-auction-grid {

@@ -1,6 +1,4 @@
-/* ============================
-   Category Management
-============================ */
+/* Category Management */
 
 .category-management {
   width: 100%;
@@ -73,9 +71,7 @@
   font-size: 22px;
 }
 
-/* ============================
-   Statistics Cards
-============================ */
+/* Statistics Cards */
 
 .category-stats {
   display: grid;
@@ -191,9 +187,7 @@
   color: #e32222;
 }
 
-/* ============================
-   Main Content Container
-============================ */
+/* Main Content Container */
 
 .category-content {
   border: 1px solid #e2edf2;
@@ -323,9 +317,7 @@
   background: #05664f;
 }
 
-/* ============================
-   Table + Form Layout
-============================ */
+/* Table + Form Layout */
 
 .category-main-layout {
   display: grid;
@@ -510,9 +502,7 @@
   color: #65709e !important;
 }
 
-/* ============================
-   Pagination
-============================ */
+/* Pagination */
 
 .category-pagination {
   min-height: 60px;
@@ -569,9 +559,7 @@
   color: #65709e;
 }
 
-/* ============================
-   Add / Edit Panel
-============================ */
+/* Add / Edit Panel */
 
 .category-form-panel {
   min-width: 0;
@@ -830,9 +818,7 @@
   margin-top: 10px;
 }
 
-/* ============================
-   Responsive Design
-============================ */
+/* Responsive Design */
 
 @media (max-width: 1400px) {
   .category-management {

@@ -12,6 +12,7 @@ function DashboardSidebar({
   onMessages,
   onAddress,
   onPaymentMethods,
+  messageCount = 0,
 }) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -99,7 +100,10 @@ function DashboardSidebar({
         >
           <Icon name="mail" size={18} />
           <span>Messages</span>
-          <span className="message-count">2</span>
+
+          {messageCount > 0 && (
+            <span className="message-count">{messageCount}</span>
+          )}
         </button>
 
         {/* MY ADDRESS */}
@@ -112,17 +116,7 @@ function DashboardSidebar({
           <span>My Address</span>
         </button>
 
-        {/* PAYMENT METHODS */}
-        <button
-          className={`nav-item ${
-            activeSection === "payment-methods" ? "active" : ""
-          }`}
-          type="button"
-          onClick={onPaymentMethods}
-        >
-          <Icon name="creditCard" size={18} />
-          <span>Payment Methods</span>
-        </button>
+        {/* PAYMENT METHODS REMOVED */}
       </nav>
 
       {/* HELP */}

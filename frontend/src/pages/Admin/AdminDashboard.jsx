@@ -24,9 +24,9 @@ import UserManagement from "../../components/Admin/UserManagement";
 
 import "./AdminDashboard.css";
 
-// ==========================================
+//
 // DASHBOARD CONTENT
-// ==========================================
+//
 
 function DashboardContent() {
   return (
@@ -45,24 +45,24 @@ function DashboardContent() {
   );
 }
 
-// ==========================================
+//
 // ADMIN DASHBOARD
-// ==========================================
+//
 
 export default function AdminDashboard() {
   const [activePage, setActivePage] = useState("Dashboard");
 
-  // ==========================================
+  //
   // HANDLE SIDEBAR NAVIGATION
-  // ==========================================
+  //
 
   const handlePageChange = (page) => {
     setActivePage(page);
   };
 
-  // ==========================================
+  //
   // RENDER ACTIVE SECTION
-  // ==========================================
+  //
 
   const renderContent = () => {
     switch (activePage) {
@@ -110,9 +110,9 @@ export default function AdminDashboard() {
     }
   };
 
-  // ==========================================
+  //
   // ADMIN DASHBOARD LAYOUT
-  // ==========================================
+  //
 
   return (
     <div className="admin-panel-layout">

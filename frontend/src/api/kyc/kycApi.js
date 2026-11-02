@@ -1,8 +1,8 @@
 import axiosClient from "../axiosClient";
 
-// ==========================================
+//
 // KYC SUBMISSION API
-// ==========================================
+//
 
 // 1. Submit KYC details (BUYER only)
 // POST /api/v1/kyc/submit
@@ -11,9 +11,9 @@ export const submitKyc = async (kycData) => {
   return response.data;
 };
 
-// ==========================================
+//
 // USER KYC APIs
-// ==========================================
+//
 
 // 2. Get logged-in user's current KYC status
 // GET /api/v1/kyc/my-status
@@ -31,9 +31,9 @@ export const getMyKycHistory = async () => {
   return response.data;
 };
 
-// ==========================================
+//
 // ADMIN KYC APIs
-// ==========================================
+//
 
 // 4. Get KYC records by verification status
 // GET /api/v1/kyc/admin/status?status=PENDING

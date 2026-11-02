@@ -36,9 +36,9 @@ const PendingSellerVerification = forwardRef(
     const [actionLoading, setActionLoading] = useState(false);
     const [error, setError] = useState("");
 
-    // ==========================================
+    //
     // FORMAT DATE
-    // ==========================================
+    //
 
     const formatDate = (dateValue) => {
       if (!dateValue) return "-";
@@ -56,9 +56,9 @@ const PendingSellerVerification = forwardRef(
       });
     };
 
-    // ==========================================
+    //
     // MAP BACKEND STATUS TO UI STATUS
-    // ==========================================
+    //
 
     const mapStatus = (status) => {
       switch (status) {
@@ -76,9 +76,9 @@ const PendingSellerVerification = forwardRef(
       }
     };
 
-    // ==========================================
+    //
     // MAP BACKEND KYC RESPONSE
-    // ==========================================
+    //
 
     const mapKycResponse = (kyc) => ({
       id: kyc.kycId,
@@ -97,9 +97,9 @@ const PendingSellerVerification = forwardRef(
       remarks: kyc.remarks || "",
     });
 
-    // ==========================================
+    //
     // FETCH ALL KYC REQUESTS
-    // ==========================================
+    //
 
     const fetchKycs = useCallback(async () => {
       setLoading(true);
@@ -148,17 +148,17 @@ const PendingSellerVerification = forwardRef(
       }
     }, []);
 
-    // ==========================================
+    //
     // LOAD DATA ON COMPONENT MOUNT
-    // ==========================================
+    //
 
     useEffect(() => {
       fetchKycs();
     }, [fetchKycs]);
 
-    // ==========================================
+    //
     // STATISTICS
-    // ==========================================
+    //
 
     const pendingCount = sellers.filter(
       (seller) => seller.status === "Pending",
@@ -176,9 +176,9 @@ const PendingSellerVerification = forwardRef(
       (seller) => seller.status === "Rejected",
     ).length;
 
-    // ==========================================
+    //
     // SEARCH AND FILTER
-    // ==========================================
+    //
 
     const filteredSellers = sellers.filter((seller) => {
       const search = searchTerm.toLowerCase();
@@ -196,9 +196,9 @@ const PendingSellerVerification = forwardRef(
       return matchesSearch && matchesStatus;
     });
 
-    // ==========================================
+    //
     // STATUS CSS CLASS
-    // ==========================================
+    //
 
     const getStatusClass = (status) => {
       switch (status) {
@@ -219,9 +219,9 @@ const PendingSellerVerification = forwardRef(
       }
     };
 
-    // ==========================================
+    //
     // OPEN SELLER DETAILS
-    // ==========================================
+    //
 
     const openSellerDetails = (seller) => {
       setSelectedSeller(seller);
@@ -229,9 +229,9 @@ const PendingSellerVerification = forwardRef(
       setError("");
     };
 
-    // ==========================================
+    //
     // UPDATE KYC STATUS
-    // ==========================================
+    //
 
     const handleStatusUpdate = async (newStatus) => {
       if (!selectedSeller) return;
@@ -283,25 +283,25 @@ const PendingSellerVerification = forwardRef(
       }
     };
 
-    // ==========================================
+    //
     // APPROVE SELLER
-    // ==========================================
+    //
 
     const handleApproval = async () => {
       await handleStatusUpdate("VERIFIED");
     };
 
-    // ==========================================
+    //
     // REJECT SELLER
-    // ==========================================
+    //
 
     const handleRejection = async () => {
       await handleStatusUpdate("REJECTED");
     };
 
-    // ==========================================
+    //
     // EXPORT FILTERED RECORDS TO CSV
-    // ==========================================
+    //
 
     const exportCSV = () => {
       const headers = [
@@ -346,17 +346,17 @@ const PendingSellerVerification = forwardRef(
       URL.revokeObjectURL(url);
     };
 
-    // ==========================================
+    //
     // EXPOSE CSV EXPORT TO USER MANAGEMENT
-    // ==========================================
+    //
 
     useImperativeHandle(ref, () => ({
       exportCSV,
     }));
 
-    // ==========================================
+    //
     // RENDER
-    // ==========================================
+    //
 
     return (
       <div className="admin-page pending-seller-verification">

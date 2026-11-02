@@ -7,8 +7,6 @@ import DashboardStats from "../../components/Dashboard/DashboardStats";
 import Messages from "../../components/Dashboard/Messages";
 import MyAddress from "../../components/Dashboard/MyAddress";
 import MyOrders from "../../components/Dashboard/MyOrders";
-import PaymentMethods from "../../components/Dashboard/PaymentMethods";
-import RecentActivity from "../../components/Dashboard/RecentActivity";
 import Watchlist from "../../components/Dashboard/Watchlist";
 import WonAuctions from "../../components/Dashboard/WonAuctions";
 import Header from "../../components/Header/Header";
@@ -57,7 +55,6 @@ function Dashboard({
   const handleWatchlist = () => setActiveSection("watchlist");
   const handleMessages = () => setActiveSection("messages");
   const handleAddress = () => setActiveSection("address");
-  const handlePaymentMethods = () => setActiveSection("payment-methods");
 
   return (
     <>
@@ -89,7 +86,6 @@ function Dashboard({
           onWatchlist={handleWatchlist}
           onMessages={handleMessages}
           onAddress={handleAddress}
-          onPaymentMethods={handlePaymentMethods}
         />
 
         <main className="dashboard-main">
@@ -101,8 +97,6 @@ function Dashboard({
             <Messages mode="full" />
           ) : activeSection === "address" ? (
             <MyAddress />
-          ) : activeSection === "payment-methods" ? (
-            <PaymentMethods />
           ) : (
             <>
               <section className="account-summary-row">
@@ -111,15 +105,10 @@ function Dashboard({
 
               <DashboardStats />
 
+              {/* Registered Auctions on the left, Won Auctions on the right */}
               <section className="dashboard-columns active-bids-row">
                 <ActiveBids onLiveAuction={onLiveAuction} />
-                <RecentActivity />
-              </section>
-
-              <section className="dashboard-columns bottom-three-row">
                 <WonAuctions />
-                <Messages mode="overview" />
-                <div></div>
               </section>
 
               <footer className="dashboard-footer">

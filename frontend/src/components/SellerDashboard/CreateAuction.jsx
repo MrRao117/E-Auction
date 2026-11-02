@@ -10,6 +10,7 @@ import {
 import "./CreateAuction.css";
 
 export default function CreateAuction() {
+  const [pageView, setPageView] = useState("listing"); // listing | add | auction
   const [useCustomCategory, setUseCustomCategory] = useState(false);
   const [category, setCategory] = useState("");
   const [categories, setCategories] = useState([]);
@@ -491,6 +492,7 @@ export default function CreateAuction() {
       setCategory("");
       setUseCustomCategory(false);
       setProductImages([]);
+      setPageView("listing");
       alert("Product saved successfully and submitted for verification.");
     } catch (error) {
       console.error("Failed to add product:", error);
@@ -507,6 +509,15 @@ export default function CreateAuction() {
   const handleCreateAuction = async () => {
     if (!selectedProduct) {
       alert("Please select a verified product.");
+      return;
+    }
+
+    if (
+      String(selectedProduct.verificationStatus ?? "")
+        .trim()
+        .toLowerCase() !== "verified"
+    ) {
+      alert("This product has not been verified by the admin yet.");
       return;
     }
 
@@ -559,6 +570,7 @@ export default function CreateAuction() {
         endTime: "",
       });
 
+      setPageView("listing");
       alert("Auction created successfully.");
     } catch (error) {
       console.error("Failed to create auction:", error);
@@ -613,594 +625,579 @@ export default function CreateAuction() {
       {/* PAGE HEADING */}
       <div className="create-auction-heading">
         <div>
-          <h1>Create New Auction</h1>
+          <h1 style={{ fontSize: "22px" }}>
+            {pageView === "listing"
+              ? "Product Listing"
+              : pageView === "add"
+                ? "Add Product"
+                : "Create Auction"}
+          </h1>
           <p>
-            Add your product details first. After admin verification, you can
-            create the auction.
+            {pageView === "listing"
+              ? "Manage your products and track their verification status."
+              : pageView === "add"
+                ? "Add your product details. Your product will be reviewed by an admin."
+                : "Create an auction only for a product verified by the admin."}
           </p>
         </div>
+        {pageView === "listing" && (
+          <button
+            type="button"
+            className="listing-add-product-button"
+            onClick={() => setPageView("add")}
+          >
+            <span>+</span> Add Product
+          </button>
+        )}
+        {pageView !== "listing" && (
+          <button
+            type="button"
+            className="listing-back-button"
+            onClick={() => setPageView("listing")}
+          >
+            ← Back to Product Listing
+          </button>
+        )}
       </div>
 
-      {/* ONLY THE TWO FORMS USE THIS GRID */}
-      <div className="create-auction-content">
-        {/* =====================================================
+      {pageView === "add" && (
+        <div className="create-auction-content add-product-only-content">
+          {/* 
             LEFT FORM - ADD PRODUCT
-        ====================================================== */}
-        <section className="create-product-card">
-          <div className="create-section-header">
-            <div className="create-section-number product-step-number">1</div>
-            <div>
-              <h2>Add Product Details</h2>
-              <p>Provide accurate information about your product.</p>
-            </div>
-          </div>
-
-          <div className="create-product-form">
-            {/* PRODUCT NAME */}
-            <div className="create-form-group">
-              <label htmlFor="productName">
-                Product Name <span>*</span>
-              </label>
-              <input
-                id="productName"
-                type="text"
-                placeholder="Enter product name"
-                value={product.productName}
-                onChange={(event) =>
-                  setProduct({
-                    ...product,
-                    productName: event.target.value,
-                  })
-                }
-              />
-            </div>
-
-            {/* CATEGORY */}
-            <div className="create-form-group">
-              <label htmlFor="productCategory">
-                Category <span>*</span>
-              </label>
-
-              <div className="category-input-row">
-                {useCustomCategory ? (
-                  <input
-                    id="productCategory"
-                    type="text"
-                    placeholder="Write category here"
-                    value={category}
-                    onChange={(event) => setCategory(event.target.value)}
-                  />
-                ) : (
-                  <select
-                    id="productCategory"
-                    value={category}
-                    onChange={(event) => setCategory(event.target.value)}
-                  >
-                    <option value="" disabled>
-                      {isLoadingCategories
-                        ? "Loading categories..."
-                        : "Select a category"}
-                    </option>
-                    {categories.map((item) => (
-                      <option
-                        key={item.categoryId}
-                        value={String(item.categoryId)}
-                      >
-                        {item.categoryName}
-                      </option>
-                    ))}
-                  </select>
-                )}
-
-                <button
-                  type="button"
-                  className="create-category-button"
-                  onClick={handleCategoryToggle}
-                >
-                  <span>+</span>
-                  {useCustomCategory ? "Select Category" : "Create Category"}
-                </button>
+        = */}
+          <section className="create-product-card">
+            <div className="create-section-header">
+              <div className="create-section-number product-step-number">1</div>
+              <div>
+                <h2>Add Product Details</h2>
+                <p>Provide accurate information about your product.</p>
               </div>
             </div>
 
-            {/* BASE PRICE */}
-            <div className="create-form-group">
-              <label htmlFor="basePrice">
-                Base Price <span>*</span>
-              </label>
-              <div className="price-input-wrapper">
-                <span className="currency-symbol">₹</span>
+            <div className="create-product-form">
+              {/* PRODUCT NAME */}
+              <div className="create-form-group">
+                <label htmlFor="productName">
+                  Product Name <span>*</span>
+                </label>
                 <input
-                  id="basePrice"
-                  type="number"
-                  min="0"
-                  placeholder="Enter base price"
-                  value={product.basePrice}
+                  id="productName"
+                  type="text"
+                  placeholder="Enter product name"
+                  value={product.productName}
                   onChange={(event) =>
                     setProduct({
                       ...product,
-                      basePrice: event.target.value,
+                      productName: event.target.value,
                     })
                   }
                 />
               </div>
-            </div>
 
-            {/* DESCRIPTION */}
-            <div className="create-form-group">
-              <label htmlFor="productDescription">
-                Description <span>*</span>
-              </label>
-              <textarea
-                id="productDescription"
-                rows="5"
-                placeholder="Provide a detailed description of your product..."
-                value={product.description}
-                onChange={(event) =>
-                  setProduct({
-                    ...product,
-                    description: event.target.value,
-                  })
-                }
-              />
-            </div>
-
-            {/* PRODUCT PHOTOS */}
-            <div className="create-form-group">
-              <label htmlFor="productImages">
-                Product Photos <span>*</span>
-              </label>
-
-              <div className="product-image-upload">
-                <label htmlFor="productImages" className="upload-placeholder">
-                  <div className="upload-icon">↥</div>
-                  <strong>Click to upload product photos</strong>
-                  <span>Select at least 1 photo</span>
-                  <small>JPG, PNG, JPEG • Maximum 5MB per image</small>
+              {/* CATEGORY */}
+              <div className="create-form-group">
+                <label htmlFor="productCategory">
+                  Category <span>*</span>
                 </label>
 
-                <input
-                  id="productImages"
-                  type="file"
-                  accept="image/png,image/jpeg,image/jpg"
-                  multiple
-                  hidden
-                  onChange={handleImageChange}
+                <div className="category-input-row">
+                  {useCustomCategory ? (
+                    <input
+                      id="productCategory"
+                      type="text"
+                      placeholder="Write category here"
+                      value={category}
+                      onChange={(event) => setCategory(event.target.value)}
+                    />
+                  ) : (
+                    <select
+                      id="productCategory"
+                      value={category}
+                      onChange={(event) => setCategory(event.target.value)}
+                    >
+                      <option value="" disabled>
+                        {isLoadingCategories
+                          ? "Loading categories..."
+                          : "Select a category"}
+                      </option>
+                      {categories.map((item) => (
+                        <option
+                          key={item.categoryId}
+                          value={String(item.categoryId)}
+                        >
+                          {item.categoryName}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+
+                  <button
+                    type="button"
+                    className="create-category-button"
+                    onClick={handleCategoryToggle}
+                  >
+                    <span>+</span>
+                    {useCustomCategory ? "Select Category" : "Create Category"}
+                  </button>
+                </div>
+              </div>
+
+              {/* BASE PRICE */}
+              <div className="create-form-group">
+                <label htmlFor="basePrice">
+                  Base Price <span>*</span>
+                </label>
+                <div className="price-input-wrapper">
+                  <span className="currency-symbol">₹</span>
+                  <input
+                    id="basePrice"
+                    type="number"
+                    min="0"
+                    placeholder="Enter base price"
+                    value={product.basePrice}
+                    onChange={(event) =>
+                      setProduct({
+                        ...product,
+                        basePrice: event.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* DESCRIPTION */}
+              <div className="create-form-group">
+                <label htmlFor="productDescription">
+                  Description <span>*</span>
+                </label>
+                <textarea
+                  id="productDescription"
+                  rows="5"
+                  placeholder="Provide a detailed description of your product..."
+                  value={product.description}
+                  onChange={(event) =>
+                    setProduct({
+                      ...product,
+                      description: event.target.value,
+                    })
+                  }
                 />
               </div>
 
-              {productImages.length > 0 && (
-                <div
-                  className={`photo-count ${
-                    productImages.length >= 1 ? "photo-count-valid" : ""
-                  }`}
-                >
-                  {productImages.length} photos selected
-                  {productImages.length >= 1
-                    ? " ✓ Minimum requirement satisfied"
-                    : " — At least 1 required"}
-                </div>
-              )}
+              {/* PRODUCT PHOTOS */}
+              <div className="create-form-group">
+                <label htmlFor="productImages">
+                  Product Photos <span>*</span>
+                </label>
 
-              {productImages.length > 0 && (
-                <div className="product-upload-previews">
-                  {productImages.map((file, index) => (
-                    <div
-                      className="product-upload-preview"
-                      key={`${file.name}-${index}`}
-                    >
-                      <img
-                        src={getImageSource(file)}
-                        alt={`Product ${index + 1}`}
-                      />
-                      <span>{index + 1}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                <div className="product-image-upload">
+                  <label htmlFor="productImages" className="upload-placeholder">
+                    <div className="upload-icon">↥</div>
+                    <strong>Click to upload product photos</strong>
+                    <span>Select at least 1 photo</span>
+                    <small>JPG, PNG, JPEG • Maximum 5MB per image</small>
+                  </label>
 
-            <button
-              type="button"
-              className="add-product-button"
-              onClick={handleAddProduct}
-              disabled={isAddingProduct}
-            >
-              <span>+</span>
-              {isAddingProduct ? "Saving Product..." : "Add Product"}
-            </button>
-          </div>
-
-          <div className="product-verification-notice">
-            <div className="verification-notice-icon">◷</div>
-            <div>
-              <strong>Product will be reviewed by admin</strong>
-              <p>
-                After adding the product, it will go through admin verification.
-                You will be notified once it is verified, and then you can
-                create the auction.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* =====================================================
-            RIGHT FORM - AUCTION
-        ====================================================== */}
-        <section className="create-auction-card">
-          <div className="flow-card">
-            <h2>Product to Auction Flow</h2>
-
-            <div className="product-auction-flow">
-              <div className="flow-line" />
-
-              <div
-                className={`flow-step ${
-                  currentFlowStep >= 1 ? "completed" : ""
-                } ${currentFlowStep === 1 ? "current" : ""}`}
-              >
-                <div className="flow-step-number">1</div>
-                <strong>Add Product</strong>
-                <span>(by Seller)</span>
-              </div>
-
-              <div
-                className={`flow-step ${
-                  currentFlowStep >= 2 ? "completed" : ""
-                } ${currentFlowStep === 2 ? "current" : ""}`}
-              >
-                <div className="flow-step-number">2</div>
-                <strong>Under Verification</strong>
-                <span>(by Admin)</span>
-              </div>
-
-              <div
-                className={`flow-step ${
-                  currentFlowStep >= 3 ? "completed" : ""
-                } ${currentFlowStep === 3 ? "current" : ""}`}
-              >
-                <div className="flow-step-number">3</div>
-                <strong>Get Notified</strong>
-                <span>(when Verified)</span>
-              </div>
-
-              <div
-                className={`flow-step ${
-                  currentFlowStep >= 4 ? "completed" : ""
-                } ${currentFlowStep === 4 ? "current" : ""}`}
-              >
-                <div className="flow-step-number">4</div>
-                <strong>Create Auction</strong>
-                <span>(for Verified Product)</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="auction-form-panel">
-            <div className="create-section-header auction-section-header">
-              <div className="create-section-number auction-step-number">2</div>
-              <div>
-                <h2>Create Auction (After Product Verification)</h2>
-                <p>
-                  Once your product is verified by admin, you can create the
-                  auction.
-                </p>
-              </div>
-            </div>
-
-            <div className="auction-verification-message">
-              <div className="auction-message-icon">
-                {auctionEnabled ? "✓" : "!"}
-              </div>
-              <span>
-                {auctionEnabled
-                  ? "This product is verified and ready for auction!"
-                  : "Product verification is required before creating an auction."}
-              </span>
-            </div>
-
-            <div className="verified-product-selector">
-              <label htmlFor="verifiedProduct">
-                Verified Product <span>*</span>
-              </label>
-              <select
-                id="verifiedProduct"
-                value={selectedProductId}
-                onChange={(event) => setSelectedProductId(event.target.value)}
-                disabled={verifiedProducts.length === 0}
-              >
-                <option value="">
-                  {verifiedProducts.length === 0
-                    ? "No verified product available yet"
-                    : "Select a verified product"}
-                </option>
-                {verifiedProducts.map((item, index) => (
-                  <option
-                    key={`${item.productName}-${index}`}
-                    value={String(item.productId)}
-                  >
-                    {item.productName} — {item.category}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="selected-product-card">
-              <div className="selected-product-image">
-                {selectedProduct?.images?.[0] ? (
-                  <img
-                    src={getImageSource(selectedProduct.images[0])}
-                    alt={selectedProduct.productName}
+                  <input
+                    id="productImages"
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg"
+                    multiple
+                    hidden
+                    onChange={handleImageChange}
                   />
-                ) : (
-                  <span>Product Image</span>
+                </div>
+
+                {productImages.length > 0 && (
+                  <div
+                    className={`photo-count ${
+                      productImages.length >= 1 ? "photo-count-valid" : ""
+                    }`}
+                  >
+                    {productImages.length} photos selected
+                    {productImages.length >= 1
+                      ? " ✓ Minimum requirement satisfied"
+                      : " — At least 1 required"}
+                  </div>
+                )}
+
+                {productImages.length > 0 && (
+                  <div className="product-upload-previews">
+                    {productImages.map((file, index) => (
+                      <div
+                        className="product-upload-preview"
+                        key={`${file.name}-${index}`}
+                      >
+                        <img
+                          src={getImageSource(file)}
+                          alt={`Product ${index + 1}`}
+                        />
+                        <span>{index + 1}</span>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
 
-              <div className="selected-product-details">
-                <h3>
-                  {selectedProduct?.productName || "Product will appear here"}
-                </h3>
+              <button
+                type="button"
+                className="add-product-button"
+                onClick={handleAddProduct}
+                disabled={isAddingProduct}
+              >
+                <span>+</span>
+                {isAddingProduct ? "Saving Product..." : "Add Product"}
+              </button>
+            </div>
+
+            <div className="product-verification-notice">
+              <div className="verification-notice-icon">◷</div>
+              <div>
+                <strong>Product will be reviewed by admin</strong>
                 <p>
-                  {selectedProduct
-                    ? `Category: ${selectedProduct.category}`
-                    : "Select a verified product to create an auction."}
+                  After adding the product, it will go through admin
+                  verification. You will be notified once it is verified, and
+                  then you can create the auction.
                 </p>
               </div>
+            </div>
+          </section>
+        </div>
+      )}
 
-              <div className="selected-product-id">
-                <span>Product ID</span>
-                <strong>
-                  {selectedProduct?.productId ?? "Auto Generated"}
-                </strong>
+      {pageView === "auction" && (
+        <div className="create-auction-content auction-only-content">
+          {/* 
+            RIGHT FORM - AUCTION
+        = */}
+          <section className="create-auction-card">
+            <div className="auction-form-panel">
+              <div className="auction-verification-message">
+                <div className="auction-message-icon">
+                  {auctionEnabled ? "✓" : "!"}
+                </div>
+                <span>
+                  {auctionEnabled
+                    ? "This product is verified and ready for auction!"
+                    : "Product verification is required before creating an auction."}
+                </span>
               </div>
 
-              <div
-                className={`product-status ${
-                  selectedProduct ? "product-status-verified" : ""
-                }`}
+              <div className="auction-selected-product-section">
+                <div
+                  className="auction-product-gallery"
+                  aria-label="Uploaded product photos"
+                >
+                  {selectedProduct?.images?.length ? (
+                    selectedProduct.images.map((image, index) => (
+                      <div
+                        className="auction-product-gallery-image"
+                        key={`${selectedProduct.productId}-image-${index}`}
+                      >
+                        <img
+                          src={getImageSource(image)}
+                          alt={`${selectedProduct.productName} photo ${index + 1}`}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="auction-product-gallery-empty">
+                      No product photos available.
+                    </div>
+                  )}
+                </div>
+
+                <div className="verified-product-heading">
+                  <label>
+                    Verified Product <span>*</span>
+                  </label>
+                  <span className="verified-product-fixed-note">
+                    Selected from your verified product listing
+                  </span>
+                </div>
+
+                <div className="selected-product-card selected-product-inline-card">
+                  <div className="selected-product-inline-item">
+                    <span>Product Name</span>
+                    <strong>
+                      {selectedProduct?.productName || "No product selected"}
+                    </strong>
+                  </div>
+
+                  <div className="selected-product-inline-item">
+                    <span>Category</span>
+                    <strong>{selectedProduct?.category || "—"}</strong>
+                  </div>
+
+                  <div className="selected-product-inline-item">
+                    <span>Product ID</span>
+                    <strong>{selectedProduct?.productId ?? "—"}</strong>
+                  </div>
+
+                  <div className="selected-product-inline-item selected-product-inline-status">
+                    <span>Status</span>
+                    <strong
+                      className={`product-status ${selectedProduct ? "product-status-verified" : ""}`}
+                    >
+                      {selectedProduct ? "✓ Verified" : "Not selected"}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+
+              <div className="auction-form">
+                {/* TITLE */}
+                <div className="create-form-group auction-title-group">
+                  <label htmlFor="auctionTitle">Auction Title</label>
+                  <input
+                    id="auctionTitle"
+                    type="text"
+                    placeholder="Enter auction title"
+                    value={auction.title}
+                    disabled={!auctionEnabled}
+                    onChange={(event) =>
+                      setAuction({ ...auction, title: event.target.value })
+                    }
+                  />
+                  <small>If left empty, the product name will be used.</small>
+                </div>
+
+                {/* BID INCREMENT - SAME AS SELECTED PRODUCT BASE PRICE */}
+                <div className="create-form-group bid-increment-group">
+                  <label htmlFor="bidIncrement">
+                    Bid Increment (Same as Base Price)
+                  </label>
+                  <input
+                    id="bidIncrement"
+                    type="number"
+                    value={selectedProduct?.basePrice ?? ""}
+                    placeholder="Select a verified product"
+                    disabled={!auctionEnabled}
+                    readOnly
+                  />
+                </div>
+
+                {/* START TIME */}
+                <div className="create-form-group auction-start-group">
+                  <label htmlFor="auctionStartTime">
+                    Auction Start Time <span>*</span>
+                  </label>
+                  <div
+                    className="datetime-input-wrapper"
+                    onClick={() => auctionStartTimeRef.current?.showPicker?.()}
+                  >
+                    <span className="datetime-icon" aria-hidden="true">
+                      📅
+                    </span>
+                    <input
+                      ref={auctionStartTimeRef}
+                      id="auctionStartTime"
+                      type="datetime-local"
+                      value={auction.startTime}
+                      disabled={!auctionEnabled}
+                      onChange={(event) =>
+                        setAuction({
+                          ...auction,
+                          startTime: event.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+
+                {/* END TIME */}
+                <div className="create-form-group auction-end-group">
+                  <label htmlFor="auctionEndTime">
+                    Auction End Time <span>*</span>
+                  </label>
+                  <div
+                    className="datetime-input-wrapper"
+                    onClick={() => auctionEndTimeRef.current?.showPicker?.()}
+                  >
+                    <span className="datetime-icon" aria-hidden="true">
+                      📅
+                    </span>
+                    <input
+                      ref={auctionEndTimeRef}
+                      id="auctionEndTime"
+                      type="datetime-local"
+                      value={auction.endTime}
+                      disabled={!auctionEnabled}
+                      onChange={(event) =>
+                        setAuction({ ...auction, endTime: event.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="create-auction-button"
+                disabled={!auctionEnabled || isCreatingAuction}
+                onClick={handleCreateAuction}
               >
-                {selectedProduct ? "✓ Verified" : "Waiting"}
-              </div>
+                <span>⚒</span>
+                {isCreatingAuction ? "Creating Auction..." : "Create Auction"}
+              </button>
             </div>
+          </section>
+        </div>
+      )}
 
-            <div className="auction-form">
-              {/* TITLE */}
-              <div className="create-form-group auction-title-group">
-                <label htmlFor="auctionTitle">Auction Title</label>
-                <input
-                  id="auctionTitle"
-                  type="text"
-                  placeholder="Enter auction title"
-                  value={auction.title}
-                  disabled={!auctionEnabled}
-                  onChange={(event) =>
-                    setAuction({ ...auction, title: event.target.value })
-                  }
-                />
-                <small>If left empty, the product name will be used.</small>
-              </div>
-
-              {/* BID INCREMENT - SAME AS SELECTED PRODUCT BASE PRICE */}
-              <div className="create-form-group bid-increment-group">
-                <label htmlFor="bidIncrement">
-                  Bid Increment (Same as Base Price)
-                </label>
-                <input
-                  id="bidIncrement"
-                  type="number"
-                  value={selectedProduct?.basePrice ?? ""}
-                  placeholder="Select a verified product"
-                  disabled={!auctionEnabled}
-                  readOnly
-                />
-              </div>
-
-              {/* START TIME */}
-              <div className="create-form-group auction-start-group">
-                <label htmlFor="auctionStartTime">
-                  Auction Start Time <span>*</span>
-                </label>
-                <div
-                  className="datetime-input-wrapper"
-                  onClick={() => auctionStartTimeRef.current?.showPicker?.()}
-                >
-                  <span className="datetime-icon" aria-hidden="true">
-                    📅
-                  </span>
-                  <input
-                    ref={auctionStartTimeRef}
-                    id="auctionStartTime"
-                    type="datetime-local"
-                    value={auction.startTime}
-                    disabled={!auctionEnabled}
-                    onChange={(event) =>
-                      setAuction({ ...auction, startTime: event.target.value })
-                    }
-                  />
-                </div>
-              </div>
-
-              {/* END TIME */}
-              <div className="create-form-group auction-end-group">
-                <label htmlFor="auctionEndTime">
-                  Auction End Time <span>*</span>
-                </label>
-                <div
-                  className="datetime-input-wrapper"
-                  onClick={() => auctionEndTimeRef.current?.showPicker?.()}
-                >
-                  <span className="datetime-icon" aria-hidden="true">
-                    📅
-                  </span>
-                  <input
-                    ref={auctionEndTimeRef}
-                    id="auctionEndTime"
-                    type="datetime-local"
-                    value={auction.endTime}
-                    disabled={!auctionEnabled}
-                    onChange={(event) =>
-                      setAuction({ ...auction, endTime: event.target.value })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              className="create-auction-button"
-              disabled={!auctionEnabled || isCreatingAuction}
-              onClick={handleCreateAuction}
-            >
-              <span>⚒</span>
-              {isCreatingAuction ? "Creating Auction..." : "Create Auction"}
-            </button>
-          </div>
-        </section>
-      </div>
-
-      {/* =====================================================
-          ADDED PRODUCTS - FULL WIDTH, OUTSIDE THE GRID
-      ====================================================== */}
-      {products.length > 0 && (
+      {/* PRODUCT LISTING IS THE DEFAULT VIEW */}
+      {pageView === "listing" && (
         <section className="added-products-section">
           <div className="added-products-heading">
-            <div>
-              <h2>Added Products</h2>
-              <p>Products submitted to the system for admin verification.</p>
-            </div>
+            <div></div>
             <span>
               {products.length} Product{products.length !== 1 ? "s" : ""}
             </span>
           </div>
 
-          <div className="added-products-list">
-            {isLoadingProducts && <p>Loading your products...</p>}
-            {!isLoadingProducts && products.length === 0 && (
-              <p>You have not added any products yet.</p>
-            )}
-            {products.map((item, index) => (
-              <article
-                className="added-product-details"
-                key={`${item.productName}-${index}`}
+          {isLoadingProducts ? (
+            <div className="product-list-empty">
+              <p>Loading your products...</p>
+            </div>
+          ) : products.length === 0 ? (
+            <div className="product-list-empty">
+              <div className="product-empty-icon">▧</div>
+              <h3>No products added yet</h3>
+              <p>Add your first product to submit it for admin verification.</p>
+              <button
+                type="button"
+                className="listing-add-product-button"
+                onClick={() => setPageView("add")}
               >
-                <div className="added-product-details-header">
-                  <div className="product-title-block">
-                    <div className="product-details-number">{index + 1}</div>
-                    <div>
-                      <h3>PRODUCT DETAILS</h3>
-                      <p>
-                        Your product has been submitted for admin verification.
-                      </p>
-                    </div>
-                  </div>
-
-                  <span
-                    className={`product-verification-badge ${
-                      item.verificationStatus === "Verified"
-                        ? "product-verification-badge-verified"
-                        : "product-verification-badge-pending"
-                    }`}
+                <span>+</span> Add Product
+              </button>
+            </div>
+          ) : (
+            <div className="seller-product-list">
+              {products.map((item, index) => {
+                const status = String(item.verificationStatus ?? "Pending")
+                  .trim()
+                  .toLowerCase();
+                const isVerified = status === "verified";
+                const isRejected = status === "rejected";
+                const alreadyAssigned =
+                  assignedProductIds.has(String(item.productId)) ||
+                  productAlreadyAssigned(item);
+                return (
+                  <article
+                    className="seller-product-row"
+                    key={item.productId ?? `${item.productName}-${index}`}
                   >
-                    {item.verificationStatus === "Verified"
-                      ? "✓ Verified"
-                      : "◷ Pending Verification"}
-                  </span>
-                </div>
-
-                <div className="product-details-main">
-                  <div className="product-details-photo-grid">
-                    {item.images.map((file, photoIndex) => (
-                      <div
-                        className="product-detail-photo"
-                        key={`${file.name}-${photoIndex}`}
-                      >
+                    <div className="seller-product-image">
+                      {item.images?.[0] ? (
                         <img
-                          src={getImageSource(file)}
-                          alt={`${item.productName} ${photoIndex + 1}`}
+                          src={getImageSource(item.images[0])}
+                          alt={item.productName}
                         />
-                        <span>{photoIndex + 1}</span>
+                      ) : (
+                        <span>No image</span>
+                      )}
+                    </div>
+                    <div className="seller-product-info">
+                      <div className="seller-product-details-grid">
+                        <div>
+                          <span>Product ID</span>
+                          <strong>{item.productId ?? "Auto Generated"}</strong>
+                        </div>
+                        <div>
+                          <span>Product Name</span>
+                          <strong>{item.productName}</strong>
+                        </div>
+                        <div>
+                          <span>Category</span>
+                          <strong>{item.category}</strong>
+                        </div>
+                        <div>
+                          <span>Base Price</span>
+                          <strong>{formatPrice(item.basePrice)}</strong>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-
-                  <div className="product-details-grid">
-                    <div>
-                      <span className="product-detail-label">Product ID</span>
-                      <strong className="product-detail-value">
-                        {item.productId ?? "Auto Generated"}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span className="product-detail-label">Product Name</span>
-                      <strong className="product-detail-value">
-                        {item.productName}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span className="product-detail-label">Category</span>
-                      <strong className="product-detail-value">
-                        {item.category}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span className="product-detail-label">Base Price</span>
-                      <strong className="product-detail-value">
-                        {formatPrice(item.basePrice)}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span className="product-detail-label">
-                        Product Photos
-                      </span>
-                      <strong className="product-detail-value product-photo-count">
-                        {item.images.length} Photos
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span className="product-detail-label">
-                        Verification Status
-                      </span>
-                      <strong
-                        className={`product-detail-value ${
-                          item.verificationStatus === "Verified"
-                            ? "verified-text"
-                            : "pending-text"
-                        }`}
+                      <p className="seller-product-remarks">
+                        Remarks:{" "}
+                        {item.remarks ||
+                          (isVerified
+                            ? "Product verified successfully."
+                            : "Product is waiting for admin verification.")}
+                      </p>
+                      <div
+                        className={`seller-product-progress ${isVerified ? "is-verified" : ""}`}
                       >
-                        {item.verificationStatus}
-                      </strong>
+                        {[
+                          "Add Product",
+                          "Under Verification",
+                          "Get Notified",
+                          "Create Auction",
+                        ].map((step, stepIndex) => {
+                          const done =
+                            stepIndex === 0 ||
+                            (isVerified && stepIndex <= 2) ||
+                            (alreadyAssigned && stepIndex <= 3);
+                          return (
+                            <div
+                              className={`seller-progress-step ${done ? "done" : ""}`}
+                              key={step}
+                            >
+                              <span>{done ? "✓" : stepIndex + 1}</span>
+                              <strong>{step}</strong>
+                              <small>
+                                {
+                                  [
+                                    "(by Seller)",
+                                    "(by Admin)",
+                                    "(when Verified)",
+                                    "(for Verified Product)",
+                                  ][stepIndex]
+                                }
+                              </small>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-
-                    <div>
-                      <span className="product-detail-label">Verified By</span>
-                      <strong className="product-detail-value">
-                        {item.verifiedBy ?? "Not Verified Yet"}
-                      </strong>
+                    <div className="seller-product-action">
+                      <span
+                        className={`product-verification-badge ${isVerified ? "product-verification-badge-verified" : isRejected ? "product-verification-badge-rejected" : "product-verification-badge-pending"}`}
+                      >
+                        {isVerified
+                          ? "✓ Verified"
+                          : isRejected
+                            ? "Rejected"
+                            : "◷ Pending Verification"}
+                      </span>
+                      <button
+                        type="button"
+                        className="seller-create-auction-button"
+                        disabled={!isVerified || alreadyAssigned}
+                        onClick={() => {
+                          setSelectedProductId(String(item.productId));
+                          setAuction({
+                            title: item.productName,
+                            startTime: "",
+                            endTime: "",
+                          });
+                          setPageView("auction");
+                        }}
+                      >
+                        ⚒ Create Auction
+                      </button>
+                      <small>
+                        {alreadyAssigned
+                          ? "Auction already created"
+                          : isVerified
+                            ? "Available for verified product"
+                            : "Available after verification"}
+                      </small>
                     </div>
-
-                    <div>
-                      <span className="product-detail-label">Remarks</span>
-                      <strong className="product-detail-value remarks-value">
-                        {item.remarks}
-                      </strong>
-                    </div>
-                  </div>
-
-                  <div className="product-description-details">
-                    <span className="product-detail-label">Description</span>
-                    <p>{item.description}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
         </section>
       )}
     </div>

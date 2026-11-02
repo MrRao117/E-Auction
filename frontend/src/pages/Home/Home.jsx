@@ -1,10 +1,9 @@
+import ExploreAuctions from "../../components/ExploreAuctions/ExploreAuctions";
+import ExploreLiveAuctions from "../../components/ExploreLiveAuctions/ExploreLiveAuctions";
 import Footer from "../../components/FooterBanner/FooterBanner";
 import Header from "../../components/Header/Header";
 import Hero from "../../components/Hero/Hero";
-// import HowItWorks from "../../components/HowItWorks/HowItWorks";
-import ExploreAuctions from "../../components/ExploreAuctions/ExploreAuctions";
 import TrendingAuctions from "../../components/TrendingAuctions/TrendingAuctions";
-import TrustBar from "../../components/TrustBar/TrustBar";
 
 import "./Home.css";
 
@@ -41,6 +40,7 @@ export default function Home({
       />
 
       <main>
+        {/* Trending Auctions / Auction For You */}
         <div className="auction-content">
           <div className="auction-left">
             <TrendingAuctions
@@ -50,9 +50,21 @@ export default function Home({
           </div>
         </div>
 
+        {/* Hero and existing advertisement section */}
         <Hero />
 
-        <div className="auction-content-explore">
+        {/* Explore Live Auctions — immediately after Hero */}
+        <div className="auction-content-explore home-explore-more">
+          <div className="auction-left-explore">
+            <ExploreLiveAuctions
+              onViewAllAuctions={onViewAllAuctions}
+              onProductDetails={onProductDetails}
+            />
+          </div>
+        </div>
+
+        {/* Explore More */}
+        <div className="auction-content-explore home-explore-more">
           <div className="auction-left-explore">
             <ExploreAuctions
               onViewAllAuctions={onViewAllAuctions}
@@ -60,13 +72,6 @@ export default function Home({
             />
           </div>
         </div>
-
-        <TrustBar />
-
-        {/* How It Works section */}
-        {/* <section id="how-it-works">
-          <HowItWorks />
-        </section> */}
       </main>
 
       <Footer />

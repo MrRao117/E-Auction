@@ -1,6 +1,6 @@
-/* =========================================================
+/* 
    ALL AUCTIONS PAGE
-========================================================= */
+ */
 
 * {
   box-sizing: border-box;
@@ -30,9 +30,9 @@
   margin: 0;
 }
 
-/* =========================================================
+/* 
    SEARCH / SORT / VIEW
-========================================================= */
+ */
 
 .auction-toolbar {
   display: flex;
@@ -87,10 +87,10 @@
   color: #999;
 }
 
-/* =========================================================
+/* 
    MAIN LAYOUT
    LEFT FILTER + RIGHT RESULTS
-========================================================= */
+ */
 
 .auction-main {
   display: block;
@@ -104,9 +104,9 @@
   margin-right: 0;
 }
 
-/* =========================================================
+/* 
    LEFT SIDEBAR
-========================================================= */
+ */
 
 .auction-sidebar {
   position: fixed;
@@ -189,9 +189,9 @@
   font-size: 10px;
 }
 
-/* =========================================================
+/* 
    PRICE RANGE
-========================================================= */
+ */
 
 .range-wrapper {
   position: relative;
@@ -284,9 +284,9 @@
   font-size: 11px;
 }
 
-/* =========================================================
+/* 
    CLEAR FILTER BUTTON
-========================================================= */
+ */
 
 .clear-filters-btn {
   width: 100%;
@@ -311,9 +311,9 @@
   color: #fff;
 }
 
-/* =========================================================
+/* 
    AUCTION RESULTS
-========================================================= */
+ */
 
 .auction-results {
   min-width: 0;
@@ -322,10 +322,10 @@
   margin-right: 0;
 }
 
-/* =========================================================
+/* 
    LIST VIEW
    5 CARDS PER PAGE
-========================================================= */
+ */
 
 .auction-list {
   width: 100%;
@@ -340,9 +340,9 @@
   min-width: 0;
 }
 
-/* =========================================================
+/* 
    AUCTION CARD - LIST VIEW
-========================================================= */
+ */
 
 .auction-list .auction-card {
   position: relative;
@@ -374,9 +374,9 @@
   box-shadow: 0 4px 10px rgba(7, 93, 56, 0.09);
 }
 
-/* =========================================================
+/* 
    CARD IMAGE - LIST
-========================================================= */
+ */
 
 .auction-list .auction-card-image {
   position: relative;
@@ -399,9 +399,9 @@
   object-fit: cover;
 }
 
-/* =========================================================
+/* 
    HEART
-========================================================= */
+ */
 
 .auction-list .auction-heart {
   position: absolute;
@@ -443,9 +443,9 @@
   transform: scale(1.05);
 }
 
-/* =========================================================
+/* 
    CARD CONTENT - LIST
-========================================================= */
+ */
 
 .auction-list .auction-card-content {
   position: relative;
@@ -460,9 +460,9 @@
   padding: 11px 12px 10px;
 }
 
-/* =========================================================
+/* 
    TITLE
-========================================================= */
+ */
 
 .auction-list .auction-card-content h3 {
   width: 100%;
@@ -482,9 +482,9 @@
   text-overflow: ellipsis;
 }
 
-/* =========================================================
+/* 
    CATEGORY
-========================================================= */
+ */
 
 .auction-list .auction-card-content .auction-category {
   position: static;
@@ -509,9 +509,9 @@
   text-overflow: ellipsis;
 }
 
-/* =========================================================
+/* 
    SELLER
-========================================================= */
+ */
 
 .auction-list .auction-card-content .auction-seller {
   position: static;
@@ -535,9 +535,9 @@
   text-overflow: ellipsis;
 }
 
-/* =========================================================
+/* 
    TIME LEFT
-========================================================= */
+ */
 .auction-list .auction-card-content .auction-card-details {
   width: 100%;
 
@@ -589,9 +589,9 @@
 
   white-space: nowrap;
 }
-/* =========================================================
+/* 
    REGISTER BUTTON
-========================================================= */
+ */
 
 .auction-list .auction-card-content .auction-register {
   width: 100%;
@@ -631,11 +631,11 @@
   color: #fff;
 }
 
-/* =========================================================
+/* 
    GRID VIEW
    6 CARDS PER PAGE
    2 COLUMNS × 3 ROWS
-========================================================= */
+ */
 
 .auction-list.grid-view {
   width: 100%;
@@ -651,9 +651,9 @@
   align-items: stretch;
 }
 
-/* =========================================================
+/* 
    GRID CARD
-========================================================= */
+ */
 
 .auction-list.grid-view .auction-card {
   position: relative;
@@ -689,9 +689,9 @@
   box-shadow: 0 4px 10px rgba(7, 93, 56, 0.09);
 }
 
-/* =========================================================
+/* 
    GRID IMAGE
-========================================================= */
+ */
 
 .auction-list.grid-view .auction-card-image {
   position: relative;
@@ -713,9 +713,9 @@
   object-fit: cover;
 }
 
-/* =========================================================
+/* 
    GRID HEART
-========================================================= */
+ */
 
 .auction-list.grid-view .auction-heart {
   position: absolute;
@@ -756,9 +756,9 @@
   transform: scale(1.05);
 }
 
-/* =========================================================
+/* 
    GRID CONTENT
-========================================================= */
+ */
 
 .auction-list.grid-view .auction-card-content {
   position: relative;
@@ -786,9 +786,9 @@
   padding: 15px 13px;
 }
 
-/* =========================================================
+/* 
    GRID TITLE
-========================================================= */
+ */
 
 .auction-list.grid-view .auction-card-content h3 {
   grid-column: 1;
@@ -811,9 +811,9 @@
   text-overflow: ellipsis;
 }
 
-/* =========================================================
+/* 
    GRID CATEGORY
-========================================================= */
+ */
 
 .auction-list.grid-view .auction-card-content .auction-category {
   position: absolute;
@@ -840,9 +840,9 @@
   text-overflow: ellipsis;
 }
 
-/* =========================================================
+/* 
    GRID SELLER
-========================================================= */
+ */
 
 .auction-list.grid-view .auction-card-content .auction-seller {
   position: absolute;
@@ -869,9 +869,9 @@
   text-overflow: ellipsis;
 }
 
-/* =========================================================
+/* 
    GRID TIMER
-========================================================= */
+ */
 
 .auction-list.grid-view .auction-card-content .auction-card-details {
   grid-column: 2;
@@ -926,9 +926,9 @@
   white-space: nowrap;
 }
 
-/* =========================================================
+/* 
    GRID REGISTER
-========================================================= */
+ */
 
 .auction-list.grid-view .auction-card-content .auction-register {
   grid-column: 3;
@@ -973,9 +973,9 @@
   color: #fff;
 }
 
-/* =========================================================
+/* 
    EMPTY STATE
-========================================================= */
+ */
 
 .no-auctions {
   min-height: 250px;
@@ -1022,10 +1022,10 @@
   cursor: pointer;
 }
 
-/* =========================================================
+/* 
    PAGINATION
    BELOW COMPLETE AUCTION LIST
-========================================================= */
+ */
 
 .auction-pagination {
   width: 100%;
@@ -1092,9 +1092,9 @@
   cursor: not-allowed;
 }
 
-/* =========================================================
+/* 
    RESPONSIVE - 1100px
-========================================================= */
+ */
 
 @media (max-width: 1100px) {
   .auction-sidebar {
@@ -1169,11 +1169,11 @@
   }
 }
 
-/* =========================================================
+/* 
    AUCTION CARD COMPONENT OVERRIDES
    Scoped to All Auctions so Home and Explore cards stay unchanged.
    These selectors match the actual AuctionCard.jsx class names.
-========================================================= */
+ */
 
 .auction-list .auction-card {
   min-height: 280px;
@@ -1397,10 +1397,10 @@
   }
 }
 
-/* =========================================================
+/* 
    CENTER THE TIME / COUNTDOWN INSIDE ALL AUCTION CARDS
    Scoped to All Auctions only.
-========================================================= */
+ */
 
 .auction-list .auction-card-content .auction-time {
   width: 100%;
